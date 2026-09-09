@@ -5,7 +5,7 @@
 @section('content')
 
 <!-- Hero Section -->
-<section class="relative bg-gradient-to-b from-sky-50 via-white to-slate-50 py-20 lg:py-28 overflow-hidden border-b border-sky-100">
+<section class="relative bg-gradient-to-b from-sky-50 via-white to-slate-50 py-16 lg:py-16 overflow-hidden border-b border-sky-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-sky-100/80 text-sky-800 font-semibold text-xs tracking-wide uppercase mb-6 border border-sky-200">
             <span>🇬🇧 UK Community Networking Ecosystem</span>
