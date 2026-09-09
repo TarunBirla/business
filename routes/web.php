@@ -33,6 +33,7 @@ Route::get('/groups', [PublicGroupController::class, 'index'])->name('groups.ind
 Route::get('/groups/{slug}', [PublicGroupController::class, 'show'])->name('groups.show');
 Route::get('/join/{slug}', [PublicGroupController::class, 'show'])->name('groups.join');
 Route::get('/groups/{slug}/qr', [PublicGroupController::class, 'qr'])->name('groups.qr');
+Route::match(['get', 'post'], '/groups/{group}/member-join', [PublicGroupController::class, 'joinCommunity'])->name('groups.member_join')->middleware('auth');
 
 Route::get('/events', [PublicEventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('events.show');

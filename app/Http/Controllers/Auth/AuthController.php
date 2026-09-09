@@ -33,6 +33,27 @@ class AuthController extends Controller
                 return redirect()->intended(route('super_admin.dashboard'));
             }
 
+            // Check if user was trying to join a group stored in session
+            $groupId = session('join_group_id') ?? session('referral_group_id');
+            if ($groupId) {
+                $group = Group::find($groupId);
+                if ($group) {
+                    session()->forget(['join_group_id', 'referral_group_id']);
+                    if (!$user->isMemberOf($group->id)) {
+                        if ($group->community_type === 'paid') {
+                            return redirect()->route('join.checkout', $group->id);
+                        } else {
+                            $user->groups()->attach($group->id, [
+                                'membership_role' => 'member',
+                                'status' => 'active',
+                                'joined_at' => now(),
+                            ]);
+                            return redirect()->route('member.dashboard')->with('success', "Welcome back! You have joined {$group->name}.");
+                        }
+                    }
+                }
+            }
+
             return redirect()->intended(route('member.dashboard'));
         }
 
@@ -43,7 +64,7 @@ class AuthController extends Controller
 
     public function showRegister(Request $request)
     {
-        $groupId = $request->get('group_id');
+        $groupId = $request->get('group_id') ?? session('join_group_id') ?? session('referral_group_id');
         $group = $groupId ? Group::find($groupId) : null;
         return view('auth.register', compact('group'));
     }
@@ -85,10 +106,11 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Handle joining group if specified or stored in session
-        $groupId = $request->group_id ?? session('referral_group_id');
+        $groupId = $request->group_id ?? session('join_group_id') ?? session('referral_group_id');
         if ($groupId) {
             $group = Group::find($groupId);
             if ($group) {
+                session()->forget(['join_group_id', 'referral_group_id']);
                 if ($group->community_type === 'paid') {
                     // Redirect to payment review page
                     return redirect()->route('join.checkout', $group->id);

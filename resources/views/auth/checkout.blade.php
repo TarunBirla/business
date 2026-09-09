@@ -29,11 +29,11 @@
         <form method="POST" action="{{ route('join.checkout.process', $group->id) }}" class="space-y-4">
             @csrf
             <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900">
-                🔒 Secured by Stripe Architecture. Card details are processed safely using 256-bit encryption. No card details stored.
+                🔒 Secured by Pay Architecture. Card details are processed safely using 256-bit encryption. No card details stored.
             </div>
 
             <button type="submit" class="w-full py-4 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition text-base">
-                Pay £{{ number_format($plan->price ?? 20, 2) }} via Stripe
+                Pay £{{ number_format($plan->price ?? 20, 2) }} 
             </button>
         </form>
     </div>

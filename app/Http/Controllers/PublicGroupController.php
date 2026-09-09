@@ -38,6 +38,9 @@ class PublicGroupController extends Controller
     {
         $group = Group::where('slug', $slug)->with(['activeSubscriptionPlan'])->firstOrFail();
 
+        // Store group ID in session so registration or login auto-joins
+        session(['join_group_id' => $group->id]);
+
         // Track referral if ?ref= parameter is present
         if ($request->has('ref')) {
             $refCode = $request->get('ref');
@@ -74,6 +77,28 @@ class PublicGroupController extends Controller
             'activePlan',
             'qrCodeSvg'
         ));
+    }
+
+    public function joinCommunity(Request $request, Group $group)
+    {
+        $user = auth()->user();
+
+        if ($user->isMemberOf($group->id)) {
+            return redirect()->route('member.dashboard')->with('info', "You are already a member of {$group->name}.");
+        }
+
+        if ($group->community_type === 'paid') {
+            return redirect()->route('join.checkout', $group->id);
+        }
+
+        // Free community join
+        $user->groups()->attach($group->id, [
+            'membership_role' => 'member',
+            'status' => 'active',
+            'joined_at' => now(),
+        ]);
+
+        return redirect()->route('member.dashboard')->with('success', "You have successfully joined {$group->name}!");
     }
 
     public function qr(string $slug)

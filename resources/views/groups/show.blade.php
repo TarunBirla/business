@@ -37,7 +37,7 @@
                             Already Joined &rarr;
                         </a>
                     @else
-                        <a href="{{ route('register') }}?group_id={{ $group->id }}" class="w-full sm:w-auto px-8 py-3.5 bg-white text-sky-800 hover:bg-sky-50 font-bold rounded-xl shadow-xl transition text-center">
+                        <a href="{{ route('groups.member_join', $group->id) }}" class="w-full sm:w-auto px-8 py-3.5 bg-white text-sky-800 hover:bg-sky-50 font-bold rounded-xl shadow-xl transition text-center">
                             Join Community
                         </a>
                     @endif
@@ -215,9 +215,21 @@
                     </li>
                 </ul>
 
-                <a href="{{ route('register') }}?group_id={{ $group->id }}" class="block w-full py-4 bg-sky-500 hover:bg-sky-400 text-white font-bold text-center text-base rounded-xl shadow-lg transition">
-                    Join This Community Now
-                </a>
+                @auth
+                    @if(auth()->user()->isMemberOf($group->id))
+                        <a href="{{ route('member.dashboard') }}" class="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-center text-base rounded-xl shadow-lg transition">
+                            Already Joined &rarr;
+                        </a>
+                    @else
+                        <a href="{{ route('groups.member_join', $group->id) }}" class="block w-full py-4 bg-sky-500 hover:bg-sky-400 text-white font-bold text-center text-base rounded-xl shadow-lg transition">
+                            Join This Community Now
+                        </a>
+                    @endif
+                @else
+                    <a href="{{ route('register') }}?group_id={{ $group->id }}" class="block w-full py-4 bg-sky-500 hover:bg-sky-400 text-white font-bold text-center text-base rounded-xl shadow-lg transition">
+                        Join This Community Now
+                    </a>
+                @endauth
             </div>
 
             <!-- Who Can Join -->
