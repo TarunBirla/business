@@ -16,35 +16,16 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg-page) !important;
-            color: var(--text-primary) !important;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
         }
 
         aside {
-            background-color: var(--card-bg) !important;
-            border-color: var(--border-color) !important;
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
         }
 
-        .bg-slate-50, .bg-slate-100 {
-            background-color: var(--bg-page) !important;
-        }
-
-        .bg-white {
-            background-color: var(--bg-surface) !important;
-        }
-
-        .text-slate-900, .text-slate-800 {
-            color: var(--text-heading) !important;
-        }
-
-        .text-slate-700, .text-slate-600, .text-slate-500 {
-            color: var(--text-secondary) !important;
-        }
-
-        .border-slate-200, .border-slate-100, .border-sky-100 {
-            border-color: var(--border-color) !important;
-        }
-
+        /* Sky Primary Brand Accents & Links */
         .bg-sky-600 {
             background-color: var(--btn-primary-bg) !important;
             color: var(--btn-primary-text) !important;
@@ -60,6 +41,47 @@
 
         .text-sky-600:hover, .hover\:text-sky-600:hover {
             color: var(--text-link-hover) !important;
+        }
+
+        /* Inputs */
+        input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea, select {
+            background-color: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--text-primary);
+        }
+
+        /* Context-Aware Dark Mode Text & Surface Rules */
+        html.dark, [data-theme*="dark"], body.dark {
+            color-scheme: dark;
+        }
+
+        html.dark body, [data-theme*="dark"] body {
+            background-color: var(--bg-page, #0f172a) !important;
+            color: var(--text-primary, #f8fafc) !important;
+        }
+
+        html.dark .bg-white, [data-theme*="dark"] .bg-white {
+            background-color: var(--bg-surface, #1e293b) !important;
+        }
+
+        html.dark .bg-slate-50, html.dark .bg-slate-100,
+        [data-theme*="dark"] .bg-slate-50, [data-theme*="dark"] .bg-slate-100 {
+            background-color: var(--bg-page, #0f172a) !important;
+        }
+
+        html.dark .text-slate-900, html.dark .text-slate-800,
+        [data-theme*="dark"] .text-slate-900, [data-theme*="dark"] .text-slate-800 {
+            color: var(--text-heading, #f8fafc) !important;
+        }
+
+        html.dark .text-slate-700, html.dark .text-slate-600, html.dark .text-slate-500,
+        [data-theme*="dark"] .text-slate-700, [data-theme*="dark"] .text-slate-600, [data-theme*="dark"] .text-slate-500 {
+            color: var(--text-secondary, #94a3b8) !important;
+        }
+
+        html.dark .border-slate-200, html.dark .border-slate-100, html.dark .border-sky-100,
+        [data-theme*="dark"] .border-slate-200, [data-theme*="dark"] .border-slate-100, [data-theme*="dark"] .border-sky-100 {
+            border-color: var(--border-color, #334155) !important;
         }
     </style>
 
@@ -90,7 +112,7 @@
         }
     </script>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-50 text-black min-h-screen flex flex-col md:flex-row">
 
     <!-- Sidebar Navigation -->
     <aside class="w-full md:w-64 bg-white border-r border-sky-100 p-6 flex flex-col justify-between shrink-0">
@@ -102,55 +124,55 @@
             <nav class="space-y-1">
                 @if(request()->is('super-admin*'))
                     <div class="px-3 py-2 text-xs font-bold text-sky-600 uppercase tracking-wider">Super Admin</div>
-                    <a href="{{ route('super_admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.dashboard') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('super_admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.dashboard') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('super_admin.groups.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.groups*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('super_admin.groups.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.groups*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>Manage Communities</span>
                     </a>
-                    <a href="{{ route('super_admin.users.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.users*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('super_admin.users.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.users*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>All Users</span>
                     </a>
-                    <a href="{{ route('super_admin.cms.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.cms*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('super_admin.cms.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.cms*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>CMS Pages</span>
                     </a>
-                    <a href="{{ route('super_admin.themes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.themes*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('super_admin.themes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.themes*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span><i class="fa-solid fa-palette text-sky-600 mr-1.5"></i> Theme Manager</span>
                     </a>
                 @elseif(request()->is('group-admin*'))
                     <div class="px-3 py-2 text-xs font-bold text-sky-600 uppercase tracking-wider">Group Admin</div>
-                    <a href="{{ route('group_admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.dashboard') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('group_admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.dashboard') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>Dashboard</span>
                     </a>
                     @if(isset($group))
-                        <a href="{{ route('group_admin.members.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.members*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('group_admin.members.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.members*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                             <span>Members</span>
                         </a>
-                        <a href="{{ route('group_admin.events.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.events*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('group_admin.events.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.events*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                             <span>Events</span>
                         </a>
-                        <a href="{{ route('group_admin.notices.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.notices*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('group_admin.notices.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.notices*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                             <span>Notices</span>
                         </a>
-                        <a href="{{ route('group_admin.promotion.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.promotion*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <a href="{{ route('group_admin.promotion.index', $group->id) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('group_admin.promotion*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                             <span>Promote & QR</span>
                         </a>
                     @endif
                 @else
                     <div class="px-3 py-2 text-xs font-bold text-sky-600 uppercase tracking-wider">Member Area</div>
-                    <a href="{{ route('member.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.dashboard') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('member.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.dashboard') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('member.directory') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.directory*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('member.directory') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.directory*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>Member Directory</span>
                     </a>
-                    <a href="{{ route('member.connections') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.connections*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('member.connections') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.connections*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>Connections</span>
                     </a>
                     @php
                         $sidebarUnreadCount = auth()->check() ? auth()->user()->receivedMessages()->where('is_read', false)->count() : 0;
                     @endphp
-                    <a href="{{ route('member.chat') }}" class="flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.chat*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('member.chat') }}" class="flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.chat*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span><i class="fa-solid fa-comments text-sky-600 mr-1.5"></i> Community Chat</span>
                         @if($sidebarUnreadCount > 0)
                             <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full shadow">
@@ -158,10 +180,10 @@
                             </span>
                         @endif
                     </a>
-                    <a href="{{ route('member.profile.edit') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.profile*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <a href="{{ route('member.profile.edit') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.profile*') ? 'bg-sky-50 text-sky-700' : 'text-black hover:bg-slate-50' }}">
                         <span>My Profile</span>
                     </a>
-                    <a href="{{ route('groups.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm text-slate-600 hover:bg-slate-50">
+                    <a href="{{ route('groups.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm text-black hover:bg-slate-50">
                         <span>Browse Communities</span>
                     </a>
                 @endif
@@ -171,8 +193,8 @@
         <div class="pt-6 border-t border-slate-100">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <div class="font-bold text-sm text-slate-900">{{ auth()->user()->name }}</div>
-                    <div class="text-xs text-slate-500">{{ auth()->user()->profession ?? 'Member' }}</div>
+                    <div class="font-bold text-sm text-black">{{ auth()->user()->name }}</div>
+                    <div class="text-xs text-black">{{ auth()->user()->profession ?? 'Member' }}</div>
                 </div>
             </div>
             <form action="{{ route('logout') }}" method="POST">

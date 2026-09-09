@@ -7,15 +7,15 @@
     <!-- Top Selector Bar -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 flex items-center space-x-2">
+            <h1 class="text-2xl font-bold text-black flex items-center space-x-2">
                 <span><i class="fa-solid fa-comments text-sky-600 mr-2"></i>Community Direct Messaging</span>
             </h1>
-            <p class="text-xs text-slate-500 mt-1">Chat securely with verified contacts in your joined community.</p>
+            <p class="text-xs text-black mt-1">Chat securely with verified contacts in your joined community.</p>
         </div>
 
         <!-- Community Selector Dropdown -->
         <div class="flex items-center space-x-3">
-            <span class="text-xs font-bold text-slate-600 uppercase">Selected Group:</span>
+            <span class="text-xs font-bold text-black uppercase">Selected Group:</span>
             <select onchange="window.location.href='/member/chat/' + this.value" class="px-4 py-2 border border-sky-200 rounded-xl text-sm font-bold text-sky-800 bg-sky-50 focus:outline-none focus:border-sky-500">
                 @foreach($myGroups as $grp)
                     <option value="{{ $grp->id }}" {{ $grp->id == $activeGroup->id ? 'selected' : '' }}>
@@ -33,8 +33,8 @@
         <div class="border-r border-slate-200 bg-slate-50/50 flex flex-col justify-between">
             <div>
                 <div class="p-4 border-b border-slate-200 bg-white">
-                    <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wider">Group Contacts ({{ $contacts->count() }})</h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Members of {{ $activeGroup->name }}</p>
+                    <h3 class="font-bold text-black text-sm uppercase tracking-wider">Group Contacts ({{ $contacts->count() }})</h3>
+                    <p class="text-[11px] text-black mt-0.5">Members of {{ $activeGroup->name }}</p>
                 </div>
 
                 <div class="overflow-y-auto max-h-[550px] divide-y divide-slate-100">
@@ -54,7 +54,7 @@
                                     {{ strtoupper(substr($contact->first_name, 0, 1) . substr($contact->last_name, 0, 1)) }}
                                 </div>
                                 <div class="truncate">
-                                    <div class="font-bold text-slate-900 text-sm truncate">{{ $contact->name }}</div>
+                                    <div class="font-bold text-black text-sm truncate">{{ $contact->name }}</div>
                                     <div class="text-xs text-sky-600 font-medium truncate">{{ $contact->profession ?? 'Community Member' }}</div>
                                     <div class="text-[10px] text-slate-400 truncate"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $contact->city ?? 'UK' }}</div>
                                 </div>
@@ -66,7 +66,7 @@
                             @endif
                         </a>
                     @empty
-                        <div class="p-8 text-center text-xs text-slate-500 font-medium">
+                        <div class="p-8 text-center text-xs text-black font-medium">
                             No other contacts in this group yet.
                         </div>
                     @endforelse
@@ -90,7 +90,7 @@
                             {{ strtoupper(substr($activeContact->first_name, 0, 1) . substr($activeContact->last_name, 0, 1)) }}
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-900 text-base leading-tight">{{ $activeContact->name }}</h3>
+                            <h3 class="font-bold text-black text-base leading-tight">{{ $activeContact->name }}</h3>
                             <p class="text-xs text-sky-600 font-medium">{{ $activeContact->profession ?? 'Member' }} &bull; {{ $activeContact->city ?? 'UK' }}</p>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                                 <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-300 text-sky-700 font-bold flex items-center justify-center text-xs shrink-0 shadow-sm" title="{{ $senderUser ? $senderUser->name : $activeContact->name }}">
                                     {{ $senderInitials }}
                                 </div>
-                                <div class="max-w-md bg-white border border-slate-200 text-slate-900 p-3.5 rounded-2xl rounded-bl-none shadow-sm space-y-1">
+                                <div class="max-w-md bg-white border border-slate-200 text-black p-3.5 rounded-2xl rounded-bl-none shadow-sm space-y-1">
                                     <div class="text-[11px] font-bold text-sky-600">{{ $senderFirstName }}</div>
                                     <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                                     <div class="text-[10px] text-slate-400 text-right">

@@ -6,13 +6,13 @@
 <div class="py-16 px-4 max-w-2xl mx-auto">
     <div class="bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-xl">
         <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-slate-900">Create Member Account</h2>
+            <h2 class="text-3xl font-bold text-black">Create Member Account</h2>
             @if(isset($group))
                 <div class="mt-2 inline-block px-4 py-1.5 bg-sky-100 text-sky-800 rounded-full font-bold text-xs">
                     Joining {{ $group->name }}
                 </div>
             @else
-                <p class="text-sm text-slate-600 mt-1">Join the UK's leading community networking ecosystem.</p>
+                <p class="text-sm text-black mt-1">Join the UK's leading community networking ecosystem.</p>
             @endif
         </div>
 
@@ -73,7 +73,7 @@
             <div class="space-y-3 pt-2">
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" name="terms" required class="mt-1 rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                    <span class="text-xs text-slate-600">I accept the <a href="{{ route('cms.show', 'terms') }}" target="_blank" class="text-sky-600 font-bold underline">Terms & Conditions</a> and <a href="{{ route('cms.show', 'privacy') }}" target="_blank" class="text-sky-600 font-bold underline">Privacy Policy</a>.</span>
+                    <span class="text-xs text-black">I accept the <a href="{{ route('cms.show', 'terms') }}" target="_blank" class="text-sky-600 font-bold underline">Terms & Conditions</a> and <a href="{{ route('cms.show', 'privacy') }}" target="_blank" class="text-sky-600 font-bold underline">Privacy Policy</a>.</span>
                 </label>
             </div>
 
@@ -82,7 +82,7 @@
             </button>
         </form>
 
-        <div class="mt-6 text-center text-sm text-slate-600">
+        <div class="mt-6 text-center text-sm text-black">
             Already registered? <a href="{{ route('login') }}" class="font-bold text-sky-600 hover:underline">Log in here</a>
         </div>
     </div>

@@ -5,18 +5,18 @@
 @section('content')
 <div class="space-y-8">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900">Community Member Directory</h1>
-        <p class="text-sm text-slate-600 mt-1">Discover professionals, business owners, and service providers within your joined communities.</p>
+        <h1 class="text-3xl font-bold text-black">Community Member Directory</h1>
+        <p class="text-sm text-black mt-1">Discover professionals, business owners, and service providers within your joined communities.</p>
     </div>
 
     <!-- Filter Form -->
     <form method="GET" action="{{ route('member.directory') }}" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4">
         <div>
-            <label class="block text-xs font-bold text-slate-600 mb-1">Search Name / Company</label>
+            <label class="block text-xs font-bold text-black mb-1">Search Name / Company</label>
             <input type="text" name="search" value="{{ request('search') }}" placeholder="e.g. Patel, Sharma, Apex..." class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
         </div>
         <div>
-            <label class="block text-xs font-bold text-slate-600 mb-1">Filter by Community</label>
+            <label class="block text-xs font-bold text-black mb-1">Filter by Community</label>
             <select name="group_id" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
                 <option value="">All My Communities</option>
                 @foreach($myGroups as $group)
@@ -25,7 +25,7 @@
             </select>
         </div>
         <div>
-            <label class="block text-xs font-bold text-slate-600 mb-1">Services Offered</label>
+            <label class="block text-xs font-bold text-black mb-1">Services Offered</label>
             <select name="service_offered" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
                 <option value="">Any Service</option>
                 @foreach($allServices as $service)
@@ -50,14 +50,14 @@
                             {{ substr($member->first_name, 0, 1) }}{{ substr($member->last_name, 0, 1) }}
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-900 text-lg leading-tight">{{ $member->name }}</h3>
+                            <h3 class="font-bold text-black text-lg leading-tight">{{ $member->name }}</h3>
                             <p class="text-xs text-sky-600 font-medium mt-0.5">{{ $member->profession ?? 'Community Member' }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $member->city ?? 'UK' }}</p>
+                            <p class="text-xs text-black mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $member->city ?? 'UK' }}</p>
                         </div>
                     </div>
 
                     @if($member->company)
-                        <div class="text-xs text-slate-600 font-semibold mb-3">
+                        <div class="text-xs text-black font-semibold mb-3">
                             <i class="fa-solid fa-building text-sky-600 mr-1"></i>{{ $member->company }}
                         </div>
                     @endif
@@ -86,7 +86,7 @@
             </div>
         @empty
             <div class="col-span-3 text-center py-16 bg-white rounded-2xl border border-slate-200">
-                <p class="text-slate-500 font-semibold">No members found matching your search criteria.</p>
+                <p class="text-black font-semibold">No members found matching your search criteria.</p>
             </div>
         @endforelse
     </div>

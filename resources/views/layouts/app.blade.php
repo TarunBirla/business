@@ -11,66 +11,6 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    <!-- Dynamic Active Theme Variables -->
-    <style id="theme-css-variables">
-        :root, [data-theme] {
-{!! $activeTheme->toCssVariables() !!}
-        }
-
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg-page) !important;
-            color: var(--text-primary) !important;
-        }
-
-        .bg-slate-50, .bg-slate-100 {
-            background-color: var(--bg-page) !important;
-        }
-
-        .bg-white {
-            background-color: var(--bg-surface) !important;
-        }
-
-        .text-slate-900, .text-slate-800 {
-            color: var(--text-heading) !important;
-        }
-
-        .text-slate-700, .text-slate-600, .text-slate-500 {
-            color: var(--text-secondary) !important;
-        }
-
-        .border-slate-200, .border-slate-100, .border-sky-100 {
-            border-color: var(--border-color) !important;
-        }
-
-        .bg-sky-600 {
-            background-color: var(--btn-primary-bg) !important;
-            color: var(--btn-primary-text) !important;
-        }
-
-        .bg-sky-600:hover, .hover\:bg-sky-700:hover {
-            background-color: var(--btn-primary-hover) !important;
-        }
-
-        .text-sky-600, .text-sky-700 {
-            color: var(--text-link) !important;
-        }
-
-        .text-sky-600:hover, .hover\:text-sky-600:hover {
-            color: var(--text-link-hover) !important;
-        }
-
-        nav {
-            background-color: var(--navbar-bg) !important;
-            color: var(--navbar-text) !important;
-        }
-
-        footer {
-            background-color: var(--footer-bg) !important;
-            color: var(--footer-text) !important;
-        }
-    </style>
-
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="@yield('og_title', 'Community Networking Ecosystem UK')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses from your community.')">
@@ -87,19 +27,6 @@
       "url": "{{ url('/') }}",
       "logo": "{{ asset('logo.jpeg') }}",
       "description": "UK Community Networking Ecosystem bringing people together based on shared background, region, culture, and professional goals."
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Community UK",
-      "url": "{{ url('/') }}",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "{{ route('groups.index') }}?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
     }
     </script>
 
@@ -121,12 +48,8 @@
                         brand: {
                             50: '#f0f9ff',
                             100: '#e0f2fe',
-                            200: '#bae6fd',
-                            500: '#0ea5e9',
                             600: '#0284c7',
                             700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
                         }
                     },
                     fontFamily: {
@@ -136,6 +59,103 @@
             }
         }
     </script>
+
+    <!-- Dynamic Active Theme Variables -->
+    <style id="theme-css-variables">
+        :root, [data-theme] {
+{!! $activeTheme->toCssVariables() !!}
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+        }
+
+        /* Sky Primary Brand Accents & Links */
+        .bg-sky-600 {
+            background-color: var(--btn-primary-bg) !important;
+            color: var(--btn-primary-text) !important;
+        }
+
+        .bg-sky-600:hover, .hover\:bg-sky-700:hover {
+            background-color: var(--btn-primary-hover) !important;
+        }
+
+        .text-sky-600, .text-sky-700 {
+            color: var(--text-link) !important;
+        }
+
+        .text-sky-600:hover, .hover\:text-sky-600:hover {
+            color: var(--text-link-hover) !important;
+        }
+
+        /* Navbar Styling */
+        nav {
+            background-color: var(--navbar-bg) !important;
+            color: var(--navbar-text) !important;
+        }
+
+        /* Footer Styling Driven By Active Theme Tokens */
+        footer {
+            background-color: var(--footer-bg) !important;
+            color: var(--footer-text) !important;
+        }
+
+        footer h3 {
+            color: var(--footer-text) !important;
+        }
+
+        footer a {
+            color: var(--footer-text) !important;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--footer-link-hover) !important;
+        }
+
+        /* Inputs */
+        input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea, select {
+            background-color: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--text-primary);
+        }
+
+        /* Context-Aware Dark Mode Text & Surface Rules */
+        html.dark, [data-theme*="dark"], body.dark {
+            color-scheme: dark;
+        }
+
+        html.dark body, [data-theme*="dark"] body {
+            background-color: var(--bg-page, #0f172a) !important;
+            color: var(--text-primary, #f8fafc) !important;
+        }
+
+        html.dark .bg-white, [data-theme*="dark"] .bg-white {
+            background-color: var(--bg-surface, #1e293b) !important;
+        }
+
+        html.dark .bg-slate-50, html.dark .bg-slate-100,
+        [data-theme*="dark"] .bg-slate-50, [data-theme*="dark"] .bg-slate-100 {
+            background-color: var(--bg-page, #0f172a) !important;
+        }
+
+        html.dark .text-slate-900, html.dark .text-slate-800,
+        [data-theme*="dark"] .text-slate-900, [data-theme*="dark"] .text-slate-800 {
+            color: var(--text-heading, #f8fafc) !important;
+        }
+
+        html.dark .text-slate-700, html.dark .text-slate-600, html.dark .text-slate-500,
+        [data-theme*="dark"] .text-slate-700, [data-theme*="dark"] .text-slate-600, [data-theme*="dark"] .text-slate-500 {
+            color: var(--text-secondary, #94a3b8) !important;
+        }
+
+        html.dark .border-slate-200, html.dark .border-slate-100, html.dark .border-sky-100,
+        [data-theme*="dark"] .border-slate-200, [data-theme*="dark"] .border-slate-100, [data-theme*="dark"] .border-sky-100 {
+            border-color: var(--border-color, #334155) !important;
+        }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-slate-50 antialiased">
 
@@ -149,7 +169,7 @@
                     </a>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-700">
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
                     <a href="{{ url('/') }}" class="hover:text-sky-600 transition">Home</a>
                     <a href="{{ route('groups.index') }}" class="hover:text-sky-600 transition">Communities</a>
                     <a href="{{ route('events.index') }}" class="hover:text-sky-600 transition">Events</a>
@@ -167,7 +187,7 @@
                         @endif
                         <a href="{{ route('member.dashboard') }}" class="px-5 py-2.5 text-sm font-semibold text-white bg-sky-600 hover:bg-sky-700 rounded-lg shadow-md transition">My Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-sky-600 transition">Login</a>
+                        <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-semibold  hover:text-sky-600 transition">Login</a>
                         <a href="{{ route('register') }}" class="px-5 py-2.5 text-sm font-semibold text-white bg-sky-600 hover:bg-sky-700 rounded-lg shadow-md hover:shadow-lg transition">Join Now</a>
                     @endauth
                 </div>
@@ -199,42 +219,42 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white border-t border-slate-800">
+    <footer class="border-t border-slate-800/20 shadow-inner" style="background-color: var(--footer-bg); color: var(--footer-text);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-9 w-auto rounded-lg object-contain bg-white p-0.5">
+                        <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-9 w-auto rounded-lg object-contain bg-white p-0.5 shadow-sm">
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed">
+                    <p class="text-sm leading-relaxed opacity-90">
                         A UK-wide professional community networking ecosystem bringing people together based on shared background, region, culture, and professional goals.
                     </p>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-white mb-4 text-base">Quick Links</h3>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li><a href="{{ route('groups.index') }}" class="hover:text-sky-400 transition">Explore Communities</a></li>
-                        <li><a href="{{ route('events.index') }}" class="hover:text-sky-400 transition">Upcoming Events</a></li>
-                        <li><a href="{{ url('/#how-it-works') }}" class="hover:text-sky-400 transition">How It Works</a></li>
-                        <li><a href="{{ route('register') }}" class="hover:text-sky-400 transition">Join Community</a></li>
+                    <h3 class="font-bold mb-4 text-base opacity-100">Quick Links</h3>
+                    <ul class="space-y-2 text-sm opacity-90">
+                        <li><a href="{{ route('groups.index') }}" class="transition">Explore Communities</a></li>
+                        <li><a href="{{ route('events.index') }}" class="transition">Upcoming Events</a></li>
+                        <li><a href="{{ url('/#how-it-works') }}" class="transition">How It Works</a></li>
+                        <li><a href="{{ route('register') }}" class="transition">Join Community</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-white mb-4 text-base">Legal & Privacy</h3>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li><a href="{{ route('cms.show', 'privacy') }}" class="hover:text-sky-400 transition">Privacy Policy</a></li>
-                        <li><a href="{{ route('cms.show', 'terms') }}" class="hover:text-sky-400 transition">Terms & Conditions</a></li>
-                        <li><a href="{{ route('cms.show', 'cookie') }}" class="hover:text-sky-400 transition">Cookie Policy</a></li>
-                        <li><a href="{{ route('cms.show', 'faq') }}" class="hover:text-sky-400 transition">FAQ</a></li>
+                    <h3 class="font-bold mb-4 text-base opacity-100">Legal & Privacy</h3>
+                    <ul class="space-y-2 text-sm opacity-90">
+                        <li><a href="{{ route('cms.show', 'privacy') }}" class="transition">Privacy Policy</a></li>
+                        <li><a href="{{ route('cms.show', 'terms') }}" class="transition">Terms & Conditions</a></li>
+                        <li><a href="{{ route('cms.show', 'cookie') }}" class="transition">Cookie Policy</a></li>
+                        <li><a href="{{ route('cms.show', 'faq') }}" class="transition">FAQ</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-white mb-4 text-base">Community Ecosystem</h3>
-                    <p class="text-xs text-slate-400 mb-3">Empowering Gujarati, Marathi, MP, Punjabi, and regional business networks across the UK.</p>
-                    <div class="text-xs text-slate-500">&copy; {{ date('Y') }} Community UK Platform. All rights reserved.</div>
+                    <h3 class="font-bold mb-4 text-base opacity-100">Community Ecosystem</h3>
+                    <p class="text-xs mb-3 opacity-80">Empowering Gujarati, Marathi, MP, Punjabi, and regional business networks across the UK.</p>
+                    <div class="text-xs opacity-70">&copy; {{ date('Y') }} Community UK Platform. All rights reserved.</div>
                 </div>
             </div>
         </div>

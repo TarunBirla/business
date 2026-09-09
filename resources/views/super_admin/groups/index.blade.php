@@ -6,8 +6,8 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Manage Communities</h1>
-            <p class="text-sm text-slate-600 mt-1">Create unlimited custom communities, edit settings, and assign Group Admins.</p>
+            <h1 class="text-3xl font-bold text-black">Manage Communities</h1>
+            <p class="text-sm text-black mt-1">Create unlimited custom communities, edit settings, and assign Group Admins.</p>
         </div>
         <a href="{{ route('super_admin.groups.create') }}" class="px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow transition">
             + Create New Community
@@ -17,7 +17,7 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-black uppercase">
                     <th class="p-4">Community Name</th>
                     <th class="p-4">Location</th>
                     <th class="p-4">Type</th>
@@ -31,19 +31,19 @@
                 @foreach($groups as $group)
                     <tr class="hover:bg-slate-50">
                         <td class="p-4">
-                            <div class="font-bold text-slate-900">{{ $group->name }}</div>
+                            <div class="font-bold text-black">{{ $group->name }}</div>
                             <div class="text-xs text-slate-400 font-mono">/join/{{ $group->slug }}</div>
                         </td>
-                        <td class="p-4 text-slate-600">{{ $group->city ?? 'UK' }}, {{ $group->country }}</td>
+                        <td class="p-4 text-black">{{ $group->city ?? 'UK' }}, {{ $group->country }}</td>
                         <td class="p-4">
                             <span class="px-2.5 py-1 rounded text-xs font-bold uppercase {{ $group->community_type === 'free' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800' }}">
                                 {{ $group->community_type }}
                             </span>
                         </td>
-                        <td class="p-4 font-bold text-slate-900">{{ number_format($group->members_count) }}</td>
-                        <td class="p-4 text-slate-600">{{ $group->events_count }}</td>
+                        <td class="p-4 font-bold text-black">{{ number_format($group->members_count) }}</td>
+                        <td class="p-4 text-black">{{ $group->events_count }}</td>
                         <td class="p-4">
-                            <span class="px-2.5 py-1 rounded text-xs font-bold uppercase bg-slate-100 text-slate-800">
+                            <span class="px-2.5 py-1 rounded text-xs font-bold uppercase bg-slate-100 text-black">
                                 {{ $group->status }}
                             </span>
                         </td>

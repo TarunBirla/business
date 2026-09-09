@@ -5,7 +5,7 @@
 @section('content')
 
 <!-- Hero Section -->
-<section class="relative bg-gradient-to-b from-sky-50 via-white to-slate-50 py-16 lg:py-16 overflow-hidden border-b border-sky-100">
+<section class="relative py-16 lg:py-16 overflow-hidden border-b border-slate-200" style="background-color: var(--bg-page);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-sky-100/80 text-sky-800 font-semibold text-xs tracking-wide uppercase mb-6 border border-sky-200">
             <span><i class="fa-solid fa-earth-europe text-sky-600 mr-1.5"></i> UK Community Networking Ecosystem</span>
@@ -45,9 +45,9 @@
             @foreach($featuredGroups as $group)
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
                     <div>
-                        <div class="h-40 bg-gradient-to-r from-sky-400 to-sky-600 relative p-4 flex items-end">
+                        <div class="h-40 relative p-4 flex items-end" style="background-color: var(--btn-primary-bg);">
                             <div class="w-16 h-16 rounded-xl bg-white p-1 shadow-md absolute -bottom-6 left-6 border-2 border-white">
-                                <div class="w-full h-full bg-sky-100 rounded-lg flex items-center justify-center font-bold text-sky-700 text-xl uppercase">
+                                <div class="w-full h-full rounded-lg flex items-center justify-center font-bold text-sky-700 text-xl uppercase" style="background-color: var(--bg-page);">
                                     {{ substr($group->name, 0, 2) }}
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
 </section>
 
 <!-- How It Works Section -->
-<section id="how-it-works" class="py-20 bg-sky-50/60 border-y border-sky-100">
+<section id="how-it-works" class="py-20 border-y border-slate-200" style="background-color: var(--bg-page);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-3xl font-bold text-slate-900">How It Works</h2>
@@ -89,22 +89,22 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="bg-white p-8 rounded-2xl border border-sky-100 shadow-sm text-center">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
                 <div class="w-14 h-14 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-6">1</div>
                 <h3 class="font-bold text-lg text-slate-900 mb-2">Find Your Community</h3>
                 <p class="text-sm text-slate-600 leading-relaxed">Browse regional, state, cultural, or business groups based on your background.</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl border border-sky-100 shadow-sm text-center">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
                 <div class="w-14 h-14 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-6">2</div>
                 <h3 class="font-bold text-lg text-slate-900 mb-2">Register & Join</h3>
                 <p class="text-sm text-slate-600 leading-relaxed">Create your profile, set your privacy options, and join free or paid memberships.</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl border border-sky-100 shadow-sm text-center">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
                 <div class="w-14 h-14 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-6">3</div>
                 <h3 class="font-bold text-lg text-slate-900 mb-2">Discover Members</h3>
                 <p class="text-sm text-slate-600 leading-relaxed">Filter directory by profession, services offered, services needed, and city.</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl border border-sky-100 shadow-sm text-center">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
                 <div class="w-14 h-14 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-6">4</div>
                 <h3 class="font-bold text-lg text-slate-900 mb-2">Connect & Participate</h3>
                 <p class="text-sm text-slate-600 leading-relaxed">Send connection requests, exchange professional services, and attend community events.</p>
@@ -160,15 +160,15 @@
 @endif
 
 <!-- Call To Action -->
-<section class="py-20 bg-gradient-to-r from-sky-600 to-sky-800 text-white text-center">
+<section class="py-20 text-white text-center shadow-inner" style="background-color: var(--btn-primary-bg);">
     <div class="max-w-4xl mx-auto px-4">
         <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-6">
             Your Community. Your Connections. Your Opportunities.
         </h2>
-        <p class="text-sky-100 text-lg mb-8 max-w-2xl mx-auto">
+        <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
             Join thousands of members across the UK who are connecting, exchanging professional services, and supporting each other.
         </p>
-        <a href="{{ route('groups.index') }}" class="px-8 py-4 bg-white text-sky-700 hover:bg-sky-50 font-bold text-lg rounded-xl shadow-lg transition">
+        <a href="{{ route('groups.index') }}" class="px-8 py-4 bg-white text-slate-900 hover:bg-slate-100 font-bold text-lg rounded-xl shadow-lg transition">
             Find Your Community
         </a>
     </div>

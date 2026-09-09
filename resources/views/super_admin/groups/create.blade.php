@@ -5,8 +5,8 @@
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900">Create New Community</h1>
-        <p class="text-sm text-slate-600 mt-1">Configure community metadata, membership pricing, and assign Group Admin.</p>
+        <h1 class="text-3xl font-bold text-black">Create New Community</h1>
+        <p class="text-sm text-black mt-1">Configure community metadata, membership pricing, and assign Group Admin.</p>
     </div>
 
     <form method="POST" action="{{ route('super_admin.groups.store') }}" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">

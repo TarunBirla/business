@@ -7,10 +7,10 @@
     <!-- Top Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 flex items-center space-x-2">
+            <h1 class="text-2xl font-bold text-black flex items-center space-x-2">
                 <span>🎨 Admin Theme Manager</span>
             </h1>
-            <p class="text-xs text-slate-500 mt-1">Create, customize, preview, and set default color schemes across the platform.</p>
+            <p class="text-xs text-black mt-1">Create, customize, preview, and set default color schemes across the platform.</p>
         </div>
 
         <a href="{{ route('super_admin.themes.create') }}" class="px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-lg transition flex items-center space-x-2">

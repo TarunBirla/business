@@ -7,10 +7,10 @@
     <!-- Header -->
     <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">
+            <h1 class="text-2xl font-bold text-black">
                 {{ $isEdit ? 'Edit Theme: ' . $theme->name : 'Create New Custom Theme' }}
             </h1>
-            <p class="text-xs text-slate-500 mt-1">Customize color tokens with real-time live preview.</p>
+            <p class="text-xs text-black mt-1">Customize color tokens with real-time live preview.</p>
         </div>
         <a href="{{ route('super_admin.themes.index') }}" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
             &larr; Back to Themes
@@ -29,7 +29,7 @@
 
             <!-- Theme Info Section -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <h3 class="text-lg font-bold text-slate-900 border-b pb-3">Theme Identity</h3>
+                <h3 class="text-lg font-bold text-black border-b pb-3">Theme Identity</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Theme Name</label>
@@ -120,14 +120,14 @@
 
             @foreach($groups as $groupTitle => $tokens)
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="text-base font-bold text-slate-900 border-b pb-2">{{ $groupTitle }}</h3>
+                    <h3 class="text-base font-bold text-black border-b pb-2">{{ $groupTitle }}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($tokens as $key => $label)
                             @php
                                 $val = $colors[$key] ?? ($defaultColors[$key] ?? '#000000');
                             @endphp
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">{{ $label }}</label>
+                                <label class="block text-xs font-semibold text-black mb-1.5">{{ $label }}</label>
                                 <div class="flex items-center space-x-2">
                                     <input type="color" data-token="{{ $key }}" value="{{ Str::startsWith($val, '#') ? $val : '#0284c7' }}" class="color-picker-input w-10 h-10 rounded-lg cursor-pointer border border-slate-300 p-0.5 shrink-0">
                                     <input type="text" name="colors[{{ $key }}]" id="token_{{ $key }}" data-token-text="{{ $key }}" value="{{ old('colors.' . $key, $val) }}" required class="color-text-input flex-grow px-3 py-2 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-sky-500">

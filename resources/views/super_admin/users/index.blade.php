@@ -6,15 +6,15 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Platform Users Directory</h1>
-            <p class="text-sm text-slate-600 mt-1">View all registered platform members, roles, and status controls.</p>
+            <h1 class="text-3xl font-bold text-black">Platform Users Directory</h1>
+            <p class="text-sm text-black mt-1">View all registered platform members, roles, and status controls.</p>
         </div>
     </div>
 
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-black uppercase">
                     <th class="p-4">Name</th>
                     <th class="p-4">Email</th>
                     <th class="p-4">Profession</th>
@@ -27,12 +27,12 @@
             <tbody class="divide-y divide-slate-100 text-sm">
                 @foreach($users as $u)
                     <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-bold text-slate-900">{{ $u->name }}</td>
-                        <td class="p-4 text-slate-600">{{ $u->email }}</td>
+                        <td class="p-4 font-bold text-black">{{ $u->name }}</td>
+                        <td class="p-4 text-black">{{ $u->email }}</td>
                         <td class="p-4 text-sky-600 font-semibold">{{ $u->profession ?? 'Member' }}</td>
-                        <td class="p-4 text-slate-600 font-bold">{{ $u->groups->count() }}</td>
+                        <td class="p-4 text-black font-bold">{{ $u->groups->count() }}</td>
                         <td class="p-4">
-                            <span class="px-2.5 py-1 rounded text-xs font-bold uppercase {{ $u->isSuperAdmin() ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-800' }}">
+                            <span class="px-2.5 py-1 rounded text-xs font-bold uppercase {{ $u->isSuperAdmin() ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-black' }}">
                                 {{ $u->global_role }}
                             </span>
                         </td>
@@ -45,7 +45,7 @@
                             @if(!$u->isSuperAdmin())
                                 <form action="{{ route('super_admin.users.toggle_status', $u->id) }}" method="POST" class="inline">
                                     @csrf
-                                    <button type="submit" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-lg">
+                                    <button type="submit" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-black font-bold text-xs rounded-lg">
                                         {{ $u->status === 'active' ? 'Suspend' : 'Activate' }}
                                     </button>
                                 </form>

@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900">Edit Page: {{ $page->title }}</h1>
+        <h1 class="text-3xl font-bold text-black">Edit Page: {{ $page->title }}</h1>
     </div>
 
     <form method="POST" action="{{ route('super_admin.cms.update', $page->id) }}" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">

@@ -6,13 +6,13 @@
 <div class="max-w-4xl mx-auto space-y-8">
     <!-- Header Profile Card -->
     <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-        <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-sky-600 to-sky-400 text-white font-bold text-3xl flex items-center justify-center border-4 border-white shadow-lg shrink-0">
+        <div class="w-24 h-24 rounded-full text-white font-bold text-3xl flex items-center justify-center border-4 border-white shadow-lg shrink-0" style="background-color: var(--btn-primary-bg);">
             {{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}
         </div>
         <div class="flex-grow text-center md:text-left space-y-2">
-            <h1 class="text-3xl font-bold text-slate-900">{{ $user->name }}</h1>
+            <h1 class="text-3xl font-bold text-black">{{ $user->name }}</h1>
             <p class="text-base text-sky-600 font-semibold">{{ $user->profession ?? 'Community Professional' }} {{ $user->company ? 'at ' . $user->company : '' }}</p>
-            <p class="text-sm text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $user->city ?? 'UK' }}, {{ $user->country }}</p>
+            <p class="text-sm text-black"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $user->city ?? 'UK' }}, {{ $user->country }}</p>
 
             <div class="pt-4 flex flex-wrap justify-center md:justify-start gap-3">
                 @if(!$connection)
@@ -43,22 +43,22 @@
 
     <!-- Contact Details Card & Privacy Controls -->
     <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 class="text-xl font-bold text-slate-900 border-b pb-4">Contact Information</h3>
+        <h3 class="text-xl font-bold text-black border-b pb-4">Contact Information</h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Email Address</span>
+                <span class="text-xs font-bold text-black uppercase block mb-1">Email Address</span>
                 @if($canSeeEmail)
-                    <span class="text-sm font-bold text-slate-900">{{ $user->email }}</span>
+                    <span class="text-sm font-bold text-black">{{ $user->email }}</span>
                 @else
                     <span class="text-sm font-medium text-slate-400 italic">Protected (Hidden by member privacy)</span>
                 @endif
             </div>
 
             <div>
-                <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Phone Number</span>
+                <span class="text-xs font-bold text-black uppercase block mb-1">Phone Number</span>
                 @if($canSeePhone)
-                    <span class="text-sm font-bold text-slate-900">{{ $user->phone ?? 'Not provided' }}</span>
+                    <span class="text-sm font-bold text-black">{{ $user->phone ?? 'Not provided' }}</span>
                 @else
                     <span class="text-sm font-medium text-slate-400 italic">Protected (Hidden by member privacy)</span>
                 @endif
@@ -77,7 +77,7 @@
                         </button>
                     </form>
                 @else
-                    <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg inline-block">
+                    <span class="text-xs font-bold text-black bg-slate-100 px-3 py-1.5 rounded-lg inline-block">
                         Contact details request: {{ ucfirst($contactRequest->status) }}
                     </span>
                 @endif
@@ -88,7 +88,7 @@
     <!-- Biography -->
     @if($user->description)
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">About {{ $user->first_name }}</h3>
+            <h3 class="text-xl font-bold text-black mb-4">About {{ $user->first_name }}</h3>
             <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">{{ $user->description }}</p>
         </div>
     @endif

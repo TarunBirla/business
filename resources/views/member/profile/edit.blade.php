@@ -5,8 +5,8 @@
 @section('content')
 <div class="max-w-4xl mx-auto space-y-8">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900">Manage Profile & Privacy Controls</h1>
-        <p class="text-sm text-slate-600 mt-1">Keep your professional networking profile up to date and configure your privacy controls.</p>
+        <h1 class="text-3xl font-bold text-black">Manage Profile & Privacy Controls</h1>
+        <p class="text-sm text-black mt-1">Keep your professional networking profile up to date and configure your privacy controls.</p>
     </div>
 
     <form method="POST" action="{{ route('member.profile.update') }}" class="space-y-8">
@@ -14,7 +14,7 @@
 
         <!-- Basic Personal Info -->
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <h3 class="text-xl font-bold text-slate-900 border-b pb-4">Personal Details</h3>
+            <h3 class="text-xl font-bold text-black border-b pb-4">Personal Details</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -66,8 +66,8 @@
 
         <!-- Privacy & Contact Detail Controls -->
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="text-xl font-bold text-slate-900 border-b pb-4">Backend Privacy Controls (GDPR Compliant)</h3>
-            <p class="text-xs text-slate-500">By default, your email address and phone number are kept hidden from public view until you approve a connection or contact request.</p>
+            <h3 class="text-xl font-bold text-black border-b pb-4">Backend Privacy Controls (GDPR Compliant)</h3>
+            <p class="text-xs text-black">By default, your email address and phone number are kept hidden from public view until you approve a connection or contact request.</p>
 
             <div class="space-y-3 pt-2">
                 <label class="flex items-center space-x-3 cursor-pointer">
@@ -89,7 +89,7 @@
 
         <!-- Services I Offer & Services I Need -->
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <h3 class="text-xl font-bold text-slate-900 border-b pb-4">Professional Services Exchange</h3>
+            <h3 class="text-xl font-bold text-black border-b pb-4">Professional Services Exchange</h3>
 
             <div>
                 <label class="block text-xs font-bold text-sky-700 uppercase mb-3">Services I Offer (Select all that apply)</label>
@@ -97,7 +97,7 @@
                     @foreach($allServices as $service)
                         <label class="flex items-center space-x-2 p-2.5 rounded-lg border border-slate-200 hover:bg-sky-50/50 cursor-pointer">
                             <input type="checkbox" name="services_offered[]" value="{{ $service->id }}" {{ in_array($service->id, $userServicesOffered) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                            <span class="text-xs font-semibold text-slate-800">{{ $service->name }}</span>
+                            <span class="text-xs font-semibold text-black">{{ $service->name }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -109,7 +109,7 @@
                     @foreach($allServices as $service)
                         <label class="flex items-center space-x-2 p-2.5 rounded-lg border border-slate-200 hover:bg-amber-50/50 cursor-pointer">
                             <input type="checkbox" name="services_needed[]" value="{{ $service->id }}" {{ in_array($service->id, $userServicesNeeded) ? 'checked' : '' }} class="rounded border-slate-300 text-amber-600 focus:ring-amber-500">
-                            <span class="text-xs font-semibold text-slate-800">{{ $service->name }}</span>
+                            <span class="text-xs font-semibold text-black">{{ $service->name }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -120,8 +120,8 @@
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div class="flex items-center justify-between border-b pb-4">
                 <div>
-                    <h3 class="text-xl font-bold text-slate-900">Theme & Visual Appearance</h3>
-                    <p class="text-xs text-slate-500 mt-1">Select your preferred color scheme across the platform. Theme preferences are saved to your profile.</p>
+                    <h3 class="text-xl font-bold text-black">Theme & Visual Appearance</h3>
+                    <p class="text-xs text-black mt-1">Select your preferred color scheme across the platform. Theme preferences are saved to your profile.</p>
                 </div>
                 <span class="text-xs px-2.5 py-1 bg-sky-50 text-sky-700 font-semibold rounded-full border border-sky-200">
                     <i class="fa-solid fa-palette mr-1"></i> User Switcher
@@ -140,11 +140,11 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center space-x-2">
                                 <input type="radio" name="theme_id" value="{{ $theme->id }}" {{ $isSelected ? 'checked' : '' }} class="text-sky-600 focus:ring-sky-500 h-4 w-4">
-                                <span class="font-bold text-sm text-slate-900">{{ $theme->name }}</span>
+                                <span class="font-bold text-sm text-black">{{ $theme->name }}</span>
                             </div>
                             <div class="flex items-center space-x-1">
                                 @if($theme->is_default)
-                                    <span class="text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded">Default</span>
+                                    <span class="text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 bg-slate-100 text-black rounded">Default</span>
                                 @endif
                                 <span class="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded {{ $theme->type === 'dark' ? 'bg-purple-100 text-purple-700' : 'bg-amber-100 text-amber-800' }}">
                                     {{ ucfirst($theme->type) }}
@@ -161,7 +161,7 @@
                             <div class="h-full flex-1" style="background-color: {{ $colors['footer_bg'] ?? '#0f172a' }}" title="Footer Background"></div>
                         </div>
 
-                        <div class="flex items-center justify-between text-xs text-slate-500">
+                        <div class="flex items-center justify-between text-xs text-black">
                             <span class="inline-flex items-center">
                                 <span class="w-2.5 h-2.5 rounded-full mr-1.5 inline-block" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0284c7' }}"></span>
                                 Primary Accent

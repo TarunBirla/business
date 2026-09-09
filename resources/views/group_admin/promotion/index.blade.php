@@ -5,8 +5,8 @@
 @section('content')
 <div class="space-y-8">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900">Promote {{ $group->name }}</h1>
-        <p class="text-sm text-slate-600 mt-1">Use shareable URLs, customized social media messages, printable QR codes, and referral tracking to grow your community.</p>
+        <h1 class="text-3xl font-bold text-black">Promote {{ $group->name }}</h1>
+        <p class="text-sm text-black mt-1">Use shareable URLs, customized social media messages, printable QR codes, and referral tracking to grow your community.</p>
     </div>
 
     <!-- Top Grid: Share Link & QR Code Generator -->
@@ -14,7 +14,7 @@
         
         <!-- Share Links & Social Buttons -->
         <div class="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <h3 class="text-xl font-bold text-slate-900 border-b pb-4">Community Public Link & Social Sharing</h3>
+            <h3 class="text-xl font-bold text-black border-b pb-4">Community Public Link & Social Sharing</h3>
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Public Community Join URL</label>
@@ -63,8 +63,8 @@
         <!-- QR Code Printable Card -->
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center flex flex-col justify-between">
             <div>
-                <h3 class="font-bold text-slate-900 text-xl mb-1">Official QR Code</h3>
-                <p class="text-xs text-slate-500 mb-6">Scan to Join {{ $group->name }}</p>
+                <h3 class="font-bold text-black text-xl mb-1">Official QR Code</h3>
+                <p class="text-xs text-black mb-6">Scan to Join {{ $group->name }}</p>
 
                 <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100 flex justify-center">
                     {!! $qrCodeSvg !!}
@@ -85,8 +85,8 @@
     <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h3 class="text-xl font-bold text-slate-900">Referral & Traffic Source Analytics</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Track how members discover and join {{ $group->name }}.</p>
+                <h3 class="text-xl font-bold text-black">Referral & Traffic Source Analytics</h3>
+                <p class="text-xs text-black mt-0.5">Track how members discover and join {{ $group->name }}.</p>
             </div>
             <div class="px-4 py-2 bg-sky-50 text-sky-800 font-bold text-sm rounded-xl">
                 Total Referrals: {{ number_format($referralsCount) }}
@@ -96,11 +96,11 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             @forelse($sourcesCount as $source => $count)
                 <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="text-xs font-bold text-slate-500 uppercase">{{ ucfirst($source) }}</div>
-                    <div class="text-2xl font-bold text-slate-900 mt-1">{{ number_format($count) }}</div>
+                    <div class="text-xs font-bold text-black uppercase">{{ ucfirst($source) }}</div>
+                    <div class="text-2xl font-bold text-black mt-1">{{ number_format($count) }}</div>
                 </div>
             @empty
-                <div class="col-span-4 text-center py-6 text-slate-500 text-sm">
+                <div class="col-span-4 text-center py-6 text-black text-sm">
                     No referral sources recorded yet. Share your referral link above to track clicks and conversions!
                 </div>
             @endforelse

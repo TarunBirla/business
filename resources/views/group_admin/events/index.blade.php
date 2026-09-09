@@ -6,8 +6,8 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Community Events ({{ $group->name }})</h1>
-            <p class="text-sm text-slate-600 mt-1">Create and manage networking events, workshops, and attendee lists.</p>
+            <h1 class="text-3xl font-bold text-black">Community Events ({{ $group->name }})</h1>
+            <p class="text-sm text-black mt-1">Create and manage networking events, workshops, and attendee lists.</p>
         </div>
         <a href="{{ route('group_admin.events.create', $group->id) }}" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow transition">
             + Create New Event
@@ -25,9 +25,9 @@
                         <span class="text-xs text-slate-400 font-medium">Status: {{ ucfirst($event->status) }}</span>
                     </div>
 
-                    <h3 class="font-bold text-slate-900 text-lg mt-3">{{ $event->title }}</h3>
+                    <h3 class="font-bold text-black text-lg mt-3">{{ $event->title }}</h3>
                     <p class="text-xs text-sky-600 font-semibold mt-1"><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $event->start_at->format('d M Y, h:i A') }}</p>
-                    <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</p>
+                    <p class="text-xs text-black mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</p>
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">

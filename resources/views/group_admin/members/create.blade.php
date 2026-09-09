@@ -5,8 +5,8 @@
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900">Add / Invite Member</h1>
-        <p class="text-sm text-slate-600 mt-1">Manually register or invite a new member to {{ $group->name }}.</p>
+        <h1 class="text-3xl font-bold text-black">Add / Invite Member</h1>
+        <p class="text-sm text-black mt-1">Manually register or invite a new member to {{ $group->name }}.</p>
     </div>
 
     <form method="POST" action="{{ route('group_admin.members.store', $group->id) }}" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">

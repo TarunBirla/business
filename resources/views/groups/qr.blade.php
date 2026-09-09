@@ -21,7 +21,7 @@
         </div>
 
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">{{ $group->name }}</h1>
+            <h1 class="text-3xl font-bold text-black">{{ $group->name }}</h1>
             <p class="text-sm font-semibold text-sky-600 mt-1">Connect. Network. Support. Grow Together.</p>
         </div>
 
@@ -30,15 +30,15 @@
         </div>
 
         <div class="space-y-1">
-            <p class="text-lg font-bold text-slate-900">Scan QR Code to Join Community</p>
-            <p class="text-xs text-slate-500 font-mono">{{ $group->join_url }}</p>
+            <p class="text-lg font-bold text-black">Scan QR Code to Join Community</p>
+            <p class="text-xs text-black font-mono">{{ $group->join_url }}</p>
         </div>
 
         <div class="no-print pt-4 space-y-2">
             <button onclick="window.print()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow hover:bg-sky-700 transition flex items-center justify-center space-x-2">
                 <span><i class="fa-solid fa-print mr-2"></i> Print Poster / Save as PDF</span>
             </button>
-            <button onclick="window.close()" class="text-xs text-slate-500 hover:underline">Close Window</button>
+            <button onclick="window.close()" class="text-xs text-black hover:underline">Close Window</button>
         </div>
     </div>
 </body>
