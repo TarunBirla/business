@@ -27,7 +27,7 @@
     </div>
 
     <!-- Main Chat Grid -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-3 min-h-[600px] max-h-[750px]">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-3 min-h-[400px] max-h-[550px]">
         
         <!-- Left Panel: Group Contacts List -->
         <div class="border-r border-slate-200 bg-slate-50/50 flex flex-col justify-between">
