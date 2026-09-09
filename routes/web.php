@@ -28,6 +28,7 @@ use App\Http\Controllers\SuperAdmin\SuperAdminCmsController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', fn() => redirect()->route('member.dashboard'));
 Route::get('/groups', [PublicGroupController::class, 'index'])->name('groups.index');
 Route::get('/groups/{slug}', [PublicGroupController::class, 'show'])->name('groups.show');
 Route::get('/join/{slug}', [PublicGroupController::class, 'show'])->name('groups.join');
@@ -50,7 +51,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
