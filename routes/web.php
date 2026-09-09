@@ -21,6 +21,7 @@ use App\Http\Controllers\SuperAdmin\SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\SuperAdminGroupController;
 use App\Http\Controllers\SuperAdmin\SuperAdminUserController;
 use App\Http\Controllers\SuperAdmin\SuperAdminCmsController;
+use App\Http\Controllers\SuperAdmin\ThemeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
     Route::get('/member/profile', [MemberProfileController::class, 'edit'])->name('member.profile.edit');
     Route::post('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+    Route::post('/member/profile/theme', [MemberProfileController::class, 'updateTheme'])->name('member.profile.theme');
 
     // Directory & Member Profile Viewing
     Route::get('/member/directory', [MemberDirectoryController::class, 'index'])->name('member.directory');
@@ -141,4 +143,14 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     Route::get('/cms', [SuperAdminCmsController::class, 'index'])->name('cms.index');
     Route::get('/cms/{page}/edit', [SuperAdminCmsController::class, 'edit'])->name('cms.edit');
     Route::put('/cms/{page}', [SuperAdminCmsController::class, 'update'])->name('cms.update');
+
+    // Theme Manager
+    Route::get('/themes', [ThemeController::class, 'index'])->name('themes.index');
+    Route::get('/themes/create', [ThemeController::class, 'create'])->name('themes.create');
+    Route::post('/themes', [ThemeController::class, 'store'])->name('themes.store');
+    Route::get('/themes/{theme}/edit', [ThemeController::class, 'edit'])->name('themes.edit');
+    Route::put('/themes/{theme}', [ThemeController::class, 'update'])->name('themes.update');
+    Route::post('/themes/{theme}/set-default', [ThemeController::class, 'setDefault'])->name('themes.set_default');
+    Route::post('/themes/{theme}/duplicate', [ThemeController::class, 'duplicate'])->name('themes.duplicate');
+    Route::delete('/themes/{theme}', [ThemeController::class, 'destroy'])->name('themes.destroy');
 });

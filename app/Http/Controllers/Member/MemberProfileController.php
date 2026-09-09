@@ -14,8 +14,9 @@ class MemberProfileController extends Controller
         $allServices = Service::where('status', 'active')->orderBy('name')->get();
         $userServicesOffered = $user->servicesOffered->pluck('id')->toArray();
         $userServicesNeeded = $user->servicesNeeded->pluck('id')->toArray();
+        $themes = \App\Models\Theme::where('is_active', true)->orderBy('is_default', 'desc')->get();
 
-        return view('member.profile.edit', compact('user', 'allServices', 'userServicesOffered', 'userServicesNeeded'));
+        return view('member.profile.edit', compact('user', 'allServices', 'userServicesOffered', 'userServicesNeeded', 'themes'));
     }
 
     public function update(Request $request)
@@ -38,6 +39,7 @@ class MemberProfileController extends Controller
             'show_phone' => 'nullable|boolean',
             'allow_connections' => 'nullable|boolean',
             'allow_contact_requests' => 'nullable|boolean',
+            'theme_id' => 'nullable|exists:themes,id',
         ]);
 
         $user->update([
@@ -52,6 +54,7 @@ class MemberProfileController extends Controller
             'description' => $request->description,
             'website' => $request->website,
             'linkedin' => $request->linkedin,
+            'theme_id' => $request->theme_id,
             'privacy_settings' => [
                 'show_email' => $request->boolean('show_email'),
                 'show_phone' => $request->boolean('show_phone'),
@@ -76,5 +79,21 @@ class MemberProfileController extends Controller
         }
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function updateTheme(Request $request)
+    {
+        $request->validate([
+            'theme_id' => 'nullable|exists:themes,id',
+        ]);
+
+        $user = auth()->user();
+        $user->update(['theme_id' => $request->theme_id]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Theme updated successfully!']);
+        }
+
+        return redirect()->back()->with('success', 'Theme preference saved successfully.');
     }
 }

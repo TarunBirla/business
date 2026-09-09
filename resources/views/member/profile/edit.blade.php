@@ -116,9 +116,97 @@
             </div>
         </div>
 
-        <button type="submit" class="px-8 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition">
-            Save Profile & Settings
+        <!-- Theme Preference Settings -->
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div class="flex items-center justify-between border-b pb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">Theme & Visual Appearance</h3>
+                    <p class="text-xs text-slate-500 mt-1">Select your preferred color scheme across the platform. Theme preferences are saved to your profile.</p>
+                </div>
+                <span class="text-xs px-2.5 py-1 bg-sky-50 text-sky-700 font-semibold rounded-full border border-sky-200">
+                    <i class="fa-solid fa-palette mr-1"></i> User Switcher
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                @foreach($themes as $theme)
+                    @php
+                        $isSelected = ($user->theme_id == $theme->id) || (is_null($user->theme_id) && $theme->is_default);
+                        $colors = $theme->colors ?? [];
+                    @endphp
+                    <label class="theme-card-option relative block cursor-pointer rounded-xl border-2 transition-all p-4 hover:shadow-md {{ $isSelected ? 'border-sky-500 bg-sky-50/30 ring-2 ring-sky-500/20' : 'border-slate-200 hover:border-slate-300 bg-white' }}"
+                           data-theme-id="{{ $theme->id }}"
+                           data-colors='@json($theme->colors)'>
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-2">
+                                <input type="radio" name="theme_id" value="{{ $theme->id }}" {{ $isSelected ? 'checked' : '' }} class="text-sky-600 focus:ring-sky-500 h-4 w-4">
+                                <span class="font-bold text-sm text-slate-900">{{ $theme->name }}</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                @if($theme->is_default)
+                                    <span class="text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded">Default</span>
+                                @endif
+                                <span class="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded {{ $theme->type === 'dark' ? 'bg-purple-100 text-purple-700' : 'bg-amber-100 text-amber-800' }}">
+                                    {{ ucfirst($theme->type) }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Color Swatches Bar -->
+                        <div class="h-8 rounded-lg overflow-hidden flex border border-slate-200 shadow-inner mb-3">
+                            <div class="h-full flex-1" style="background-color: {{ $colors['bg_page'] ?? '#f8fafc' }}" title="Page Background"></div>
+                            <div class="h-full flex-1" style="background-color: {{ $colors['card_bg'] ?? '#ffffff' }}" title="Card Background"></div>
+                            <div class="h-full flex-1" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0284c7' }}" title="Primary Brand"></div>
+                            <div class="h-full flex-1" style="background-color: {{ $colors['text_heading'] ?? '#0f172a' }}" title="Heading Text"></div>
+                            <div class="h-full flex-1" style="background-color: {{ $colors['footer_bg'] ?? '#0f172a' }}" title="Footer Background"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs text-slate-500">
+                            <span class="inline-flex items-center">
+                                <span class="w-2.5 h-2.5 rounded-full mr-1.5 inline-block" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0284c7' }}"></span>
+                                Primary Accent
+                            </span>
+                            <span class="font-semibold text-sky-600 text-[11px]">
+                                {{ $isSelected ? 'Active Theme' : 'Click to select' }}
+                            </span>
+                        </div>
+                    </label>
+                @endforeach
+            </div>
+        </div>
+
+        <button type="submit" class="px-8 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition flex items-center space-x-2">
+            <i class="fa-solid fa-check"></i>
+            <span>Save Profile & Settings</span>
         </button>
     </form>
 </div>
+
+<script>
+    document.querySelectorAll('.theme-card-option').forEach(card => {
+        card.addEventListener('click', function() {
+            // Uncheck others
+            document.querySelectorAll('.theme-card-option').forEach(c => {
+                c.classList.remove('border-sky-500', 'bg-sky-50/30', 'ring-2', 'ring-sky-500/20');
+                c.classList.add('border-slate-200', 'bg-white');
+            });
+            // Highlight selected card
+            this.classList.remove('border-slate-200', 'bg-white');
+            this.classList.add('border-sky-500', 'bg-sky-50/30', 'ring-2', 'ring-sky-500/20');
+
+            // Apply live preview if colors exist
+            const colorsJson = this.getAttribute('data-colors');
+            if (colorsJson) {
+                try {
+                    const colors = JSON.parse(colorsJson);
+                    const root = document.documentElement;
+                    Object.keys(colors).forEach(key => {
+                        const cssVar = '--' + key.replace(/_/g, '-');
+                        root.style.setProperty(cssVar, colors[key]);
+                    });
+                } catch(e) {}
+            }
+        });
+    });
+</script>
 @endsection

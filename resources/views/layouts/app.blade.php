@@ -1,5 +1,8 @@
+@php
+    $activeTheme = \App\Services\ThemeService::getActiveTheme();
+@endphp
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ $activeTheme->slug }}" class="{{ $activeTheme->type }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +10,66 @@
     <meta name="description" content="@yield('meta_description', 'Connect with your community, discover professionals and businesses, exchange services, attend events and build meaningful relationships across the UK.')">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Dynamic Active Theme Variables -->
+    <style id="theme-css-variables">
+        :root, [data-theme] {
+{!! $activeTheme->toCssVariables() !!}
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-page) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .bg-slate-50, .bg-slate-100 {
+            background-color: var(--bg-page) !important;
+        }
+
+        .bg-white {
+            background-color: var(--bg-surface) !important;
+        }
+
+        .text-slate-900, .text-slate-800 {
+            color: var(--text-heading) !important;
+        }
+
+        .text-slate-700, .text-slate-600, .text-slate-500 {
+            color: var(--text-secondary) !important;
+        }
+
+        .border-slate-200, .border-slate-100, .border-sky-100 {
+            border-color: var(--border-color) !important;
+        }
+
+        .bg-sky-600 {
+            background-color: var(--btn-primary-bg) !important;
+            color: var(--btn-primary-text) !important;
+        }
+
+        .bg-sky-600:hover, .hover\:bg-sky-700:hover {
+            background-color: var(--btn-primary-hover) !important;
+        }
+
+        .text-sky-600, .text-sky-700 {
+            color: var(--text-link) !important;
+        }
+
+        .text-sky-600:hover, .hover\:text-sky-600:hover {
+            color: var(--text-link-hover) !important;
+        }
+
+        nav {
+            background-color: var(--navbar-bg) !important;
+            color: var(--navbar-text) !important;
+        }
+
+        footer {
+            background-color: var(--footer-bg) !important;
+            color: var(--footer-text) !important;
+        }
+    </style>
 
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="@yield('og_title', 'Community Networking Ecosystem UK')">
@@ -47,7 +110,6 @@
     
     <!-- FontAwesome 6 Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -74,13 +136,6 @@
             }
         }
     </script>
-    <style>
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #f8fafc;
-            color: #0f172a;
-        }
-    </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-slate-50 antialiased">
 

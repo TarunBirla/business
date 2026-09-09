@@ -1,9 +1,68 @@
+@php
+    $activeTheme = \App\Services\ThemeService::getActiveTheme();
+@endphp
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ $activeTheme->slug }}" class="{{ $activeTheme->type }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - Community UK</title>
+
+    <!-- Dynamic Active Theme Variables -->
+    <style id="theme-css-variables">
+        :root, [data-theme] {
+{!! $activeTheme->toCssVariables() !!}
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-page) !important;
+            color: var(--text-primary) !important;
+        }
+
+        aside {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        .bg-slate-50, .bg-slate-100 {
+            background-color: var(--bg-page) !important;
+        }
+
+        .bg-white {
+            background-color: var(--bg-surface) !important;
+        }
+
+        .text-slate-900, .text-slate-800 {
+            color: var(--text-heading) !important;
+        }
+
+        .text-slate-700, .text-slate-600, .text-slate-500 {
+            color: var(--text-secondary) !important;
+        }
+
+        .border-slate-200, .border-slate-100, .border-sky-100 {
+            border-color: var(--border-color) !important;
+        }
+
+        .bg-sky-600 {
+            background-color: var(--btn-primary-bg) !important;
+            color: var(--btn-primary-text) !important;
+        }
+
+        .bg-sky-600:hover, .hover\:bg-sky-700:hover {
+            background-color: var(--btn-primary-hover) !important;
+        }
+
+        .text-sky-600, .text-sky-700 {
+            color: var(--text-link) !important;
+        }
+
+        .text-sky-600:hover, .hover\:text-sky-600:hover {
+            color: var(--text-link-hover) !important;
+        }
+    </style>
+
     <!-- Fonts: Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,9 +89,6 @@
             }
         }
     </script>
-    <style>
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #f8fafc; color: #0f172a; }
-    </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col md:flex-row">
 
@@ -41,7 +97,6 @@
         <div>
             <a href="{{ url('/') }}" class="flex items-center space-x-3 mb-8">
                 <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-10 w-auto rounded-xl object-contain shadow-sm">
-                <span class="text-xl font-bold tracking-tight text-slate-900">Community<span class="text-sky-600">UK</span></span>
             </a>
 
             <nav class="space-y-1">
@@ -58,6 +113,9 @@
                     </a>
                     <a href="{{ route('super_admin.cms.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.cms*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
                         <span>CMS Pages</span>
+                    </a>
+                    <a href="{{ route('super_admin.themes.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('super_admin.themes*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <span><i class="fa-solid fa-palette text-sky-600 mr-1.5"></i> Theme Manager</span>
                     </a>
                 @elseif(request()->is('group-admin*'))
                     <div class="px-3 py-2 text-xs font-bold text-sky-600 uppercase tracking-wider">Group Admin</div>
