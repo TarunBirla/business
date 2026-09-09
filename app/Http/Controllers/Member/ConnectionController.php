@@ -79,11 +79,21 @@ class ConnectionController extends Controller
         return back()->with('success', 'Connection request sent successfully.');
     }
 
-    public function acceptRequest(Connection $connection)
+    public function acceptRequest(Request $request, $id)
     {
         $user = auth()->user();
-        if ($connection->receiver_id !== $user->id) {
-            abort(403, 'Unauthorized.');
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $connection = Connection::find($id);
+
+        if (!$connection) {
+            return redirect()->route('member.connections')->with('error', 'Connection request not found.');
+        }
+
+        if ($connection->receiver_id !== $user->id && !$user->isSuperAdmin()) {
+            return redirect()->route('member.connections')->with('error', 'You are not authorized to accept this connection request.');
         }
 
         $connection->update([
@@ -91,21 +101,31 @@ class ConnectionController extends Controller
             'accepted_at' => now(),
         ]);
 
-        return back()->with('success', 'Connection request accepted.');
+        return redirect()->route('member.connections')->with('success', 'Connection request accepted successfully!');
     }
 
-    public function rejectRequest(Connection $connection)
+    public function rejectRequest(Request $request, $id)
     {
         $user = auth()->user();
-        if ($connection->receiver_id !== $user->id) {
-            abort(403, 'Unauthorized.');
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $connection = Connection::find($id);
+
+        if (!$connection) {
+            return redirect()->route('member.connections')->with('error', 'Connection request not found.');
+        }
+
+        if ($connection->receiver_id !== $user->id && !$user->isSuperAdmin()) {
+            return redirect()->route('member.connections')->with('error', 'You are not authorized to decline this connection request.');
         }
 
         $connection->update([
             'status' => 'rejected',
         ]);
 
-        return back()->with('success', 'Connection request declined.');
+        return redirect()->route('member.connections')->with('success', 'Connection request declined.');
     }
 
     public function requestContactDetails(Request $request)

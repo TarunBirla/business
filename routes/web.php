@@ -73,8 +73,8 @@ Route::middleware('auth')->group(function () {
     // Connection System & Contact Requests
     Route::get('/member/connections', [ConnectionController::class, 'index'])->name('member.connections');
     Route::post('/member/connections/send', [ConnectionController::class, 'sendRequest'])->name('member.connections.send');
-    Route::post('/member/connections/{connection}/accept', [ConnectionController::class, 'acceptRequest'])->name('member.connections.accept');
-    Route::post('/member/connections/{connection}/reject', [ConnectionController::class, 'rejectRequest'])->name('member.connections.reject');
+    Route::match(['get', 'post'], '/member/connections/{connection}/accept', [ConnectionController::class, 'acceptRequest'])->name('member.connections.accept');
+    Route::match(['get', 'post'], '/member/connections/{connection}/reject', [ConnectionController::class, 'rejectRequest'])->name('member.connections.reject');
     Route::post('/member/contact-request/send', [ConnectionController::class, 'requestContactDetails'])->name('member.contact_request.send');
 
     // Event Registration
