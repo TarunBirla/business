@@ -7,7 +7,7 @@
 <div class="bg-gradient-to-r from-sky-700 to-sky-900 rounded-2xl text-white p-8 mb-8 shadow-md">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-bold">Welcome back, {{ $user->first_name }}! 👋</h1>
+            <h1 class="text-3xl font-bold">Welcome back, {{ $user->first_name }}! <i class="fa-solid fa-hand-sparkles text-amber-300 ml-1"></i></h1>
             <p class="text-sky-100 text-sm mt-1">Here is what is happening across your community networks today.</p>
         </div>
 
@@ -112,8 +112,8 @@
                 @forelse($upcomingEvents as $reg)
                     <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
                         <h4 class="font-bold text-slate-900 text-sm">{{ $reg->event->title }}</h4>
-                        <p class="text-xs text-sky-600 font-semibold mt-1">📅 {{ $reg->event->start_at->format('d M Y, h:i A') }}</p>
-                        <p class="text-xs text-slate-500 mt-0.5">📍 {{ $reg->event->venue ?? 'Online' }}</p>
+                        <p class="text-xs text-sky-600 font-semibold mt-1"><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $reg->event->start_at->format('d M Y, h:i A') }}</p>
+                        <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $reg->event->venue ?? 'Online' }}</p>
                     </div>
                 @empty
                     <p class="text-sm text-slate-500">No event registrations found.</p>

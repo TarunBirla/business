@@ -26,12 +26,12 @@
                     </div>
 
                     <h3 class="font-bold text-slate-900 text-lg mt-3">{{ $event->title }}</h3>
-                    <p class="text-xs text-sky-600 font-semibold mt-1">📅 {{ $event->start_at->format('d M Y, h:i A') }}</p>
-                    <p class="text-xs text-slate-500 mt-0.5">📍 {{ $event->venue ?? 'Online' }}, {{ $event->city }}</p>
+                    <p class="text-xs text-sky-600 font-semibold mt-1"><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $event->start_at->format('d M Y, h:i A') }}</p>
+                    <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</p>
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
-                    <span class="text-xs font-bold text-slate-700">🎟️ {{ $event->registrations_count }} Registered</span>
+                    <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-ticket text-sky-600 mr-1"></i>{{ $event->registrations_count }} Registered</span>
                     <a href="{{ route('group_admin.events.attendees', [$group->id, $event->id]) }}" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition">
                         View Attendees & CSV
                     </a>

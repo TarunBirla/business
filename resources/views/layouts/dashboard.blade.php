@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -91,7 +93,7 @@
                         $sidebarUnreadCount = auth()->check() ? auth()->user()->receivedMessages()->where('is_read', false)->count() : 0;
                     @endphp
                     <a href="{{ route('member.chat') }}" class="flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.chat*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
-                        <span>💬 Community Chat</span>
+                        <span><i class="fa-solid fa-comments text-sky-600 mr-1.5"></i> Community Chat</span>
                         @if($sidebarUnreadCount > 0)
                             <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full shadow">
                                 {{ $sidebarUnreadCount }}

@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 flex items-center space-x-2">
-                <span>💬 Community Direct Messaging</span>
+                <span><i class="fa-solid fa-comments text-sky-600 mr-2"></i>Community Direct Messaging</span>
             </h1>
             <p class="text-xs text-slate-500 mt-1">Chat securely with verified contacts in your joined community.</p>
         </div>
@@ -56,7 +56,7 @@
                                 <div class="truncate">
                                     <div class="font-bold text-slate-900 text-sm truncate">{{ $contact->name }}</div>
                                     <div class="text-xs text-sky-600 font-medium truncate">{{ $contact->profession ?? 'Community Member' }}</div>
-                                    <div class="text-[10px] text-slate-400 truncate">📍 {{ $contact->city ?? 'UK' }}</div>
+                                    <div class="text-[10px] text-slate-400 truncate"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $contact->city ?? 'UK' }}</div>
                                 </div>
                             </div>
                             @if($unreadCount > 0)
@@ -153,9 +153,9 @@
                             </div>
                         @endif
                     @empty
-                        <div class="text-center py-20 text-slate-400 text-xs font-medium">
-                            <div class="text-3xl mb-2">💬</div>
-                            No messages yet. Send a message to start conversing with {{ $activeContact->first_name }}.
+                        <div class="text-center py-20 text-slate-400 text-xs font-medium flex flex-col items-center">
+                            <i class="fa-regular fa-comments text-4xl text-slate-300 mb-2"></i>
+                            <span>No messages yet. Send a message to start conversing with {{ $activeContact->first_name }}.</span>
                         </div>
                     @endforelse
                 </div>
@@ -166,8 +166,9 @@
                     <input type="hidden" name="group_id" value="{{ $activeGroup->id }}">
                     <input type="hidden" name="receiver_id" value="{{ $activeContact->id }}">
                     <input type="text" name="message" required autocomplete="off" placeholder="Type your message to {{ $activeContact->first_name }}..." class="flex-grow px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
-                    <button type="submit" class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-lg transition">
-                        Send 🚀
+                    <button type="submit" class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-lg transition flex items-center space-x-1.5">
+                        <span>Send</span>
+                        <i class="fa-solid fa-paper-plane ml-1"></i>
                     </button>
                 </form>
             @else

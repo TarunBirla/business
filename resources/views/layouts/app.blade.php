@@ -5,17 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Community Networking Ecosystem') - Community UK</title>
     <meta name="description" content="@yield('meta_description', 'Connect with your community, discover professionals and businesses, exchange services, attend events and build meaningful relationships across the UK.')">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="@yield('og_title', 'Community Networking Ecosystem UK')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses from your community.')">
-    <meta property="og:image" content="@yield('og_image', asset('images/community-og.png'))">
+    <meta property="og:image" content="@yield('og_image', asset('logo.jpeg'))">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Community UK",
+      "url": "{{ url('/') }}",
+      "logo": "{{ asset('logo.jpeg') }}",
+      "description": "UK Community Networking Ecosystem bringing people together based on shared background, region, culture, and professional goals."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Community UK",
+      "url": "{{ url('/') }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ route('groups.index') }}?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 
     <!-- Fonts: Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
@@ -113,7 +144,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white mt-20 border-t border-slate-800">
+    <footer class="bg-slate-900 text-white border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
@@ -126,7 +157,7 @@
                 </div>
 
                 <div>
-                    <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                    <h3 class="font-bold text-white mb-4 text-base">Quick Links</h3>
                     <ul class="space-y-2 text-sm text-slate-400">
                         <li><a href="{{ route('groups.index') }}" class="hover:text-sky-400 transition">Explore Communities</a></li>
                         <li><a href="{{ route('events.index') }}" class="hover:text-sky-400 transition">Upcoming Events</a></li>
@@ -136,7 +167,7 @@
                 </div>
 
                 <div>
-                    <h4 class="font-bold text-white mb-4">Legal & Privacy</h4>
+                    <h3 class="font-bold text-white mb-4 text-base">Legal & Privacy</h3>
                     <ul class="space-y-2 text-sm text-slate-400">
                         <li><a href="{{ route('cms.show', 'privacy') }}" class="hover:text-sky-400 transition">Privacy Policy</a></li>
                         <li><a href="{{ route('cms.show', 'terms') }}" class="hover:text-sky-400 transition">Terms & Conditions</a></li>
@@ -146,7 +177,7 @@
                 </div>
 
                 <div>
-                    <h4 class="font-bold text-white mb-4">Community Ecosystem</h4>
+                    <h3 class="font-bold text-white mb-4 text-base">Community Ecosystem</h3>
                     <p class="text-xs text-slate-400 mb-3">Empowering Gujarati, Marathi, MP, Punjabi, and regional business networks across the UK.</p>
                     <div class="text-xs text-slate-500">&copy; {{ date('Y') }} Community UK Platform. All rights reserved.</div>
                 </div>

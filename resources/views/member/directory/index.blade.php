@@ -52,13 +52,13 @@
                         <div>
                             <h3 class="font-bold text-slate-900 text-lg leading-tight">{{ $member->name }}</h3>
                             <p class="text-xs text-sky-600 font-medium mt-0.5">{{ $member->profession ?? 'Community Member' }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5">📍 {{ $member->city ?? 'UK' }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $member->city ?? 'UK' }}</p>
                         </div>
                     </div>
 
                     @if($member->company)
                         <div class="text-xs text-slate-600 font-semibold mb-3">
-                            🏢 {{ $member->company }}
+                            <i class="fa-solid fa-building text-sky-600 mr-1"></i>{{ $member->company }}
                         </div>
                     @endif
 
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
-                    <span class="text-[11px] text-slate-400 font-medium">Privacy Protected 🔒</span>
+                    <span class="text-[11px] text-slate-400 font-medium">Privacy Protected <i class="fa-solid fa-lock text-slate-400 ml-1"></i></span>
                     <a href="{{ route('member.directory.show', $member->id) }}" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition">
                         View Profile & Connect
                     </a>

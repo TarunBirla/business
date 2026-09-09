@@ -10,9 +10,9 @@
         </div>
         <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-white mb-4">{{ $event->title }}</h1>
         <div class="flex flex-wrap gap-6 text-sm text-sky-100">
-            <span>📅 {{ $event->start_at->format('l, F j, Y \a\t h:i A') }}</span>
-            <span>📍 {{ $event->venue ?? 'Online Meeting' }}, {{ $event->city }}</span>
-            <span>🎟️ Capacity: {{ $event->capacity }} Attendees</span>
+            <span><i class="fa-regular fa-calendar-days text-sky-300 mr-1.5"></i>{{ $event->start_at->format('l, F j, Y \a\t h:i A') }}</span>
+            <span><i class="fa-solid fa-location-dot text-rose-300 mr-1.5"></i>{{ $event->venue ?? 'Online Meeting' }}, {{ $event->city }}</span>
+            <span><i class="fa-solid fa-ticket text-sky-300 mr-1.5"></i>Capacity: {{ $event->capacity }} Attendees</span>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/30 text-sky-100 text-xs font-semibold uppercase tracking-wider mb-2">
-                        <span>📍 {{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
+                        <span><i class="fa-solid fa-location-dot text-rose-300 mr-1"></i>{{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
                     </div>
                     <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-white">{{ $group->name }}</h1>
                     <p class="text-sky-100 text-base md:text-lg mt-2 max-w-2xl font-medium">
@@ -28,7 +28,7 @@
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
                 <button onclick="document.getElementById('shareModal').classList.remove('hidden')" class="w-full sm:w-auto px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/20 backdrop-blur-md transition flex items-center justify-center space-x-2">
-                    <span>🔗 Share & QR Code</span>
+                    <span><i class="fa-solid fa-share-nodes mr-1.5"></i>Share & QR Code</span>
                 </button>
 
                 @auth
@@ -89,7 +89,7 @@
             <!-- About Section -->
             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                 <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center space-x-2">
-                    <span>📖 About The Community</span>
+                    <span><i class="fa-solid fa-book-open text-sky-600 mr-2"></i>About The Community</span>
                 </h2>
                 <p class="text-slate-700 text-base leading-relaxed whitespace-pre-line">
                     {{ $group->description }}
@@ -108,28 +108,36 @@
                 <h2 class="text-2xl font-bold text-slate-900 mb-6">Why Join This Community?</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex items-start space-x-4">
-                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">🤝</div>
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">
+                            <i class="fa-solid fa-handshake text-lg text-sky-600"></i>
+                        </div>
                         <div>
                             <h4 class="font-bold text-slate-900 text-sm">Build Connections</h4>
                             <p class="text-xs text-slate-600 mt-1">Meet people from your community, regional background, or language group across the UK.</p>
                         </div>
                     </div>
                     <div class="flex items-start space-x-4">
-                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">💼</div>
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">
+                            <i class="fa-solid fa-briefcase text-lg text-sky-600"></i>
+                        </div>
                         <div>
                             <h4 class="font-bold text-slate-900 text-sm">Discover Professionals</h4>
                             <p class="text-xs text-slate-600 mt-1">Find vetted accountants, solicitors, property agents, IT experts, and business consultants.</p>
                         </div>
                     </div>
                     <div class="flex items-start space-x-4">
-                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">🛠️</div>
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">
+                            <i class="fa-solid fa-screwdriver-wrench text-lg text-sky-600"></i>
+                        </div>
                         <div>
                             <h4 class="font-bold text-slate-900 text-sm">Offer & Find Services</h4>
                             <p class="text-xs text-slate-600 mt-1">Promote your own professional services and request help from trusted community members.</p>
                         </div>
                     </div>
                     <div class="flex items-start space-x-4">
-                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">🎉</div>
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold shrink-0">
+                            <i class="fa-solid fa-ticket text-lg text-sky-600"></i>
+                        </div>
                         <div>
                             <h4 class="font-bold text-slate-900 text-sm">Attend Exclusive Events</h4>
                             <p class="text-xs text-slate-600 mt-1">Join networking dinners, cultural meetups, business breakfasts, and online webinars.</p>
@@ -144,8 +152,8 @@
                 <p class="text-sm text-slate-600 mb-6">Members within this community offer and request services in these fields:</p>
                 <div class="flex flex-wrap gap-2">
                     @foreach(['Accounting', 'Legal & Legal Advice', 'Property & Estate Agents', 'Insurance', 'IT & Software', 'Marketing & Branding', 'Recruitment', 'Business Consulting', 'Education & Tutoring', 'Photography & Media'] as $category)
-                        <span class="px-3.5 py-1.5 bg-sky-50 border border-sky-100 text-sky-800 text-xs font-semibold rounded-lg">
-                            ✓ {{ $category }}
+                        <span class="px-3.5 py-1.5 bg-sky-50 border border-sky-100 text-sky-800 text-xs font-semibold rounded-lg flex items-center">
+                            <i class="fa-solid fa-check text-sky-600 mr-1.5 text-xs"></i> {{ $category }}
                         </span>
                     @endforeach
                 </div>
@@ -161,8 +169,8 @@
                                 <div>
                                     <h4 class="font-bold text-slate-900 text-base">{{ $event->title }}</h4>
                                     <div class="text-xs text-slate-500 mt-1 space-x-3">
-                                        <span>📅 {{ $event->start_at->format('d M Y, h:i A') }}</span>
-                                        <span>📍 {{ $event->venue ?? 'Online' }}, {{ $event->city }}</span>
+                                        <span><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $event->start_at->format('d M Y, h:i A') }}</span>
+                                        <span><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-3">
@@ -271,13 +279,13 @@
 
         <div class="space-y-3 mb-6">
             <a href="https://api.whatsapp.com/send?text={{ urlencode('Join ' . $group->name . ' on Community UK: ' . $group->join_url) }}" target="_blank" class="flex items-center justify-center space-x-2 w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition text-sm">
-                <span>💬 Share on WhatsApp</span>
+                <span class="flex items-center"><i class="fa-brands fa-whatsapp mr-2 text-base"></i> Share on WhatsApp</span>
             </a>
-            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($group->join_url) }}" target="_blank" class="flex items-center justify-center space-x-2 w-full py-3 bg-sky-700 text-white font-bold rounded-xl hover:bg-sky-800 transition text-sm">
-                <span>💼 Share on LinkedIn</span>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($group->join_url) }}" target="_blank" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-sm transition flex items-center justify-center space-x-2 border border-sky-100">
+                <span class="flex items-center"><i class="fa-brands fa-linkedin text-sky-700 mr-2 text-base"></i> Share on LinkedIn</span>
             </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($group->join_url) }}" target="_blank" class="flex items-center justify-center space-x-2 w-full py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition text-sm">
-                <span>📘 Share on Facebook</span>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($group->join_url) }}" target="_blank" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-sm transition flex items-center justify-center space-x-2 border border-sky-100">
+                <span class="flex items-center"><i class="fa-brands fa-facebook text-blue-600 mr-2 text-base"></i> Share on Facebook</span>
             </a>
         </div>
 

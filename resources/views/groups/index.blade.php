@@ -53,7 +53,7 @@
                     <div class="pt-8 px-6 pb-6">
                         <h3 class="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition">{{ $group->name }}</h3>
                         <p class="text-xs text-sky-600 font-medium mt-1 flex items-center">
-                            <span>📍 {{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
+                            <span><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i>{{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
                         </p>
                         <p class="text-sm text-slate-600 mt-3 line-clamp-3 leading-relaxed">
                             {{ $group->description }}
@@ -61,9 +61,9 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                    <div class="text-xs text-slate-500 font-semibold">
-                        <span>👥 {{ number_format($group->members_count) }} Members</span> &bull; 
-                        <span>📅 {{ $group->events_count }} Events</span>
+                    <div class="text-xs text-slate-500 font-semibold space-x-2">
+                        <span><i class="fa-solid fa-users text-sky-600 mr-1"></i>{{ number_format($group->members_count) }} Members</span> &bull; 
+                        <span><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $group->events_count }} Events</span>
                     </div>
                     <a href="{{ route('groups.show', $group->slug) }}" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg transition shadow-sm">
                         View Community

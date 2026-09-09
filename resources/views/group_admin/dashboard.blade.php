@@ -22,7 +22,7 @@
                 + Send Notice
             </a>
             <a href="{{ route('group_admin.promotion.index', $activeGroup->id) }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition">
-                🔗 Promote & QR
+                <i class="fa-solid fa-qrcode mr-1"></i> Promote & QR
             </a>
         </div>
     </div>
@@ -79,7 +79,7 @@
                     <div class="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
                         <div>
                             <div class="font-bold text-slate-900 text-sm">{{ $evt->title }}</div>
-                            <div class="text-xs text-sky-600 font-semibold mt-0.5">📅 {{ $evt->start_at->format('d M Y, h:i A') }}</div>
+                            <div class="text-xs text-sky-600 font-semibold mt-0.5"><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $evt->start_at->format('d M Y, h:i A') }}</div>
                         </div>
                         <span class="font-bold text-xs text-slate-900">
                             {{ $evt->event_type === 'free' ? 'Free' : '£' . number_format($evt->price, 2) }}

@@ -74,7 +74,7 @@
                         <div>
                             <div class="font-bold text-slate-900 text-sm">{{ $sug->name }}</div>
                             <div class="text-xs text-sky-600 font-medium">{{ $sug->profession ?? 'Member' }}</div>
-                            <div class="text-xs text-slate-500 mt-1">📍 {{ $sug->city }}</div>
+                            <div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $sug->city }}</div>
                         </div>
                         <a href="{{ route('member.directory.show', $sug->id) }}" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-center font-bold text-xs rounded-lg transition">
                             View Profile & Connect

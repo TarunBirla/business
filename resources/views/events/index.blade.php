@@ -23,8 +23,8 @@
                         {{ $event->description }}
                     </p>
                     <div class="mt-4 pt-4 border-t border-slate-100 space-y-1 text-xs text-slate-600">
-                        <p class="flex items-center space-x-1"><span>📅</span> <span>{{ $event->start_at->format('d M Y, h:i A') }}</span></p>
-                        <p class="flex items-center space-x-1"><span>📍</span> <span>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</span></p>
+                        <p class="flex items-center space-x-1.5"><span><i class="fa-regular fa-calendar-days text-sky-600"></i></span> <span>{{ $event->start_at->format('d M Y, h:i A') }}</span></p>
+                        <p class="flex items-center space-x-1.5"><span><i class="fa-solid fa-location-dot text-rose-500"></i></span> <span>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</span></p>
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">

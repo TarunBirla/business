@@ -28,8 +28,9 @@
 
         <form method="POST" action="{{ route('join.checkout.process', $group->id) }}" class="space-y-4">
             @csrf
-            <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900">
-                🔒 Secured by Pay Architecture. Card details are processed safely using 256-bit encryption. No card details stored.
+            <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900 flex items-center">
+                <i class="fa-solid fa-lock text-sky-700 mr-2 text-sm"></i>
+                <span>Secured by Pay Architecture. Card details are processed safely using 256-bit encryption. No card details stored.</span>
             </div>
 
             <button type="submit" class="w-full py-4 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition text-base">

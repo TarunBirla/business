@@ -8,7 +8,7 @@
 <section class="relative bg-gradient-to-b from-sky-50 via-white to-slate-50 py-16 lg:py-16 overflow-hidden border-b border-sky-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-sky-100/80 text-sky-800 font-semibold text-xs tracking-wide uppercase mb-6 border border-sky-200">
-            <span>🇬🇧 UK Community Networking Ecosystem</span>
+            <span><i class="fa-solid fa-earth-europe text-sky-600 mr-1.5"></i> UK Community Networking Ecosystem</span>
         </div>
         <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 leading-tight max-w-4xl mx-auto">
             Connect With Your Community. <br class="hidden sm:inline" /><span class="text-sky-600">Build Meaningful Relationships.</span>
@@ -58,7 +58,7 @@
                         <div class="pt-8 px-6 pb-6">
                             <h3 class="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition">{{ $group->name }}</h3>
                             <p class="text-xs text-sky-600 font-medium mt-1 flex items-center">
-                                <span>📍 {{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
+                                <span><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i>{{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
                             </p>
                             <p class="text-sm text-slate-600 mt-3 line-clamp-2 leading-relaxed">
                                 {{ $group->description }}
@@ -66,9 +66,9 @@
                         </div>
                     </div>
                     <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                        <div class="text-xs text-slate-500 font-semibold">
-                            <span>👥 {{ number_format($group->members_count) }} Members</span> &bull; 
-                            <span>📅 {{ $group->events_count }} Events</span>
+                        <div class="text-xs text-slate-500 font-semibold space-x-2">
+                            <span><i class="fa-solid fa-users text-sky-600 mr-1"></i>{{ number_format($group->members_count) }} Members</span> &bull; 
+                            <span><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $group->events_count }} Events</span>
                         </div>
                         <a href="{{ route('groups.show', $group->slug) }}" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg transition shadow-sm">
                             Join Community
@@ -127,22 +127,28 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach($upcomingEvents as $event)
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-lg transition duration-300">
                     <div class="p-6">
                         <span class="inline-block px-3 py-1 bg-sky-100 text-sky-800 rounded-full text-xs font-bold mb-3">
                             {{ $event->group->name }}
                         </span>
-                        <h4 class="font-bold text-lg text-slate-900 leading-snug">{{ $event->title }}</h4>
-                        <div class="mt-4 space-y-1 text-xs text-slate-500">
-                            <p class="flex items-center space-x-1"><span>📅</span> <span>{{ $event->start_at->format('d M Y, h:i A') }}</span></p>
-                            <p class="flex items-center space-x-1"><span>📍</span> <span>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</span></p>
+                        <h3 class="font-bold text-lg text-slate-900 leading-snug">{{ $event->title }}</h3>
+                        <div class="mt-4 space-y-2 text-xs text-slate-500">
+                            <p class="flex items-center space-x-2">
+                                <i class="fa-regular fa-calendar-days text-sky-600 w-4"></i>
+                                <span>{{ $event->start_at->format('d M Y, h:i A') }}</span>
+                            </p>
+                            <p class="flex items-center space-x-2">
+                                <i class="fa-solid fa-location-dot text-rose-500 w-4"></i>
+                                <span>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</span>
+                            </p>
                         </div>
                     </div>
                     <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                         <span class="font-bold text-slate-900 text-sm">
                             {{ $event->event_type === 'free' ? 'Free' : '£' . number_format($event->price, 2) }}
                         </span>
-                        <a href="{{ route('events.show', $event->slug) }}" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition">
+                        <a href="{{ route('events.show', $event->slug) }}" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-sm">
                             Event Details
                         </a>
                     </div>

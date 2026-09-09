@@ -45,16 +45,16 @@
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-3">One-Click Social Sharing</label>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <a href="https://api.whatsapp.com/send?text={{ urlencode($defaultShareText . ' ' . $shareUrl) }}" target="_blank" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
-                        <span>💬 WhatsApp</span>
+                        <span><i class="fa-brands fa-whatsapp text-sm mr-1"></i> WhatsApp</span>
                     </a>
                     <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($shareUrl) }}" target="_blank" class="px-4 py-3 bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
-                        <span>💼 LinkedIn</span>
+                        <span><i class="fa-brands fa-linkedin text-sm mr-1"></i> LinkedIn</span>
                     </a>
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
-                        <span>📘 Facebook</span>
+                        <span><i class="fa-brands fa-facebook text-sm mr-1"></i> Facebook</span>
                     </a>
                     <a href="mailto:?subject={{ urlencode('Join ' . $group->name) }}&body={{ urlencode($defaultShareText . ' ' . $shareUrl) }}" class="px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
-                        <span>✉️ Email</span>
+                        <span><i class="fa-solid fa-envelope text-sm mr-1"></i> Email</span>
                     </a>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 
             <div class="space-y-2">
                 <a href="{{ route('groups.qr', $group->slug) }}" target="_blank" class="block w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow transition">
-                    🖨️ Printable & Downloadable View
+                    <i class="fa-solid fa-print mr-1"></i> Printable & Downloadable View
                 </a>
                 <p class="text-[11px] text-slate-400">Perfect for event banners, flyers, posters, and business cards.</p>
             </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Printable QR Code - {{ $group->name }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Space Grotesk', sans-serif; }
@@ -34,8 +35,8 @@
         </div>
 
         <div class="no-print pt-4 space-y-2">
-            <button onclick="window.print()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow hover:bg-sky-700 transition">
-                🖨️ Print Poster / Save as PDF
+            <button onclick="window.print()" class="w-full py-3 bg-sky-600 text-white font-bold rounded-xl shadow hover:bg-sky-700 transition flex items-center justify-center space-x-2">
+                <span><i class="fa-solid fa-print mr-2"></i> Print Poster / Save as PDF</span>
             </button>
             <button onclick="window.close()" class="text-xs text-slate-500 hover:underline">Close Window</button>
         </div>

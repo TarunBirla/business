@@ -12,7 +12,7 @@
         <div class="flex-grow text-center md:text-left space-y-2">
             <h1 class="text-3xl font-bold text-slate-900">{{ $user->name }}</h1>
             <p class="text-base text-sky-600 font-semibold">{{ $user->profession ?? 'Community Professional' }} {{ $user->company ? 'at ' . $user->company : '' }}</p>
-            <p class="text-sm text-slate-500">📍 {{ $user->city ?? 'UK' }}, {{ $user->country }}</p>
+            <p class="text-sm text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $user->city ?? 'UK' }}, {{ $user->country }}</p>
 
             <div class="pt-4 flex flex-wrap justify-center md:justify-start gap-3">
                 @if(!$connection)
@@ -20,22 +20,22 @@
                         @csrf
                         <input type="hidden" name="receiver_id" value="{{ $user->id }}">
                         <input type="hidden" name="group_id" value="{{ $activeGroupId }}">
-                        <button type="submit" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-sm shadow transition">
-                            🤝 Connect
+                        <button type="submit" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-sm shadow transition flex items-center">
+                            <i class="fa-solid fa-user-plus mr-1.5"></i> Connect
                         </button>
                     </form>
                 @elseif($connection->status === 'pending')
-                    <span class="px-5 py-2.5 bg-amber-50 text-amber-800 font-bold rounded-xl text-sm border border-amber-200">
-                        ⏳ Connection Request Pending
+                    <span class="px-5 py-2.5 bg-amber-50 text-amber-800 font-bold rounded-xl text-sm border border-amber-200 flex items-center">
+                        <i class="fa-regular fa-clock text-amber-600 mr-1.5"></i> Connection Request Pending
                     </span>
                 @elseif($connection->status === 'accepted')
-                    <span class="px-5 py-2.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl text-sm border border-emerald-200">
-                        ✓ Connected
+                    <span class="px-5 py-2.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl text-sm border border-emerald-200 flex items-center">
+                        <i class="fa-solid fa-check text-emerald-600 mr-1.5"></i> Connected
                     </span>
                 @endif
 
-                <a href="{{ route('member.chat', ['groupId' => $activeGroupId, 'receiverId' => $user->id]) }}" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm shadow transition">
-                    💬 Direct Message
+                <a href="{{ route('member.chat', ['groupId' => $activeGroupId, 'receiverId' => $user->id]) }}" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm shadow transition flex items-center">
+                    <i class="fa-solid fa-comments text-sky-400 mr-1.5"></i> Direct Message
                 </a>
             </div>
         </div>
@@ -113,7 +113,7 @@
             <div class="flex flex-wrap gap-2">
                 @forelse($user->servicesNeeded as $srv)
                     <span class="px-3 py-1 bg-amber-50 text-amber-800 text-xs font-semibold rounded-lg border border-amber-100">
-                        🔍 {{ $srv->name }}
+                        <i class="fa-solid fa-magnifying-glass text-sky-600 mr-1 text-xs"></i> {{ $srv->name }}
                     </span>
                 @empty
                     <span class="text-xs text-slate-400">No services requested yet.</span>
