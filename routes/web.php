@@ -1,0 +1,137 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PublicGroupController;
+use App\Http\Controllers\PublicEventController;
+use App\Http\Controllers\CmsController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Member\MemberDashboardController;
+use App\Http\Controllers\Member\MemberProfileController;
+use App\Http\Controllers\Member\MemberDirectoryController;
+use App\Http\Controllers\Member\ConnectionController;
+use App\Http\Controllers\Member\EventRegistrationController;
+use App\Http\Controllers\GroupAdmin\GroupAdminDashboardController;
+use App\Http\Controllers\GroupAdmin\GroupAdminMemberController;
+use App\Http\Controllers\GroupAdmin\GroupAdminEventController;
+use App\Http\Controllers\GroupAdmin\GroupAdminNoticeController;
+use App\Http\Controllers\GroupAdmin\GroupAdminPromotionController;
+use App\Http\Controllers\SuperAdmin\SuperAdminDashboardController;
+use App\Http\Controllers\SuperAdmin\SuperAdminGroupController;
+use App\Http\Controllers\SuperAdmin\SuperAdminUserController;
+use App\Http\Controllers\SuperAdmin\SuperAdminCmsController;
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/groups', [PublicGroupController::class, 'index'])->name('groups.index');
+Route::get('/groups/{slug}', [PublicGroupController::class, 'show'])->name('groups.show');
+Route::get('/join/{slug}', [PublicGroupController::class, 'show'])->name('groups.join');
+Route::get('/groups/{slug}/qr', [PublicGroupController::class, 'qr'])->name('groups.qr');
+
+Route::get('/events', [PublicEventController::class, 'index'])->name('events.index');
+Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('events.show');
+
+Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
+
+/*
+|--------------------------------------------------------------------------
+| Guest Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Member Protected Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    // Checkout for Paid Communities
+    Route::get('/join/checkout/{group}', [AuthController::class, 'showCheckout'])->name('join.checkout');
+    Route::post('/join/checkout/{group}', [AuthController::class, 'processCheckout'])->name('join.checkout.process');
+
+    // Member Dashboard & Profile
+    Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+    Route::get('/member/profile', [MemberProfileController::class, 'edit'])->name('member.profile.edit');
+    Route::post('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+
+    // Directory & Member Profile Viewing
+    Route::get('/member/directory', [MemberDirectoryController::class, 'index'])->name('member.directory');
+    Route::get('/member/directory/{user}', [MemberDirectoryController::class, 'show'])->name('member.directory.show');
+
+    // Connection System & Contact Requests
+    Route::get('/member/connections', [ConnectionController::class, 'index'])->name('member.connections');
+    Route::post('/member/connections/send', [ConnectionController::class, 'sendRequest'])->name('member.connections.send');
+    Route::post('/member/connections/{connection}/accept', [ConnectionController::class, 'acceptRequest'])->name('member.connections.accept');
+    Route::post('/member/connections/{connection}/reject', [ConnectionController::class, 'rejectRequest'])->name('member.connections.reject');
+    Route::post('/member/contact-request/send', [ConnectionController::class, 'requestContactDetails'])->name('member.contact_request.send');
+
+    // Event Registration
+    Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->name('member.events.register');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Group Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_admin.')->group(function () {
+    Route::get('/', [GroupAdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Group Member Management
+    Route::get('/group/{group}/members', [GroupAdminMemberController::class, 'index'])->name('members.index');
+    Route::get('/group/{group}/members/create', [GroupAdminMemberController::class, 'create'])->name('members.create');
+    Route::post('/group/{group}/members', [GroupAdminMemberController::class, 'store'])->name('members.store');
+    Route::get('/group/{group}/members/export-csv', [GroupAdminMemberController::class, 'exportCsv'])->name('members.export_csv');
+
+    // Group Event Management
+    Route::get('/group/{group}/events', [GroupAdminEventController::class, 'index'])->name('events.index');
+    Route::get('/group/{group}/events/create', [GroupAdminEventController::class, 'create'])->name('events.create');
+    Route::post('/group/{group}/events', [GroupAdminEventController::class, 'store'])->name('events.store');
+    Route::get('/group/{group}/events/{event}/attendees', [GroupAdminEventController::class, 'attendees'])->name('events.attendees');
+    Route::get('/group/{group}/events/{event}/export-csv', [GroupAdminEventController::class, 'exportAttendeesCsv'])->name('events.export_csv');
+
+    // Group Notice Board
+    Route::get('/group/{group}/notices', [GroupAdminNoticeController::class, 'index'])->name('notices.index');
+    Route::get('/group/{group}/notices/create', [GroupAdminNoticeController::class, 'create'])->name('notices.create');
+    Route::post('/group/{group}/notices', [GroupAdminNoticeController::class, 'store'])->name('notices.store');
+
+    // Promotion & QR Code System
+    Route::get('/group/{group}/promotion', [GroupAdminPromotionController::class, 'index'])->name('promotion.index');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Super Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_admin.')->group(function () {
+    Route::get('/', [SuperAdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Community Management
+    Route::get('/groups', [SuperAdminGroupController::class, 'index'])->name('groups.index');
+    Route::get('/groups/create', [SuperAdminGroupController::class, 'create'])->name('groups.create');
+    Route::post('/groups', [SuperAdminGroupController::class, 'store'])->name('groups.store');
+    Route::get('/groups/{group}/edit', [SuperAdminGroupController::class, 'edit'])->name('groups.edit');
+    Route::put('/groups/{group}', [SuperAdminGroupController::class, 'update'])->name('groups.update');
+
+    // User Management
+    Route::get('/users', [SuperAdminUserController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/toggle-status', [SuperAdminUserController::class, 'toggleStatus'])->name('users.toggle_status');
+
+    // CMS Pages Management
+    Route::get('/cms', [SuperAdminCmsController::class, 'index'])->name('cms.index');
+    Route::get('/cms/{page}/edit', [SuperAdminCmsController::class, 'edit'])->name('cms.edit');
+    Route::put('/cms/{page}', [SuperAdminCmsController::class, 'update'])->name('cms.update');
+});
