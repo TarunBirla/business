@@ -87,6 +87,9 @@
                     <a href="{{ route('member.connections') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.connections*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
                         <span>Connections</span>
                     </a>
+                    <a href="{{ route('member.chat') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.chat*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <span>💬 Community Chat</span>
+                    </a>
                     <a href="{{ route('member.profile.edit') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm {{ request()->routeIs('member.profile*') ? 'bg-sky-50 text-sky-700' : 'text-slate-600 hover:bg-slate-50' }}">
                         <span>My Profile</span>
                     </a>

@@ -13,6 +13,7 @@ use App\Models\EventRegistration;
 use App\Models\Notice;
 use App\Models\Connection;
 use App\Models\ContactRequest;
+use App\Models\Message;
 use App\Models\CmsPage;
 
 class DatabaseSeeder extends Seeder
@@ -353,6 +354,16 @@ class DatabaseSeeder extends Seeder
             [
                 'status' => 'pending',
             ]
+        );
+
+        // 8. Create Sample Messages
+        Message::firstOrCreate(
+            ['group_id' => $groupModels[0]->id, 'sender_id' => $usersCreated[0]->id, 'receiver_id' => $usersCreated[1]->id, 'message' => 'Hello Priya! Welcome to the Gujarati Community UK networking portal.'],
+            ['is_read' => true]
+        );
+        Message::firstOrCreate(
+            ['group_id' => $groupModels[0]->id, 'sender_id' => $usersCreated[1]->id, 'receiver_id' => $usersCreated[0]->id, 'message' => 'Hi Rajesh! Thank you, looking forward to exchanging services and attending community dinners.'],
+            ['is_read' => true]
         );
 
         // 8. Create CMS Pages

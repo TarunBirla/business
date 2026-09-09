@@ -128,6 +128,24 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    public function unreadMessagesCountInGroup(int $groupId): int
+    {
+        return $this->receivedMessages()
+            ->where('group_id', $groupId)
+            ->where('is_read', false)
+            ->count();
+    }
+
     public function getProfileCompletionPercentageAttribute(): int
     {
         $fields = ['first_name', 'last_name', 'email', 'phone', 'profession', 'company', 'city', 'description', 'linkedin', 'profile_photo'];

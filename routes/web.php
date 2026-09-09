@@ -11,6 +11,7 @@ use App\Http\Controllers\Member\MemberProfileController;
 use App\Http\Controllers\Member\MemberDirectoryController;
 use App\Http\Controllers\Member\ConnectionController;
 use App\Http\Controllers\Member\EventRegistrationController;
+use App\Http\Controllers\Member\MessageController;
 use App\Http\Controllers\GroupAdmin\GroupAdminDashboardController;
 use App\Http\Controllers\GroupAdmin\GroupAdminMemberController;
 use App\Http\Controllers\GroupAdmin\GroupAdminEventController;
@@ -79,6 +80,10 @@ Route::middleware('auth')->group(function () {
 
     // Event Registration
     Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->name('member.events.register');
+
+    // Community Messaging / Chat System
+    Route::get('/member/chat/{groupId?}/{receiverId?}', [MessageController::class, 'index'])->name('member.chat');
+    Route::post('/member/chat/send', [MessageController::class, 'sendMessage'])->name('member.chat.send');
 });
 
 /*

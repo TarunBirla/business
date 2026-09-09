@@ -33,6 +33,10 @@
                         ✓ Connected
                     </span>
                 @endif
+
+                <a href="{{ route('member.chat', ['groupId' => $activeGroupId, 'receiverId' => $user->id]) }}" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm shadow transition">
+                    💬 Direct Message
+                </a>
             </div>
         </div>
     </div>
