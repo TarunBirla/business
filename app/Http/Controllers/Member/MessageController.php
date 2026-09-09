@@ -40,9 +40,16 @@ class MessageController extends Controller
             $activeContact = $contacts->first();
         }
 
-        // Fetch conversation history
+        // Fetch conversation history & mark read
         $messages = collect();
         if ($activeContact) {
+            // Mark unread messages from active contact as read immediately upon opening thread
+            Message::where('group_id', $activeGroup->id)
+                ->where('sender_id', $activeContact->id)
+                ->where('receiver_id', $authUser->id)
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+
             $messages = Message::where('group_id', $activeGroup->id)
                 ->where(function ($q) use ($authUser, $activeContact) {
                     $q->where(function ($q2) use ($authUser, $activeContact) {
@@ -53,13 +60,6 @@ class MessageController extends Controller
                 })
                 ->orderBy('created_at', 'asc')
                 ->get();
-
-            // Mark unread messages from active contact as read
-            Message::where('group_id', $activeGroup->id)
-                ->where('sender_id', $activeContact->id)
-                ->where('receiver_id', $authUser->id)
-                ->where('is_read', false)
-                ->update(['is_read' => true]);
         }
 
         return view('member.chat.index', compact(

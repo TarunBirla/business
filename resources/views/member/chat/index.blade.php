@@ -49,7 +49,7 @@
                         @endphp
                         <a href="{{ route('member.chat', ['groupId' => $activeGroup->id, 'receiverId' => $contact->id]) }}" 
                            class="flex items-center justify-between p-4 transition hover:bg-sky-50/80 {{ $isSelected ? 'bg-sky-100/70 border-l-4 border-sky-600' : '' }}">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-3 truncate pr-2">
                                 <div class="w-10 h-10 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
                                     {{ substr($contact->first_name, 0, 1) }}{{ substr($contact->last_name, 0, 1) }}
                                 </div>
@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             @if($unreadCount > 0)
-                                <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full shadow">
+                                <span class="px-2.5 py-0.5 bg-rose-500 text-white text-[11px] font-extrabold rounded-full shadow shrink-0 animate-pulse">
                                     {{ $unreadCount }}
                                 </span>
                             @endif
@@ -86,7 +86,7 @@
                 <!-- Active Chat Header -->
                 <div class="p-4 bg-white border-b border-slate-200 flex items-center justify-between shadow-sm">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-sm">
+                        <div class="w-10 h-10 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
                             {{ substr($activeContact->first_name, 0, 1) }}{{ substr($activeContact->last_name, 0, 1) }}
                         </div>
                         <div>
@@ -104,19 +104,39 @@
                 <div id="messagesContainer" class="p-6 overflow-y-auto flex-grow space-y-4 max-h-[480px]">
                     @forelse($messages as $msg)
                         @php $isMe = $msg->sender_id === auth()->id(); @endphp
-                        <div class="flex {{ $isMe ? 'justify-end' : 'justify-start' }}">
-                            <div class="max-w-md px-4 py-3 rounded-2xl text-sm shadow-sm space-y-1 {{ $isMe ? 'bg-sky-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none' }}">
-                                <p class="leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
-                                <div class="text-[10px] {{ $isMe ? 'text-sky-200 text-right' : 'text-slate-400' }}">
-                                    {{ $msg->created_at->format('h:i A') }}
-                                    @if($isMe)
-                                        <span>&bull; {{ $msg->is_read ? 'Read ✓✓' : 'Sent ✓' }}</span>
-                                    @endif
+                        @if($isMe)
+                            <!-- Outgoing Message (Sent by Logged-in User -> Right Aligned) -->
+                            <div class="flex justify-end items-end space-x-2">
+                                <div class="max-w-md bg-sky-600 text-white p-3.5 rounded-2xl rounded-br-none shadow-sm space-y-1">
+                                    <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
+                                    <div class="flex items-center justify-end space-x-1 text-[10px] text-sky-200">
+                                        <span>{{ $msg->created_at->format('h:i A') }}</span>
+                                        @if($msg->is_read)
+                                            <span title="Read by recipient" class="text-sky-200 font-bold">✓✓</span>
+                                        @else
+                                            <span title="Sent" class="text-sky-300">✓</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <!-- Incoming Message (Received from Contact -> Left Aligned) -->
+                            <div class="flex justify-start items-end space-x-2">
+                                <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-300 text-sky-700 font-bold flex items-center justify-center text-xs shrink-0 shadow-sm">
+                                    {{ substr($activeContact->first_name, 0, 1) }}{{ substr($activeContact->last_name, 0, 1) }}
+                                </div>
+                                <div class="max-w-md bg-white border border-slate-200 text-slate-900 p-3.5 rounded-2xl rounded-bl-none shadow-sm space-y-1">
+                                    <div class="text-[11px] font-bold text-sky-600">{{ $activeContact->first_name }}</div>
+                                    <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
+                                    <div class="text-[10px] text-slate-400 text-right">
+                                        {{ $msg->created_at->format('h:i A') }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @empty
-                        <div class="text-center py-16 text-slate-400 text-xs font-medium">
+                        <div class="text-center py-20 text-slate-400 text-xs font-medium">
+                            <div class="text-3xl mb-2">💬</div>
                             No messages yet. Send a message to start conversing with {{ $activeContact->first_name }}.
                         </div>
                     @endforelse
