@@ -51,7 +51,7 @@
                            class="flex items-center justify-between p-4 transition hover:bg-sky-50/80 {{ $isSelected ? 'bg-sky-100/70 border-l-4 border-sky-600' : '' }}">
                             <div class="flex items-center space-x-3 truncate pr-2">
                                 <div class="w-10 h-10 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
-                                    {{ substr($contact->first_name, 0, 1) }}{{ substr($contact->last_name, 0, 1) }}
+                                    {{ strtoupper(substr($contact->first_name, 0, 1) . substr($contact->last_name, 0, 1)) }}
                                 </div>
                                 <div class="truncate">
                                     <div class="font-bold text-slate-900 text-sm truncate">{{ $contact->name }}</div>
@@ -87,7 +87,7 @@
                 <div class="p-4 bg-white border-b border-slate-200 flex items-center justify-between shadow-sm">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
-                            {{ substr($activeContact->first_name, 0, 1) }}{{ substr($activeContact->last_name, 0, 1) }}
+                            {{ strtoupper(substr($activeContact->first_name, 0, 1) . substr($activeContact->last_name, 0, 1)) }}
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-900 text-base leading-tight">{{ $activeContact->name }}</h3>
@@ -103,11 +103,26 @@
                 <!-- Messages Conversation Container -->
                 <div id="messagesContainer" class="p-6 overflow-y-auto flex-grow space-y-4 max-h-[480px]">
                     @forelse($messages as $msg)
-                        @php $isMe = $msg->sender_id === auth()->id(); @endphp
+                        @php
+                            // Data-driven alignment logic: Compare sender_id with current logged-in user ID
+                            $isMe = (int)$msg->sender_id === (int)auth()->id();
+                            
+                            // Dynamic sender resolution using actual relationship model
+                            $senderUser = $msg->sender;
+                            $senderFirstName = $senderUser 
+                                ? $senderUser->first_name 
+                                : ($isMe ? auth()->user()->first_name : $activeContact->first_name);
+                            
+                            $senderInitials = $senderUser 
+                                ? strtoupper(substr($senderUser->first_name, 0, 1) . substr($senderUser->last_name, 0, 1))
+                                : ($isMe ? strtoupper(substr(auth()->user()->first_name, 0, 1) . substr(auth()->user()->last_name, 0, 1)) : strtoupper(substr($activeContact->first_name, 0, 1) . substr($activeContact->last_name, 0, 1)));
+                        @endphp
+
                         @if($isMe)
-                            <!-- Outgoing Message (Sent by Logged-in User -> Right Aligned) -->
+                            <!-- Sent Message (Current Logged-in User) -> ALWAYS RIGHT ALIGNED -->
                             <div class="flex justify-end items-end space-x-2">
                                 <div class="max-w-md bg-sky-600 text-white p-3.5 rounded-2xl rounded-br-none shadow-sm space-y-1">
+                                    <div class="text-[11px] font-bold text-sky-100 text-right">{{ $senderFirstName }}</div>
                                     <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                                     <div class="flex items-center justify-end space-x-1 text-[10px] text-sky-200">
                                         <span>{{ $msg->created_at->format('h:i A') }}</span>
@@ -118,15 +133,18 @@
                                         @endif
                                     </div>
                                 </div>
+                                <div class="w-8 h-8 rounded-full bg-sky-700 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-sm" title="{{ auth()->user()->name }}">
+                                    {{ $senderInitials }}
+                                </div>
                             </div>
                         @else
-                            <!-- Incoming Message (Received from Contact -> Left Aligned) -->
+                            <!-- Received Message (From Partner Contact/Sender) -> ALWAYS LEFT ALIGNED -->
                             <div class="flex justify-start items-end space-x-2">
-                                <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-300 text-sky-700 font-bold flex items-center justify-center text-xs shrink-0 shadow-sm">
-                                    {{ substr($activeContact->first_name, 0, 1) }}{{ substr($activeContact->last_name, 0, 1) }}
+                                <div class="w-8 h-8 rounded-full bg-sky-100 border border-sky-300 text-sky-700 font-bold flex items-center justify-center text-xs shrink-0 shadow-sm" title="{{ $senderUser ? $senderUser->name : $activeContact->name }}">
+                                    {{ $senderInitials }}
                                 </div>
                                 <div class="max-w-md bg-white border border-slate-200 text-slate-900 p-3.5 rounded-2xl rounded-bl-none shadow-sm space-y-1">
-                                    <div class="text-[11px] font-bold text-sky-600">{{ $activeContact->first_name }}</div>
+                                    <div class="text-[11px] font-bold text-sky-600">{{ $senderFirstName }}</div>
                                     <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                                     <div class="text-[10px] text-slate-400 text-right">
                                         {{ $msg->created_at->format('h:i A') }}
