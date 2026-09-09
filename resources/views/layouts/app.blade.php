@@ -59,10 +59,7 @@
             <div class="flex justify-between h-20">
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-sky-400 flex items-center justify-center text-white font-bold text-xl shadow-md">
-                            C
-                        </div>
-                        <span class="text-2xl font-bold tracking-tight text-slate-900">Community<span class="text-sky-600">UK</span></span>
+                        <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-10 w-auto rounded-xl object-contain shadow-sm">
                     </a>
                 </div>
 
@@ -121,8 +118,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">C</div>
-                        <span class="text-xl font-bold text-white">Community<span class="text-sky-400">UK</span></span>
+                        <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-9 w-auto rounded-lg object-contain bg-white p-0.5">
                     </div>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         A UK-wide professional community networking ecosystem bringing people together based on shared background, region, culture, and professional goals.

@@ -38,7 +38,7 @@
     <aside class="w-full md:w-64 bg-white border-r border-sky-100 p-6 flex flex-col justify-between shrink-0">
         <div>
             <a href="{{ url('/') }}" class="flex items-center space-x-3 mb-8">
-                <div class="w-10 h-10 rounded-xl bg-sky-600 flex items-center justify-center text-white font-bold text-xl shadow-md">C</div>
+                <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-10 w-auto rounded-xl object-contain shadow-sm">
                 <span class="text-xl font-bold tracking-tight text-slate-900">Community<span class="text-sky-600">UK</span></span>
             </a>
 
