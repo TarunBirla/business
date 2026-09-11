@@ -4,11 +4,15 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-3xl font-bold text-black">Platform Users Directory</h1>
             <p class="text-sm text-black mt-1">View all registered platform members, roles, and status controls.</p>
         </div>
+        <a href="{{ route('super_admin.users.create') }}" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-sm transition">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Add New User</span>
+        </a>
     </div>
 
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">

@@ -40,7 +40,15 @@
                                 {{ $group->community_type }}
                             </span>
                         </td>
-                        <td class="p-4 font-bold text-black">{{ number_format($group->members_count) }}</td>
+                        <td class="p-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-bold text-black">{{ number_format($group->members_count) }}</span>
+                                <a href="{{ route('super_admin.groups.members', $group->id) }}" class="inline-flex items-center space-x-1 text-xs font-bold text-sky-600 hover:text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md hover:bg-sky-100 transition">
+                                    <i class="fa-solid fa-users text-[10px]"></i>
+                                    <span>View</span>
+                                </a>
+                            </div>
+                        </td>
                         <td class="p-4 text-black">{{ $group->events_count }}</td>
                         <td class="p-4">
                             <span class="px-2.5 py-1 rounded text-xs font-bold uppercase bg-slate-100 text-black">
@@ -48,6 +56,10 @@
                             </span>
                         </td>
                         <td class="p-4 text-right space-x-2">
+                            <a href="{{ route('super_admin.groups.members', $group->id) }}" class="px-3 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold text-xs rounded-lg inline-flex items-center space-x-1">
+                                <i class="fa-solid fa-list text-[10px]"></i>
+                                <span>Members</span>
+                            </a>
                             <a href="{{ route('groups.show', $group->slug) }}" target="_blank" class="text-xs font-bold text-sky-600 hover:underline">Public Page</a>
                             <a href="{{ route('super_admin.groups.edit', $group->id) }}" class="px-3 py-1.5 bg-slate-900 text-white font-bold text-xs rounded-lg hover:bg-slate-800">Edit</a>
                         </td>

@@ -19,7 +19,15 @@ class SuperAdminGroupController extends Controller
 
     public function create()
     {
-        $users = User::where('status', 'active')->orderBy('first_name')->get();
+        $users = User::where('status', 'active')
+            ->where(function($q) {
+                $q->whereIn('global_role', ['group_admin', 'super_admin'])
+                  ->orWhereHas('groups', function($gq) {
+                      $gq->where('group_user.membership_role', 'group_admin');
+                  });
+            })
+            ->orderBy('first_name')
+            ->get();
         return view('super_admin.groups.create', compact('users'));
     }
 
@@ -78,11 +86,37 @@ class SuperAdminGroupController extends Controller
 
     public function edit(Group $group)
     {
-        $users = User::where('status', 'active')->orderBy('first_name')->get();
+        $users = User::where('status', 'active')
+            ->where(function($q) {
+                $q->whereIn('global_role', ['group_admin', 'super_admin'])
+                  ->orWhereHas('groups', function($gq) {
+                      $gq->where('group_user.membership_role', 'group_admin');
+                  });
+            })
+            ->orderBy('first_name')
+            ->get();
         $groupAdmins = $group->groupAdmins->pluck('id')->toArray();
         $subscription = $group->activeSubscriptionPlan;
 
         return view('super_admin.groups.edit', compact('group', 'users', 'groupAdmins', 'subscription'));
+    }
+
+    public function members(Group $group, Request $request)
+    {
+        $query = $group->members();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $members = $query->paginate(15);
+
+        return view('super_admin.groups.members', compact('group', 'members'));
     }
 
     public function update(Request $request, Group $group)

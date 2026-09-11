@@ -104,6 +104,10 @@
                 </div>
             @endforeach
         </div>
+
+        <div class="pt-4">
+            {{ $projects->links() }}
+        </div>
     @endif
 </div>
 @endsection

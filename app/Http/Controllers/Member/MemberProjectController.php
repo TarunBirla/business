@@ -11,7 +11,7 @@ class MemberProjectController extends Controller
 {
     public function index()
     {
-        $projects = auth()->user()->projects;
+        $projects = auth()->user()->projects()->latest()->paginate(9);
         return view('member.projects.index', compact('projects'));
     }
 

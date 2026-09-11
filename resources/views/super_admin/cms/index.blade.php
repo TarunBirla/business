@@ -23,5 +23,9 @@
             </div>
         @endforeach
     </div>
+
+    <div class="pt-4">
+        {{ $pages->links() }}
+    </div>
 </div>
 @endsection

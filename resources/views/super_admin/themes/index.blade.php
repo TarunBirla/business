@@ -103,5 +103,9 @@
             </div>
         @endforeach
     </div>
+
+    <div class="pt-4">
+        {{ $themes->links() }}
+    </div>
 </div>
 @endsection

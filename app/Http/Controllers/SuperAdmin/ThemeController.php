@@ -12,7 +12,7 @@ class ThemeController extends Controller
 {
     public function index()
     {
-        $themes = Theme::orderBy('is_default', 'desc')->orderBy('created_at', 'desc')->get();
+        $themes = Theme::orderBy('is_default', 'desc')->orderBy('created_at', 'desc')->paginate(9);
         return view('super_admin.themes.index', compact('themes'));
     }
 

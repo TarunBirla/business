@@ -10,7 +10,7 @@ class SuperAdminCmsController extends Controller
 {
     public function index()
     {
-        $pages = CmsPage::all();
+        $pages = CmsPage::latest()->paginate(10);
         return view('super_admin.cms.index', compact('pages'));
     }
 

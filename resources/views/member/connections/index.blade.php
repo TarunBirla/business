@@ -62,6 +62,9 @@
                 <p class="text-sm text-black col-span-3">No accepted connections yet. Explore the member directory to connect.</p>
             @endforelse
         </div>
+        <div class="mt-4">
+            {{ $myConnections->links() }}
+        </div>
     </div>
 
     <!-- Suggested Connections -->

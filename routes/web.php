@@ -102,6 +102,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->name('member.events.register');
 
     // Community Messaging / Chat System
+    Route::get('/member/chat-api/fetch', [MessageController::class, 'fetchMessages'])->name('member.chat.fetch');
     Route::get('/member/chat/{groupId?}/{receiverId?}', [MessageController::class, 'index'])->name('member.chat');
     Route::post('/member/chat/send', [MessageController::class, 'sendMessage'])->name('member.chat.send');
 });
@@ -150,9 +151,17 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     Route::post('/groups', [SuperAdminGroupController::class, 'store'])->name('groups.store');
     Route::get('/groups/{group}/edit', [SuperAdminGroupController::class, 'edit'])->name('groups.edit');
     Route::put('/groups/{group}', [SuperAdminGroupController::class, 'update'])->name('groups.update');
+    Route::get('/groups/{group}/members', [SuperAdminGroupController::class, 'members'])->name('groups.members');
+
+    // Group Admin Management
+    Route::get('/group-admins', [SuperAdminUserController::class, 'groupAdmins'])->name('group_admins.index');
+    Route::get('/group-admins/create', [SuperAdminUserController::class, 'createGroupAdmin'])->name('group_admins.create');
+    Route::post('/group-admins', [SuperAdminUserController::class, 'storeGroupAdmin'])->name('group_admins.store');
 
     // User Management
     Route::get('/users', [SuperAdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [SuperAdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [SuperAdminUserController::class, 'store'])->name('users.store');
     Route::post('/users/{user}/toggle-status', [SuperAdminUserController::class, 'toggleStatus'])->name('users.toggle_status');
 
     // Member Projects Overview

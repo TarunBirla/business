@@ -19,7 +19,7 @@ class ConnectionController extends Controller
             })
             ->where('status', 'accepted')
             ->with(['sender', 'receiver', 'group'])
-            ->get();
+            ->paginate(12);
 
         $sentRequests = Connection::where('sender_id', $user->id)
             ->where('status', 'pending')
