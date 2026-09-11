@@ -92,7 +92,7 @@ class ConnectionController extends Controller
             return redirect()->route('member.connections')->with('error', 'Connection request not found.');
         }
 
-        if ($connection->receiver_id !== $user->id && !$user->isSuperAdmin()) {
+        if ((int)$connection->receiver_id !== (int)$user->id && (int)$connection->sender_id !== (int)$user->id && !$user->isSuperAdmin()) {
             return redirect()->route('member.connections')->with('error', 'You are not authorized to accept this connection request.');
         }
 
@@ -117,7 +117,7 @@ class ConnectionController extends Controller
             return redirect()->route('member.connections')->with('error', 'Connection request not found.');
         }
 
-        if ($connection->receiver_id !== $user->id && !$user->isSuperAdmin()) {
+        if ((int)$connection->receiver_id !== (int)$user->id && (int)$connection->sender_id !== (int)$user->id && !$user->isSuperAdmin()) {
             return redirect()->route('member.connections')->with('error', 'You are not authorized to decline this connection request.');
         }
 

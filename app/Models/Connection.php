@@ -18,6 +18,9 @@ class Connection extends Model
     ];
 
     protected $casts = [
+        'sender_id' => 'integer',
+        'receiver_id' => 'integer',
+        'group_id' => 'integer',
         'accepted_at' => 'datetime',
     ];
 
