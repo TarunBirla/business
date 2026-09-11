@@ -31,13 +31,10 @@ class MessageController extends Controller
             ->where('group_user.status', 'active')
             ->get();
 
-        // Select target chat contact
+        // Select target chat contact (only when explicitly clicked/provided)
         $activeContact = null;
         if ($receiverId) {
             $activeContact = $contacts->firstWhere('id', $receiverId);
-        }
-        if (!$activeContact && $contacts->isNotEmpty()) {
-            $activeContact = $contacts->first();
         }
 
         // Fetch conversation history & mark read

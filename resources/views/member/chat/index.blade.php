@@ -162,8 +162,20 @@
                     </button>
                 </form>
             @else
-                <div class="flex items-center justify-center h-full text-slate-400 text-xs sm:text-sm p-6">
-                    Select a contact from the left list to start live messaging.
+                <div class="flex flex-col items-center justify-center h-full p-8 text-center bg-slate-50 space-y-4">
+                    <div class="w-16 h-16 rounded-full text-sky-600 flex items-center justify-center text-2xl shadow-2xs border border-sky-100" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <div class="space-y-1 max-w-sm">
+                        <h3 class="font-bold text-slate-900 text-base">Select a Contact to Start Messaging</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Choose a community member from the left contacts list to open live real-time chat, view conversation history, and send direct messages.</p>
+                    </div>
+                    <div class="pt-2">
+                        <span class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-semibold bg-white border border-slate-200 text-slate-600 shadow-2xs">
+                            <i class="fa-solid fa-shield-halved text-emerald-500"></i>
+                            <span>Verified Community Messaging</span>
+                        </span>
+                    </div>
                 </div>
             @endif
         </div>
@@ -181,7 +193,7 @@
 
         const activeGroupId = {{ $activeGroup->id ?? 0 }};
         const activeContactId = {{ $activeContact->id ?? 0 }};
-        let lastMessageId = {{ $messages->last()->id ?? 0 }};
+        let lastMessageId = {{ isset($messages) && $messages->isNotEmpty() ? $messages->last()->id : 0 }};
 
         function scrollToBottom() {
             if (container) {

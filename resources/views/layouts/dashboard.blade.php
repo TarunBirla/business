@@ -286,7 +286,7 @@
     </aside>
 
     <!-- Main View Content Area -->
-    <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl w-full overflow-y-auto">
+    <main class="flex-grow p-3 sm:p-4 md:p-5 max-w-7xl w-full overflow-y-auto">
         @if(session('success'))
             <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl flex items-center space-x-2 shadow-2xs">
                 <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
