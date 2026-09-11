@@ -9,12 +9,39 @@
         <p class="text-sm text-black mt-1">Keep your professional networking profile up to date and configure your privacy controls.</p>
     </div>
 
-    <form method="POST" action="{{ route('member.profile.update') }}" class="space-y-8">
+    <form method="POST" action="{{ route('member.profile.update') }}" enctype="multipart/form-data" class="space-y-8">
         @csrf
 
         <!-- Basic Personal Info -->
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <h3 class="text-xl font-bold text-black border-b pb-4">Personal Details</h3>
+
+            <!-- Profile Photo Upload & Initial Fallback Avatar -->
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50">
+                <div class="relative w-24 h-24 rounded-full overflow-hidden shrink-0 shadow-md border-4 border-white bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center">
+                    @if($user->profile_photo)
+                        <img id="avatarPreview" src="{{ asset('storage/' . $user->profile_photo) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                    @else
+                        <div id="avatarFallback" class="w-full h-full flex items-center justify-center font-extrabold text-2xl uppercase text-white tracking-wider">
+                            {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name, 0, 1)) }}
+                        </div>
+                        <img id="avatarPreview" src="" alt="Avatar Preview" class="w-full h-full object-cover hidden">
+                    @endif
+                </div>
+
+                <div class="space-y-2 text-center sm:text-left flex-grow">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">Profile Picture</label>
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                        <label class="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl cursor-pointer shadow-2xs transition inline-flex items-center space-x-2">
+                            <i class="fa-solid fa-camera text-sky-600"></i>
+                            <span>Upload New Photo</span>
+                            <input type="file" name="profile_photo" id="profile_photo_input" accept="image/*" class="hidden" onchange="previewImage(this)">
+                        </label>
+                        <span class="text-xs text-slate-400">JPG, PNG, WEBP max 4MB</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500">If no photo is uploaded, your avatar defaults to your initials: <strong class="text-slate-800 uppercase">{{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name, 0, 1)) }}</strong></p>
+                </div>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -183,6 +210,20 @@
 </div>
 
 <script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('avatarPreview');
+                const fallback = document.getElementById('avatarFallback');
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                if (fallback) fallback.classList.add('hidden');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     document.querySelectorAll('.theme-card-option').forEach(card => {
         card.addEventListener('click', function() {
             // Uncheck others

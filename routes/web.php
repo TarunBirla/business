@@ -22,6 +22,10 @@ use App\Http\Controllers\SuperAdmin\SuperAdminGroupController;
 use App\Http\Controllers\SuperAdmin\SuperAdminUserController;
 use App\Http\Controllers\SuperAdmin\SuperAdminCmsController;
 use App\Http\Controllers\SuperAdmin\ThemeController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectController;
+
+use App\Http\Controllers\PublicBusinessCardController;
+use App\Http\Controllers\Member\MemberProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +44,10 @@ Route::get('/events', [PublicEventController::class, 'index'])->name('events.ind
 Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('events.show');
 
 Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
+
+// Public Digital Business Card & vCard Export
+Route::get('/bizcard/{user}', [PublicBusinessCardController::class, 'show'])->name('bizcard.show');
+Route::get('/bizcard/{user}/vcard', [PublicBusinessCardController::class, 'downloadVcard'])->name('bizcard.vcard');
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +78,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/member/profile', [MemberProfileController::class, 'edit'])->name('member.profile.edit');
     Route::post('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
     Route::post('/member/profile/theme', [MemberProfileController::class, 'updateTheme'])->name('member.profile.theme');
+
+    // Member Projects / Portfolio Showcase
+    Route::get('/member/projects', [MemberProjectController::class, 'index'])->name('member.projects.index');
+    Route::get('/member/projects/create', [MemberProjectController::class, 'create'])->name('member.projects.create');
+    Route::post('/member/projects', [MemberProjectController::class, 'store'])->name('member.projects.store');
+    Route::get('/member/projects/{project}/edit', [MemberProjectController::class, 'edit'])->name('member.projects.edit');
+    Route::put('/member/projects/{project}', [MemberProjectController::class, 'update'])->name('member.projects.update');
+    Route::delete('/member/projects/{project}', [MemberProjectController::class, 'destroy'])->name('member.projects.destroy');
 
     // Directory & Member Profile Viewing
     Route::get('/member/directory', [MemberDirectoryController::class, 'index'])->name('member.directory');
@@ -138,6 +154,9 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     // User Management
     Route::get('/users', [SuperAdminUserController::class, 'index'])->name('users.index');
     Route::post('/users/{user}/toggle-status', [SuperAdminUserController::class, 'toggleStatus'])->name('users.toggle_status');
+
+    // Member Projects Overview
+    Route::get('/projects', [SuperAdminProjectController::class, 'index'])->name('projects.index');
 
     // CMS Pages Management
     Route::get('/cms', [SuperAdminCmsController::class, 'index'])->name('cms.index');

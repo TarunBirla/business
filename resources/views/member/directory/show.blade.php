@@ -37,6 +37,10 @@
                 <a href="{{ route('member.chat', ['groupId' => $activeGroupId, 'receiverId' => $user->id]) }}" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm shadow transition flex items-center">
                     <i class="fa-solid fa-comments text-sky-400 mr-1.5"></i> Direct Message
                 </a>
+
+                <a href="{{ route('bizcard.show', $user->id) }}" target="_blank" class="px-6 py-2.5 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold rounded-xl text-sm border border-sky-200 shadow-sm transition flex items-center">
+                    <i class="fa-solid fa-id-card text-sky-600 mr-1.5"></i> Business Card
+                </a>
             </div>
         </div>
     </div>
@@ -48,32 +52,35 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <span class="text-xs font-bold text-black uppercase block mb-1">Email Address</span>
-                @if($canSeeEmail)
-                    <span class="text-sm font-bold text-black">{{ $user->email }}</span>
+                @if($user->privacy_settings['show_email'] ?? false)
+                    <span class="text-sm font-semibold text-slate-800">{{ $user->email }}</span>
+                @elseif($approvedContactRequest)
+                    <span class="text-sm font-semibold text-slate-800">{{ $user->email }}</span>
                 @else
-                    <span class="text-sm font-medium text-slate-400 italic">Protected (Hidden by member privacy)</span>
+                    <span class="text-xs text-slate-400 italic">Hidden (GDPR Privacy)</span>
                 @endif
             </div>
 
             <div>
                 <span class="text-xs font-bold text-black uppercase block mb-1">Phone Number</span>
-                @if($canSeePhone)
-                    <span class="text-sm font-bold text-black">{{ $user->phone ?? 'Not provided' }}</span>
+                @if($user->privacy_settings['show_phone'] ?? false)
+                    <span class="text-sm font-semibold text-slate-800">{{ $user->phone ?? 'N/A' }}</span>
+                @elseif($approvedContactRequest)
+                    <span class="text-sm font-semibold text-slate-800">{{ $user->phone ?? 'N/A' }}</span>
                 @else
-                    <span class="text-sm font-medium text-slate-400 italic">Protected (Hidden by member privacy)</span>
+                    <span class="text-xs text-slate-400 italic">Hidden (GDPR Privacy)</span>
                 @endif
             </div>
         </div>
 
-        @if(!$canSeeEmail || !$canSeePhone)
-            <div class="pt-4 border-t border-slate-100 mt-4">
+        @if(!($user->privacy_settings['show_email'] ?? false) && !$approvedContactRequest)
+            <div class="pt-4 border-t border-slate-100">
                 @if(!$contactRequest)
                     <form action="{{ route('member.contact_request.send') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="receiver_id" value="{{ $user->id }}">
-                        <input type="hidden" name="group_id" value="{{ $activeGroupId }}">
-                        <button type="submit" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
-                            📞 Request Contact Details Access
+                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                        <button type="submit" class="px-5 py-2 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs rounded-lg transition border border-sky-200">
+                            Request Contact Details Access
                         </button>
                     </form>
                 @else
@@ -90,6 +97,53 @@
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
             <h3 class="text-xl font-bold text-black mb-4">About {{ $user->first_name }}</h3>
             <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">{{ $user->description }}</p>
+        </div>
+    @endif
+
+    <!-- Portfolio Projects Showcase -->
+    @if($user->projects->isNotEmpty())
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div class="flex items-center justify-between border-b pb-4">
+                <h3 class="text-xl font-bold text-black">Portfolio & Key Accomplishments</h3>
+                <span class="text-xs font-bold px-3 py-1 bg-sky-50 text-sky-700 rounded-full border border-sky-200">
+                    {{ $user->projects->count() }} Projects
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach($user->projects as $project)
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="h-36 bg-slate-200 relative overflow-hidden flex items-center justify-center">
+                                @if($project->image_url)
+                                    <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <i class="fa-solid fa-folder-open text-3xl text-slate-400"></i>
+                                @endif
+                                @if($project->category)
+                                    <span class="absolute top-2 right-2 px-2.5 py-0.5 bg-white/90 text-slate-800 text-[10px] font-bold rounded-full">
+                                        {{ $project->category }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="p-4 space-y-2">
+                                <h4 class="font-bold text-sm text-slate-900 leading-snug">{{ $project->title }}</h4>
+                                <p class="text-xs text-slate-600 line-clamp-2">{{ $project->description }}</p>
+                            </div>
+                        </div>
+
+                        @if($project->project_url)
+                            <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between">
+                                <a href="{{ $project->project_url }}" target="_blank" class="text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center space-x-1">
+                                    <span>View Live Project</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
         </div>
     @endif
 

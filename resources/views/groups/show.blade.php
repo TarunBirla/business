@@ -28,7 +28,7 @@
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
                 <button onclick="document.getElementById('shareModal').classList.remove('hidden')" class="w-full sm:w-auto px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/20 backdrop-blur-md transition flex items-center justify-center space-x-2">
-                    <span><i class="fa-solid fa-share-nodes mr-1.5"></i>Share & QR Code</span>
+                    <span><i class="fa-solid fa-share-nodes mr-1.5"></i>Share</span>
                 </button>
 
                 @auth
@@ -253,14 +253,16 @@
                 </ul>
             </div>
 
-            <!-- QR Code Box -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <h3 class="font-bold text-black text-base mb-3">Scan to Join Community</h3>
-                <div class="mb-4">
-                    {!! $qrCodeSvg !!}
+            <!-- QR Code Box (Hidden if user is already a joined member) -->
+            @unless(auth()->check() && auth()->user()->isMemberOf($group->id))
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <h3 class="font-bold text-black text-base mb-3">Scan to Join Community</h3>
+                    <div class="mb-4">
+                        {!! $qrCodeSvg !!}
+                    </div>
+                    <p class="text-xs text-black">Scan QR Code with mobile camera to open this shareable community link directly.</p>
                 </div>
-                <p class="text-xs text-black">Scan QR Code with mobile camera to open this shareable community link directly.</p>
-            </div>
+            @endunless
 
         </div>
 
@@ -275,7 +277,13 @@
             <button onclick="document.getElementById('shareModal').classList.add('hidden')" class="text-slate-400 hover:text-black text-xl font-bold">&times;</button>
         </div>
 
-        <p class="text-sm text-black mb-4">Share this community link on social media or send directly via WhatsApp and SMS.</p>
+        <p class="text-sm text-black mb-4">Share this community link on social media or scan QR Code directly.</p>
+
+        <!-- Real Scannable QR Code inside Modal -->
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center mb-5">
+            {!! $qrCodeSvg !!}
+            <p class="text-xs text-black mt-2 font-medium">Scan with camera to open shareable join link</p>
+        </div>
 
         <div class="space-y-3 mb-6">
             <a href="https://api.whatsapp.com/send?text={{ urlencode('Join ' . $group->name . ' on Community UK: ' . $group->join_url) }}" target="_blank" class="flex items-center justify-center space-x-2 w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition text-sm">

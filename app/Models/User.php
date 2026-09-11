@@ -144,6 +144,11 @@ class User extends Authenticatable
         return $this->belongsTo(Theme::class);
     }
 
+    public function projects()
+    {
+        return $this->hasMany(Project::class)->orderBy('created_at', 'desc');
+    }
+
     public function unreadMessagesCountInGroup(int $groupId): int
     {
         return $this->receivedMessages()

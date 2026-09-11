@@ -26,6 +26,7 @@ class MemberProfileController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:4096',
             'phone' => 'nullable|string|max:50',
             'profession' => 'nullable|string|max:255',
             'company' => 'nullable|string|max:255',
@@ -42,7 +43,7 @@ class MemberProfileController extends Controller
             'theme_id' => 'nullable|exists:themes,id',
         ]);
 
-        $user->update([
+        $updateData = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'phone' => $request->phone,
@@ -61,7 +62,14 @@ class MemberProfileController extends Controller
                 'allow_connections' => $request->boolean('allow_connections', true),
                 'allow_contact_requests' => $request->boolean('allow_contact_requests', true),
             ],
-        ]);
+        ];
+
+        if ($request->hasFile('profile_photo')) {
+            $path = $request->file('profile_photo')->store('profile_photos', 'public');
+            $updateData['profile_photo'] = $path;
+        }
+
+        $user->update($updateData);
 
         // Sync services offered & needed
         $user->servicesOffered()->detach();
