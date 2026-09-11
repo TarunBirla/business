@@ -165,11 +165,7 @@
                 <div class="flex items-center space-x-3">
                     <div class="hidden sm:flex items-center space-x-3">
                         @auth
-                            @if(auth()->user()->isSuperAdmin())
-                                <a href="{{ route('super_admin.dashboard') }}" class="px-4 py-2 text-xs font-bold rounded-xl border transition" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7); border-color: var(--border-color, #bae6fd);">Super Admin</a>
-                            @elseif(auth()->user()->isGroupAdmin())
-                                <a href="{{ route('group_admin.dashboard') }}" class="px-4 py-2 text-xs font-bold rounded-xl border transition" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7); border-color: var(--border-color, #bae6fd);">Group Admin</a>
-                            @endif
+                            
                             <a href="{{ route('member.dashboard') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0284c7);">My Dashboard</a>
                         @else
                             <a href="{{ route('login') }}" class="px-4 py-2 text-xs font-bold hover:opacity-80 transition" style="color: var(--text-primary, #0f172a);">Login</a>
