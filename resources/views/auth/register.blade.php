@@ -61,12 +61,22 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password *</label>
-                    <input type="password" name="password" required class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                    <div class="relative">
+                        <input type="password" id="reg_password" name="password" required class="w-full px-4 py-3 pr-11 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                        <button type="button" onclick="togglePasswordVisibility('reg_password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 transition" title="Toggle Password Visibility">
+                            <i class="fa-solid fa-eye text-base"></i>
+                        </button>
+                    </div>
                     @error('password') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Confirm Password *</label>
-                    <input type="password" name="password_confirmation" required class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                    <div class="relative">
+                        <input type="password" id="reg_password_confirmation" name="password_confirmation" required class="w-full px-4 py-3 pr-11 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                        <button type="button" onclick="togglePasswordVisibility('reg_password_confirmation', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 transition" title="Toggle Password Visibility">
+                            <i class="fa-solid fa-eye text-base"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -87,4 +97,22 @@
         </div>
     </div>
 </div>
+
+<script>
+function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (!input || !icon) return;
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
 @endsection

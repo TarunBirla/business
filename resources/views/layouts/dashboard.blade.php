@@ -143,7 +143,7 @@
 
     <!-- Sidebar Navigation Drawer (Collapsible on Mobile, Fixed/Sticky on Desktop) -->
     <aside id="sidebarNav" class="hidden md:flex w-full md:w-64 bg-white border-r border-slate-200 p-5 md:p-6 flex-col justify-between shrink-0 transition-all duration-300 z-50">
-        <div class="space-y-6">
+        <div class="space-y-1">
             <!-- Header for Mobile Drawer (Close Button) -->
             <div class="flex items-center justify-between md:hidden pb-3 border-b border-slate-100">
                 <div class="flex items-center space-x-2">
