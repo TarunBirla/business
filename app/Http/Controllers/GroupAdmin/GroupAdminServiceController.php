@@ -19,22 +19,39 @@ class GroupAdminServiceController extends Controller
 
         if ($user->isSuperAdmin()) {
             $adminGroups = Group::orderBy('name')->get();
-            $adminGroupIds = $adminGroups->pluck('id');
+            $adminGroupIds = $adminGroups->pluck('id')->toArray();
         } else {
-            $adminGroupIds = $user->groups()->wherePivot('membership_role', 'group_admin')->pluck('groups.id');
+            $adminGroupIds = $user->groups()->wherePivot('membership_role', 'group_admin')->pluck('groups.id')->toArray();
             $adminGroups = Group::whereIn('id', $adminGroupIds)->orderBy('name')->get();
         }
 
-        $activeGroupId = $request->get('group_id') ?: ($adminGroupIds->first() ?? null);
+        $activeGroupId = $request->has('group_id') && $request->get('group_id') !== '' ? $request->get('group_id') : 'all';
 
-        // Community services in admin's groups
-        $communityServicesQuery = CommunityService::where(function($q) use ($adminGroupIds) {
-                $q->whereIn('group_id', $adminGroupIds)->orWhereNull('group_id');
-            })
+        // Community services in admin's groups or created by members in admin's groups
+        $communityServicesQuery = CommunityService::where('user_id', '!=', $user->id)
+            ->where('status', 'active')
             ->with(['user', 'group', 'requests' => fn($q) => $q->where('requester_id', $user->id)]);
 
-        if ($activeGroupId) {
-            $communityServicesQuery->where('group_id', $activeGroupId);
+        if ($activeGroupId !== 'all') {
+            $communityServicesQuery->where(function($q) use ($activeGroupId) {
+                $q->where('group_id', $activeGroupId)
+                  ->orWhere(function($sub) use ($activeGroupId) {
+                      $sub->whereNull('group_id')
+                          ->whereHas('user.groups', function($gq) use ($activeGroupId) {
+                              $gq->where('groups.id', $activeGroupId);
+                          });
+                  });
+            });
+        } else {
+            $communityServicesQuery->where(function($q) use ($adminGroupIds) {
+                $q->whereIn('group_id', $adminGroupIds)
+                  ->orWhere(function($sub) use ($adminGroupIds) {
+                      $sub->whereNull('group_id')
+                          ->whereHas('user.groups', function($gq) use ($adminGroupIds) {
+                              $gq->whereIn('groups.id', $adminGroupIds);
+                          });
+                  });
+            });
         }
 
         if ($search) {

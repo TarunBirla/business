@@ -18,17 +18,17 @@
 
     <!-- Main Navigation Tabs -->
     <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
-        <a href="{{ route('group_admin.services.index', ['tab' => 'community_services']) }}" 
+        <a href="{{ route('group_admin.services.index', ['tab' => 'community_services', 'group_id' => $activeGroupId]) }}" 
            class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 {{ $tab === 'community_services' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}">
             <i class="fa-solid fa-users-gear"></i>
             <span>Community Member Services ({{ $communityServices->count() }})</span>
         </a>
-        <a href="{{ route('group_admin.services.index', ['tab' => 'my_services']) }}" 
+        <a href="{{ route('group_admin.services.index', ['tab' => 'my_services', 'group_id' => $activeGroupId]) }}" 
            class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 {{ $tab === 'my_services' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}">
             <i class="fa-solid fa-user-shield"></i>
             <span>My Admin Services ({{ $myServices->count() }})</span>
         </a>
-        <a href="{{ route('group_admin.services.index', ['tab' => 'requests']) }}" 
+        <a href="{{ route('group_admin.services.index', ['tab' => 'requests', 'group_id' => $activeGroupId]) }}" 
            class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 {{ $tab === 'requests' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}">
             <i class="fa-solid fa-envelope-open-text"></i>
             <span>Requests ({{ $receivedRequests->where('status', 'pending')->count() }} Pending)</span>
@@ -43,9 +43,9 @@
                 
                 @if($adminGroups->count() > 1)
                     <select name="group_id" onchange="this.form.submit()" class="w-full sm:w-56 px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold text-sky-700 bg-sky-50 focus:outline-none focus:border-sky-500">
-                        <option value="">All Managed Communities</option>
+                        <option value="all" {{ $activeGroupId === 'all' ? 'selected' : '' }}>All Managed Communities</option>
                         @foreach($adminGroups as $g)
-                            <option value="{{ $g->id }}" {{ $activeGroupId == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
+                            <option value="{{ $g->id }}" {{ (string)$activeGroupId === (string)$g->id ? 'selected' : '' }}>{{ $g->name }}</option>
                         @endforeach
                     </select>
                 @endif

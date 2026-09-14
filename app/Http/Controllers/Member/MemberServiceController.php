@@ -20,6 +20,7 @@ class MemberServiceController extends Controller
         $category = $request->get('category');
 
         $groups = $user->groups;
+        $userGroupIds = $groups->pluck('id')->toArray();
 
         // 1. My Services
         $myServicesQuery = CommunityService::where('user_id', $user->id)->with('group', 'requests.requester');
@@ -33,9 +34,22 @@ class MemberServiceController extends Controller
         }
         $myServices = $myServicesQuery->latest()->get();
 
-        // 2. Others Services
+        // 2. Others Services (scoped strictly to communities the member belongs to)
         $othersServicesQuery = CommunityService::where('user_id', '!=', $user->id)
             ->where('status', 'active')
+            ->where(function($q) use ($userGroupIds) {
+                if (empty($userGroupIds)) {
+                    $q->whereNull('group_id');
+                } else {
+                    $q->whereIn('group_id', $userGroupIds)
+                      ->orWhere(function($sub) use ($userGroupIds) {
+                          $sub->whereNull('group_id')
+                              ->whereHas('user.groups', function($gq) use ($userGroupIds) {
+                                  $gq->whereIn('groups.id', $userGroupIds);
+                              });
+                      });
+                }
+            })
             ->with(['user', 'group', 'requests' => fn($q) => $q->where('requester_id', $user->id)]);
 
         if ($search) {
@@ -99,7 +113,7 @@ class MemberServiceController extends Controller
 
         CommunityService::create([
             'user_id' => $user->id,
-            'group_id' => $request->group_id,
+            'group_id' => $request->group_id ?: null,
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
@@ -131,7 +145,7 @@ class MemberServiceController extends Controller
         ]);
 
         $service->update([
-            'group_id' => $request->group_id,
+            'group_id' => $request->group_id ?: null,
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
