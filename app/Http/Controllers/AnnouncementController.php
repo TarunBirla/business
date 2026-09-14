@@ -99,4 +99,67 @@ class AnnouncementController extends Controller
 
         return back()->with('success', 'Announcement published successfully to target members.');
     }
+
+    public function update(Request $request, Announcement $announcement)
+    {
+        $user = auth()->user();
+
+        if (!$user->isSuperAdmin()) {
+            if ($announcement->group_id) {
+                if (!$user->isGroupAdmin($announcement->group_id)) {
+                    abort(403, 'Unauthorized to edit this announcement.');
+                }
+            } else {
+                if ($announcement->created_by !== $user->id) {
+                    abort(403, 'Unauthorized to edit this announcement.');
+                }
+            }
+        }
+
+        $request->validate([
+            'group_id' => 'nullable|exists:groups,id',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'target_role' => 'required|in:all,member,group_admin',
+        ]);
+
+        if ($request->filled('group_id') && $request->group_id != $announcement->group_id) {
+            if (!$user->isSuperAdmin() && !$user->isGroupAdmin($request->group_id)) {
+                abort(403, 'Unauthorized community target.');
+            }
+        }
+
+        $announcement->update([
+            'group_id' => $request->filled('group_id') ? $request->group_id : null,
+            'title' => $request->title,
+            'content' => $request->content,
+            'target_role' => $request->target_role,
+        ]);
+
+        return back()->with('success', 'Announcement updated successfully.');
+    }
+
+    public function destroy(Announcement $announcement)
+    {
+        $user = auth()->user();
+
+        if (!$user->isSuperAdmin()) {
+            if ($announcement->group_id) {
+                if (!$user->isGroupAdmin($announcement->group_id)) {
+                    abort(403, 'Unauthorized to delete this announcement.');
+                }
+            } else {
+                if ($announcement->created_by !== $user->id) {
+                    abort(403, 'Unauthorized to delete this announcement.');
+                }
+            }
+        }
+
+        // Delete associated notifications
+        Notification::where('announcement_id', $announcement->id)->delete();
+
+        $announcement->delete();
+
+        return back()->with('success', 'Announcement deleted successfully.');
+    }
 }

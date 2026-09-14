@@ -42,40 +42,27 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @foreach($featuredGroups as $group)
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
-                    <div>
-                        <div class="h-40 relative p-4 flex items-end" style="background-color: var(--btn-primary-bg);">
-                            <div class="w-16 h-16 rounded-xl bg-white p-1 shadow-md absolute -bottom-6 left-6 border-2 border-white">
-                                <div class="w-full h-full rounded-lg flex items-center justify-center font-bold text-sky-700 text-xl uppercase" style="background-color: var(--bg-page);">
-                                    {{ substr($group->name, 0, 2) }}
-                                </div>
-                            </div>
-                            <span class="ml-auto bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-800">
-                                {{ ucfirst($group->community_type) }}
-                            </span>
-                        </div>
-                        <div class="pt-8 px-6 pb-6">
-                            <h3 class="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition">{{ $group->name }}</h3>
-                            <p class="text-xs text-sky-600 font-medium mt-1 flex items-center">
-                                <span><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i>{{ $group->city ?? 'UK Wide' }}, {{ $group->country }}</span>
-                            </p>
-                            <p class="text-sm text-slate-600 mt-3 line-clamp-2 leading-relaxed">
-                                {{ $group->description }}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                        <div class="text-xs text-slate-500 font-semibold space-x-2">
-                            <span><i class="fa-solid fa-users text-sky-600 mr-1"></i>{{ number_format($group->members_count) }} Members</span> &bull; 
-                            <span><i class="fa-regular fa-calendar-days text-sky-600 mr-1"></i>{{ $group->events_count }} Events</span>
-                        </div>
-                        <a href="{{ route('groups.show', $group->slug) }}" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg transition shadow-sm">
-                            Join Community
-                        </a>
-                    </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-5 border border-sky-100">
+                    <i class="fa-solid fa-users-rays"></i>
                 </div>
-            @endforeach
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Regional & Cultural Networks</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Join verified state, cultural, and professional communities across the UK to stay connected with members who share your roots and values.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-5 border border-sky-100">
+                    <i class="fa-solid fa-address-book"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Verified Member Directory</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Search and filter community members by profession, city, services offered, and services needed. Exchange business and career opportunities easily.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-5 border border-sky-100">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Dedicated Admin Governance</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Group admins maintain community standards, approve new member requests, manage local events, and broadcast announcements seamlessly.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -114,50 +101,44 @@
 </section>
 
 <!-- Upcoming Events Section -->
-@if($upcomingEvents->count() > 0)
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
                 <h2 class="text-3xl font-bold text-slate-900">Upcoming Community Events</h2>
-                <p class="text-slate-600 mt-2">Attend networking nights, workshops, and community meetups.</p>
+                <p class="text-slate-600 mt-2">Attend networking nights, workshops, and community meetups across the UK.</p>
             </div>
-            <a href="{{ route('events.index') }}" class="font-bold text-sky-600 hover:text-sky-700">View All Events &rarr;</a>
+            <a href="{{ route('events.index') }}" class="font-bold text-sky-600 hover:text-sky-700 flex items-center space-x-1">
+                <span>View All Events</span>
+                <span>&rarr;</span>
+            </a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach($upcomingEvents as $event)
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-lg transition duration-300">
-                    <div class="p-6">
-                        <span class="inline-block px-3 py-1 bg-sky-100 text-sky-800 rounded-full text-xs font-bold mb-3">
-                            {{ $event->group->name }}
-                        </span>
-                        <h3 class="font-bold text-lg text-slate-900 leading-snug">{{ $event->title }}</h3>
-                        <div class="mt-4 space-y-2 text-xs text-slate-500">
-                            <p class="flex items-center space-x-2">
-                                <i class="fa-regular fa-calendar-days text-sky-600 w-4"></i>
-                                <span>{{ $event->start_at->format('d M Y, h:i A') }}</span>
-                            </p>
-                            <p class="flex items-center space-x-2">
-                                <i class="fa-solid fa-location-dot text-rose-500 w-4"></i>
-                                <span>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                        <span class="font-bold text-slate-900 text-sm">
-                            {{ $event->event_type === 'free' ? 'Free' : '£' . number_format($event->price, 2) }}
-                        </span>
-                        <a href="{{ route('events.show', $event->slug) }}" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-sm">
-                            Event Details
-                        </a>
-                    </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-5 border border-sky-100">
+                    <i class="fa-solid fa-calendar-check"></i>
                 </div>
-            @endforeach
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Live Workshops & Meetups</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Participate in both online and in-person community gatherings, professional seminars, and networking sessions tailored for members.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-5 border border-sky-100">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Digital RSVP & Event QR Passes</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Register for free or paid events with a single click. Manage your active registrations and download digital event passes from your dashboard.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-5 border border-sky-100">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Instant Broadcast Alerts</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Receive instant notifications and email updates about upcoming events, venue changes, and urgent community announcements.</p>
+            </div>
         </div>
     </div>
 </section>
-@endif
 
 <!-- Call To Action -->
 <section class="py-20 text-white text-center shadow-inner" style="background-color: var(--btn-primary-bg);">

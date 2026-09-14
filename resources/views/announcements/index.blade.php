@@ -91,11 +91,25 @@
                 <div class="divide-y divide-slate-100">
                     @foreach($announcements as $announcement)
                         <div class="p-6 space-y-2">
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <h4 class="text-base font-bold text-slate-900">{{ $announcement->title }}</h4>
-                                <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg">
-                                    {{ $announcement->group ? $announcement->group->name : 'Global' }}
-                                </span>
+                                <div class="flex items-center space-x-2 shrink-0">
+                                    <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg">
+                                        {{ $announcement->group ? $announcement->group->name : 'Global' }}
+                                    </span>
+                                    <button type="button" onclick='openEditAnnouncementModal(@json($announcement))' class="px-2.5 py-1 bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs font-bold rounded-lg transition border border-sky-200 flex items-center space-x-1" title="Edit Announcement">
+                                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                        <span>Edit</span>
+                                    </button>
+                                    <form action="{{ route('announcements.destroy', $announcement->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this announcement?');" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-bold rounded-lg transition border border-rose-200 flex items-center space-x-1" title="Delete Announcement">
+                                            <i class="fa-solid fa-trash text-xs"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                             <p class="text-xs text-slate-600 leading-relaxed">{!! nl2br(e($announcement->content)) !!}</p>
                             <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-50">
@@ -112,4 +126,95 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Announcement Modal -->
+<div id="editAnnouncementModal" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 relative">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                <i class="fa-solid fa-pen-to-square text-sky-600"></i>
+                <span>Edit Announcement</span>
+            </h3>
+            <button type="button" onclick="closeEditAnnouncementModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="editAnnouncementForm" action="" method="POST" class="space-y-4">
+            @csrf
+            @method('PUT')
+
+            @if(auth()->user()->isSuperAdmin())
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Community</label>
+                    <select name="group_id" id="edit_group_id" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                        <option value="">All Communities (Global)</option>
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @else
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Community *</label>
+                    <select name="group_id" id="edit_group_id" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Title *</label>
+                <input type="text" name="title" id="edit_title" required placeholder="Announcement Title" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Content *</label>
+                <textarea name="content" id="edit_content" rows="5" required placeholder="Write your announcement content here..." class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Audience</label>
+                <select name="target_role" id="edit_target_role" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                    <option value="all">All Members</option>
+                    <option value="member">Regular Members Only</option>
+                    <option value="group_admin">Group Admins Only</option>
+                </select>
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 pt-2">
+                <button type="button" onclick="closeEditAnnouncementModal()" class="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+                    Cancel
+                </button>
+                <button type="submit" class="px-5 py-2.5 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-sm transition">
+                    Update Announcement
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditAnnouncementModal(item) {
+        const modal = document.getElementById('editAnnouncementModal');
+        const form = document.getElementById('editAnnouncementForm');
+        form.action = `/announcements/${item.id}`;
+        document.getElementById('edit_title').value = item.title;
+        document.getElementById('edit_content').value = item.content;
+        if (document.getElementById('edit_group_id')) {
+            document.getElementById('edit_group_id').value = item.group_id || '';
+        }
+        if (document.getElementById('edit_target_role')) {
+            document.getElementById('edit_target_role').value = item.target_role || 'all';
+        }
+        modal.classList.remove('hidden');
+    }
+
+    function closeEditAnnouncementModal() {
+        const modal = document.getElementById('editAnnouncementModal');
+        modal.classList.add('hidden');
+    }
+</script>
 @endsection
