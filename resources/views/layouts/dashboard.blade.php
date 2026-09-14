@@ -252,6 +252,17 @@
                             <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Announcements</span>
                         </a>
+                        <a href="{{ route('member.chat') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('member.chat*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('member.chat*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-comments w-5" style="color: var(--text-link, #0284c7);"></i>
+                                <span>Community Chat</span>
+                            </div>
+                            @if($sidebarUnreadCount > 0)
+                                <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
+                                    {{ $sidebarUnreadCount }}
+                                </span>
+                            @endif
+                        </a>
                         <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('notifications*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('notifications*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Notifications</span>
