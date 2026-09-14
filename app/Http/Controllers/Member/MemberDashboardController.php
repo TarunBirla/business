@@ -13,6 +13,15 @@ class MemberDashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
+
+        if ($user->isSuperAdmin()) {
+            return redirect()->route('super_admin.dashboard');
+        }
+
+        if ($user->isGroupAdmin()) {
+            return redirect()->route('group_admin.dashboard');
+        }
+
         $myGroups = $user->groups()->with(['events', 'notices'])->get();
         $groupIds = $myGroups->pluck('id');
 

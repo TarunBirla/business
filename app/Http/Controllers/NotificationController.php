@@ -18,14 +18,12 @@ class NotificationController extends Controller
 
     public function markAsRead(Notification $notification)
     {
-        if ($notification->user_id !== auth()->id()) {
-            abort(403);
+        if ($notification->user_id === auth()->id() || auth()->user()->isSuperAdmin()) {
+            $notification->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
         }
-
-        $notification->update([
-            'is_read' => true,
-            'read_at' => now(),
-        ]);
 
         if ($notification->link) {
             return redirect($notification->link);

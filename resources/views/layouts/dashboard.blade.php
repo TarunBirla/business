@@ -167,7 +167,7 @@
 
             <!-- Navigation Links -->
             <nav class="space-y-1">
-                @if(request()->is('super-admin*'))
+                @if(auth()->check() && auth()->user()->isSuperAdmin() && (request()->is('super-admin*') || !request()->is('member*')))
                     <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0284c7);">Super Admin</div>
                     <a href="{{ route('super_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.dashboard') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.dashboard') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-chart-pie w-5" style="color: var(--text-link, #0284c7);"></i>
@@ -217,7 +217,7 @@
                         <i class="fa-solid fa-palette w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>Theme Manager</span>
                     </a>
-                @elseif(request()->is('group-admin*'))
+                @elseif(auth()->check() && auth()->user()->isGroupAdmin())
                     <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0284c7);">Group Admin Panel</div>
                     <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.dashboard') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.dashboard') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-chart-line w-5" style="color: var(--text-link, #0284c7);"></i>
