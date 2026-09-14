@@ -54,7 +54,7 @@
                        class="flex items-center justify-between p-3.5 transition hover:bg-sky-50/80 {{ $isSelected ? 'bg-sky-100/70 border-l-4 border-sky-600' : '' }}"
                        data-contact-id="{{ $contact->id }}">
                         <div class="flex items-center space-x-3 truncate pr-2">
-                            <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0284c7);">
+                            <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                                 {{ strtoupper(substr($contact->first_name, 0, 1) . substr($contact->last_name, 0, 1)) }}
                             </div>
                             <div class="truncate">
@@ -86,7 +86,7 @@
                 <!-- Active Chat Header -->
                 <div class="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between shrink-0 shadow-2xs">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0284c7);">
+                        <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                             {{ strtoupper(substr($activeContact->first_name, 0, 1) . substr($activeContact->last_name, 0, 1)) }}
                         </div>
                         <div>
@@ -115,7 +115,7 @@
                         @if($isMe)
                             <!-- Sent Message (Current Logged-in User) -->
                             <div class="flex justify-end items-end space-x-2 msg-item" data-msg-id="{{ $msg->id }}">
-                                <div class="max-w-xs sm:max-w-md bg-sky-600 text-white p-3 rounded-2xl rounded-br-none shadow-2xs space-y-1" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                <div class="max-w-xs sm:max-w-md bg-sky-600 text-white p-3 rounded-2xl rounded-br-none shadow-2xs space-y-1" style="background-color: var(--btn-primary-bg, #0A4744);">
                                     <div class="text-[10px] font-bold text-sky-100 text-right">{{ $senderFirstName }}</div>
                                     <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                                     <div class="flex items-center justify-end space-x-1 text-[10px] text-sky-100">
@@ -123,7 +123,7 @@
                                         <span class="font-bold msg-status">{{ $msg->is_read ? '✓✓' : '✓' }}</span>
                                     </div>
                                 </div>
-                                <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs opacity-90" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs opacity-90" style="background-color: var(--btn-primary-bg, #0A4744);">
                                     {{ $senderInitials }}
                                 </div>
                             </div>
@@ -156,14 +156,14 @@
                     <input type="hidden" name="group_id" value="{{ $activeGroup->id }}">
                     <input type="hidden" name="receiver_id" value="{{ $activeContact->id }}">
                     <input type="text" id="chatMessageInput" name="message" required autocomplete="off" placeholder="Type your message to {{ $activeContact->first_name }}..." class="flex-grow px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-sky-500 font-medium">
-                    <button type="submit" id="chatSendBtn" class="px-4 sm:px-5 py-2.5 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center space-x-1.5 shrink-0" style="background-color: var(--btn-primary-bg, #0284c7);">
+                    <button type="submit" id="chatSendBtn" class="px-4 sm:px-5 py-2.5 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center space-x-1.5 shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                         <span>Send</span>
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </form>
             @else
                 <div class="flex flex-col items-center justify-center h-full p-8 text-center bg-slate-50 space-y-4">
-                    <div class="w-16 h-16 rounded-full text-sky-600 flex items-center justify-center text-2xl shadow-2xs border border-sky-100" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);">
+                    <div class="w-16 h-16 rounded-full text-sky-600 flex items-center justify-center text-2xl shadow-2xs border border-sky-100" style="background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744);">
                         <i class="fa-solid fa-comments"></i>
                     </div>
                     <div class="space-y-1 max-w-sm">
@@ -246,7 +246,7 @@
                         // Append sent bubble
                         const msgHtml = `
                             <div class="flex justify-end items-end space-x-2 msg-item" data-msg-id="${msg.id}">
-                                <div class="max-w-xs sm:max-w-md text-white p-3 rounded-2xl rounded-br-none shadow-2xs space-y-1" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                <div class="max-w-xs sm:max-w-md text-white p-3 rounded-2xl rounded-br-none shadow-2xs space-y-1" style="background-color: var(--btn-primary-bg, #0A4744);">
                                     <div class="text-[10px] font-bold text-sky-100 text-right">${escapeHtml(msg.sender_name)}</div>
                                     <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line">${escapeHtml(msg.message)}</p>
                                     <div class="flex items-center justify-end space-x-1 text-[10px] text-sky-100">
@@ -254,7 +254,7 @@
                                         <span class="font-bold msg-status">✓</span>
                                     </div>
                                 </div>
-                                <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs opacity-90" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs opacity-90" style="background-color: var(--btn-primary-bg, #0A4744);">
                                     ${escapeHtml(msg.sender_initials)}
                                 </div>
                             </div>
@@ -299,7 +299,7 @@
                                 if (isMe) {
                                     msgHtml = `
                                         <div class="flex justify-end items-end space-x-2 msg-item" data-msg-id="${msg.id}">
-                                            <div class="max-w-xs sm:max-w-md text-white p-3 rounded-2xl rounded-br-none shadow-2xs space-y-1" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                            <div class="max-w-xs sm:max-w-md text-white p-3 rounded-2xl rounded-br-none shadow-2xs space-y-1" style="background-color: var(--btn-primary-bg, #0A4744);">
                                                 <div class="text-[10px] font-bold text-sky-100 text-right">${escapeHtml(msg.sender_name)}</div>
                                                 <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line">${escapeHtml(msg.message)}</p>
                                                 <div class="flex items-center justify-end space-x-1 text-[10px] text-sky-100">
@@ -307,7 +307,7 @@
                                                     <span class="font-bold msg-status">${msg.is_read ? '✓✓' : '✓'}</span>
                                                 </div>
                                             </div>
-                                            <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs opacity-90" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                            <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs opacity-90" style="background-color: var(--btn-primary-bg, #0A4744);">
                                                 ${escapeHtml(msg.sender_initials)}
                                             </div>
                                         </div>

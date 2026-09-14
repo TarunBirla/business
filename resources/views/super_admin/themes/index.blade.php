@@ -26,7 +26,7 @@
                 $colors = $theme->colors ?? [];
                 $bgPage = $colors['bg_page'] ?? '#ffffff';
                 $bgSurface = $colors['bg_surface'] ?? '#f8fafc';
-                $primary = $colors['btn_primary_bg'] ?? '#0284c7';
+                $primary = $colors['btn_primary_bg'] ?? '#0A4744';
                 $textPrimary = $colors['text_primary'] ?? '#0f172a';
             @endphp
             <div class="bg-white rounded-2xl border {{ $theme->is_default ? 'border-2 border-sky-500 shadow-md' : 'border-slate-200 shadow-sm' }} overflow-hidden flex flex-col justify-between hover:shadow-md transition">

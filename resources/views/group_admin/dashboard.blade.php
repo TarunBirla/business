@@ -8,26 +8,9 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <div class="text-xs font-bold text-sky-600 uppercase tracking-wider">Group Admin Control Center</div>
-            <h1 class="text-3xl font-bold text-slate-900 mt-1">{{ $activeGroup->name }}</h1>
         </div>
 
-        <!-- Quick Actions for Active Group -->
-        <div class="flex flex-wrap gap-2">
-            <a href="{{ route('group_admin.communities.index') }}" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-2xs transition flex items-center space-x-1.5">
-                <i class="fa-solid fa-layer-group"></i>
-                <span>Manage Communities</span>
-            </a>
-            <a href="{{ route('group_admin.settings', $activeGroup->id) }}" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-2xs transition flex items-center space-x-1.5">
-                <i class="fa-solid fa-sliders"></i>
-                <span>Edit Settings</span>
-            </a>
-            <a href="{{ route('group_admin.members.create', $activeGroup->id) }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-2xs transition">
-                + Add Member
-            </a>
-            <a href="{{ route('group_admin.events.create', $activeGroup->id) }}" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-2xs transition">
-                + Create Event
-            </a>
-        </div>
+        
     </div>
 
     <!-- Active Community Stats Grid -->

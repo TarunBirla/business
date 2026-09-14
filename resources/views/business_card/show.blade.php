@@ -11,7 +11,7 @@
     <div class="max-w-5xl w-full rounded-[32px] border shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden relative transition-all duration-300" style="background-color: var(--card-bg, #ffffff); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #0f172a);">
 
         <!-- Top Cover Header Banner -->
-        <div class="h-44 md:h-52 relative p-6 md:p-8 flex justify-between items-start overflow-hidden shadow-md" style="background: linear-gradient(135deg, var(--btn-primary-bg, #0284c7) 0%, var(--text-link-hover, #0369a1) 100%);">
+        <div class="h-44 md:h-52 relative p-6 md:p-8 flex justify-between items-start overflow-hidden shadow-md" style="background: linear-gradient(135deg, var(--btn-primary-bg, #0A4744) 0%, var(--text-link-hover, #0369a1) 100%);">
             <!-- Decorative Subtle Grid Pattern Overlay -->
             <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1.5px,transparent_1.5px)] [background-size:20px_20px]"></div>
 
@@ -37,7 +37,7 @@
                         @if($userModel->profile_photo)
                             <img src="{{ asset('storage/' . $userModel->profile_photo) }}" alt="{{ $userModel->name }}" class="w-full h-full rounded-full object-cover shadow-sm">
                         @else
-                            <div class="w-full h-full rounded-full flex items-center justify-center font-extrabold text-4xl uppercase text-white shadow-inner" style="background-color: var(--btn-primary-bg, #0284c7);">
+                            <div class="w-full h-full rounded-full flex items-center justify-center font-extrabold text-4xl uppercase text-white shadow-inner" style="background-color: var(--btn-primary-bg, #0A4744);">
                                 {{ substr($userModel->first_name, 0, 1) }}{{ substr($userModel->last_name, 0, 1) }}
                             </div>
                         @endif
@@ -53,7 +53,7 @@
                             {{ $userModel->name }}
                         </h1>
                         <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-0.5">
-                            <span class="px-3.5 py-1 text-xs font-black uppercase tracking-wider rounded-full border shadow-2xs" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7); border-color: var(--input-border, #bae6fd);">
+                            <span class="px-3.5 py-1 text-xs font-black uppercase tracking-wider rounded-full border shadow-2xs" style="background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); border-color: var(--input-border, #cce5e3);">
                                 {{ $userModel->profession ?? 'Community Professional' }}
                             </span>
                         </div>
@@ -115,7 +115,7 @@
 
                     <!-- Primary Share Action Button -->
                     <div>
-                        <button onclick="openShareModal()" class="w-full py-3.5 px-4 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2 transform active:scale-95" style="background-color: var(--btn-primary-bg, #0284c7);">
+                        <button onclick="openShareModal()" class="w-full py-3.5 px-4 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2 transform active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
                             <i class="fa-solid fa-qrcode text-sm"></i>
                             <span>Share Digital Business Card</span>
                         </button>
@@ -138,7 +138,7 @@
 
                             @if($userModel->servicesOffered->isNotEmpty())
                                 <div>
-                                    <div class="text-[11px] font-bold uppercase mb-2 flex items-center gap-1.5" style="color: var(--text-link, #0284c7);">
+                                    <div class="text-[11px] font-bold uppercase mb-2 flex items-center gap-1.5" style="color: var(--text-link, #0A4744);">
                                         <i class="fa-solid fa-hand-holding-hand"></i>
                                         <span>Services Offered</span>
                                     </div>
@@ -269,7 +269,7 @@
                         <div class="space-y-4 pt-2">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">Featured Portfolio & Case Studies</h3>
-                                <span class="text-[10px] font-extrabold px-3 py-1 rounded-full border shadow-2xs" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7); border-color: var(--input-border, #bae6fd);">
+                                <span class="text-[10px] font-extrabold px-3 py-1 rounded-full border shadow-2xs" style="background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); border-color: var(--input-border, #cce5e3);">
                                     {{ $userModel->projects->count() }} Showcase Projects
                                 </span>
                             </div>
@@ -312,7 +312,7 @@
                                             @endif
 
                                             @if($project->project_url)
-                                                <a href="{{ $project->project_url }}" target="_blank" class="inline-flex items-center space-x-1.5 text-xs font-bold pt-1" style="color: var(--text-link, #0284c7);">
+                                                <a href="{{ $project->project_url }}" target="_blank" class="inline-flex items-center space-x-1.5 text-xs font-bold pt-1" style="color: var(--text-link, #0A4744);">
                                                     <span>View Case Study</span>
                                                     <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                                                 </a>
@@ -338,7 +338,7 @@
                                 @foreach($upcomingEvents as $event)
                                     <div class="p-3.5 rounded-2xl border flex items-center justify-between space-x-3 transition hover:border-emerald-300" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
                                         <div class="flex items-center space-x-3.5 min-w-0">
-                                            <div class="w-12 h-12 text-white rounded-xl flex flex-col items-center justify-center shrink-0 font-black shadow-sm" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                            <div class="w-12 h-12 text-white rounded-xl flex flex-col items-center justify-center shrink-0 font-black shadow-sm" style="background-color: var(--btn-primary-bg, #0A4744);">
                                                 <span class="text-[9px] uppercase font-extrabold tracking-wider">{{ $event->start_at ? $event->start_at->format('M') : 'UP' }}</span>
                                                 <span class="text-base leading-none">{{ $event->start_at ? $event->start_at->format('d') : 'EV' }}</span>
                                             </div>
@@ -346,14 +346,14 @@
                                                 <h4 class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $event->title }}</h4>
                                                 <p class="text-[10px] mt-0.5 flex items-center space-x-2" style="color: var(--text-secondary, #64748b);">
                                                     @if($event->group)
-                                                        <span class="font-bold truncate" style="color: var(--text-link, #0284c7);">{{ $event->group->name }}</span>
+                                                        <span class="font-bold truncate" style="color: var(--text-link, #0A4744);">{{ $event->group->name }}</span>
                                                         <span>•</span>
                                                     @endif
                                                     <span class="truncate"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->city ?? 'UK' }}</span>
                                                 </p>
                                             </div>
                                         </div>
-                                        <a href="{{ route('events.show', $event->slug) }}" target="_blank" class="px-3.5 py-1.5 text-white text-[10px] font-bold rounded-xl shadow-2xs shrink-0 transition flex items-center space-x-1" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                        <a href="{{ route('events.show', $event->slug) }}" target="_blank" class="px-3.5 py-1.5 text-white text-[10px] font-bold rounded-xl shadow-2xs shrink-0 transition flex items-center space-x-1" style="background-color: var(--btn-primary-bg, #0A4744);">
                                             <span>Register</span>
                                             <i class="fa-solid fa-chevron-right text-[8px]"></i>
                                         </a>
@@ -418,7 +418,7 @@
         <!-- Copy Link Input -->
         <div class="flex items-center space-x-2">
             <input type="text" id="cardUrlInput" value="{{ $cardUrl }}" readonly class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-medium text-slate-700">
-            <button onclick="copyCardLink()" id="copyBtn" class="px-4 py-2.5 text-white font-bold text-xs rounded-xl transition shrink-0 shadow-sm" style="background-color: var(--btn-primary-bg, #0284c7);">
+            <button onclick="copyCardLink()" id="copyBtn" class="px-4 py-2.5 text-white font-bold text-xs rounded-xl transition shrink-0 shadow-sm" style="background-color: var(--btn-primary-bg, #0A4744);">
                 Copy
             </button>
         </div>
@@ -449,7 +449,7 @@
 
         setTimeout(() => {
             copyBtn.innerText = 'Copy';
-            copyBtn.style.backgroundColor = 'var(--btn-primary-bg, #0284c7)';
+            copyBtn.style.backgroundColor = 'var(--btn-primary-bg, #0A4744)';
         }, 2000);
     }
 </script>

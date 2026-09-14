@@ -18,7 +18,7 @@
                 <i class="fa-solid fa-file-csv text-slate-500"></i>
                 <span>Export CSV</span>
             </a>
-            <a href="{{ route('group_admin.members.create', $group->id) }}" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition inline-flex items-center space-x-1.5" style="background-color: var(--btn-primary-bg, #0284c7);">
+            <a href="{{ route('group_admin.members.create', $group->id) }}" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition inline-flex items-center space-x-1.5" style="background-color: var(--btn-primary-bg, #0A4744);">
                 <i class="fa-solid fa-user-plus"></i>
                 <span>Add / Invite Member</span>
             </a>
@@ -63,7 +63,7 @@
                         <tr class="hover:bg-slate-50/80 transition">
                             <td class="p-3.5 sm:p-4">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-2xs shrink-0" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                    <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-2xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                                         {{ strtoupper(substr($m->first_name, 0, 1) . substr($m->last_name, 0, 1)) }}
                                     </div>
                                     <div>

@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-6 md:space-y-8">
     <!-- Welcome Banner -->
-    <div class="rounded-2xl md:rounded-3xl text-white p-6 sm:p-8 shadow-md" style="background-color: var(--btn-primary-bg, #0284c7);">
+    <div class="rounded-2xl md:rounded-3xl text-white p-6 sm:p-8 shadow-md" style="background-color: var(--btn-primary-bg, #0A4744);">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
                 <h1 class="text-2xl sm:text-3xl font-bold">Welcome back, {{ $user->first_name }}! <i class="fa-solid fa-hand-sparkles text-amber-300 ml-1"></i></h1>

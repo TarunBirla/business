@@ -40,7 +40,7 @@
         </div>
 
         <div class="flex items-end space-x-2">
-            <button type="submit" class="flex-grow py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center justify-center space-x-1.5" style="background-color: var(--btn-primary-bg, #0284c7);">
+            <button type="submit" class="flex-grow py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center justify-center space-x-1.5" style="background-color: var(--btn-primary-bg, #0A4744);">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <span>Search</span>
             </button>
@@ -72,7 +72,7 @@
                             <!-- Member Profile -->
                             <td class="p-3.5 sm:p-4">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-2xs shrink-0" style="background-color: var(--btn-primary-bg, #0284c7);">
+                                    <div class="w-10 h-10 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-2xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                                         {{ strtoupper(substr($member->first_name, 0, 1) . substr($member->last_name, 0, 1)) }}
                                     </div>
                                     <div class="min-w-0">

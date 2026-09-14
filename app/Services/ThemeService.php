@@ -62,18 +62,18 @@ class ThemeService
             'text_primary' => '#0f172a',
             'text_secondary' => '#64748b',
             'text_heading' => '#0f172a',
-            'text_link' => '#0284c7',
-            'text_link_hover' => '#0369a1',
+            'text_link' => '#0A4744',
+            'text_link_hover' => '#063331',
 
             // Navbar / Header
             'navbar_bg' => '#ffffff',
             'navbar_text' => '#0f172a',
-            'navbar_active' => '#0284c7',
+            'navbar_active' => '#0A4744',
 
             // Buttons
-            'btn_primary_bg' => '#0284c7',
+            'btn_primary_bg' => '#0A4744',
             'btn_primary_text' => '#ffffff',
-            'btn_primary_hover' => '#0369a1',
+            'btn_primary_hover' => '#063331',
             'btn_secondary_bg' => '#ffffff',
             'btn_secondary_text' => '#334155',
             'btn_secondary_border' => '#cbd5e1',
@@ -95,7 +95,7 @@ class ThemeService
             // Forms / Inputs
             'input_bg' => '#ffffff',
             'input_border' => '#cbd5e1',
-            'input_focus' => '#0284c7',
+            'input_focus' => '#0A4744',
             'input_placeholder' => '#94a3b8',
 
             // Badges
@@ -105,18 +105,18 @@ class ThemeService
             'badge_warning_text' => '#92400e',
             'badge_error_bg' => '#fef2f2',
             'badge_error_text' => '#991b1b',
-            'badge_info_bg' => '#f0f9ff',
-            'badge_info_text' => '#075985',
+            'badge_info_bg' => '#f0f7f6',
+            'badge_info_text' => '#0A4744',
 
             // Footer
             'footer_bg' => '#0f172a',
             'footer_text' => '#94a3b8',
-            'footer_link_hover' => '#38bdf8',
+            'footer_link_hover' => '#148f88',
 
             // Misc
             'modal_bg' => '#ffffff',
             'modal_overlay' => 'rgba(15, 23, 42, 0.6)',
-            'icon_color' => '#0284c7',
+            'icon_color' => '#0A4744',
         ];
     }
 }

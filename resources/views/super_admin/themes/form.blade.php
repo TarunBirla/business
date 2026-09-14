@@ -129,7 +129,7 @@
                             <div>
                                 <label class="block text-xs font-semibold text-black mb-1.5">{{ $label }}</label>
                                 <div class="flex items-center space-x-2">
-                                    <input type="color" data-token="{{ $key }}" value="{{ Str::startsWith($val, '#') ? $val : '#0284c7' }}" class="color-picker-input w-10 h-10 rounded-lg cursor-pointer border border-slate-300 p-0.5 shrink-0">
+                                    <input type="color" data-token="{{ $key }}" value="{{ Str::startsWith($val, '#') ? $val : '#0A4744' }}" class="color-picker-input w-10 h-10 rounded-lg cursor-pointer border border-slate-300 p-0.5 shrink-0">
                                     <input type="text" name="colors[{{ $key }}]" id="token_{{ $key }}" data-token-text="{{ $key }}" value="{{ old('colors.' . $key, $val) }}" required class="color-text-input flex-grow px-3 py-2 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-sky-500">
                                 </div>
                             </div>

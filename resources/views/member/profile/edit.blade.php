@@ -183,14 +183,14 @@
                         <div class="h-8 rounded-lg overflow-hidden flex border border-slate-200 shadow-inner mb-3">
                             <div class="h-full flex-1" style="background-color: {{ $colors['bg_page'] ?? '#f8fafc' }}" title="Page Background"></div>
                             <div class="h-full flex-1" style="background-color: {{ $colors['card_bg'] ?? '#ffffff' }}" title="Card Background"></div>
-                            <div class="h-full flex-1" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0284c7' }}" title="Primary Brand"></div>
+                            <div class="h-full flex-1" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0A4744' }}" title="Primary Brand"></div>
                             <div class="h-full flex-1" style="background-color: {{ $colors['text_heading'] ?? '#0f172a' }}" title="Heading Text"></div>
                             <div class="h-full flex-1" style="background-color: {{ $colors['footer_bg'] ?? '#0f172a' }}" title="Footer Background"></div>
                         </div>
 
                         <div class="flex items-center justify-between text-xs text-black">
                             <span class="inline-flex items-center">
-                                <span class="w-2.5 h-2.5 rounded-full mr-1.5 inline-block" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0284c7' }}"></span>
+                                <span class="w-2.5 h-2.5 rounded-full mr-1.5 inline-block" style="background-color: {{ $colors['btn_primary_bg'] ?? '#0A4744' }}"></span>
                                 Primary Accent
                             </span>
                             <span class="font-semibold text-sky-600 text-[11px]">

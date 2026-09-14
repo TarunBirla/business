@@ -76,7 +76,7 @@
                         @csrf
                         <input type="hidden" name="receiver_id" value="{{ $user->id }}">
                         <input type="hidden" name="group_id" value="{{ $activeGroupId }}">
-                        <button type="submit" class="px-5 py-2 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs rounded-lg transition border border-sky-200" style="background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);">
+                        <button type="submit" class="px-5 py-2 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs rounded-lg transition border border-sky-200" style="background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744);">
                             Request Contact Details Access
                         </button>
                     </form>

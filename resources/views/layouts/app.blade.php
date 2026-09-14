@@ -53,21 +53,35 @@
         }
 
         /* Primary Brand Accents & Links */
-        .bg-sky-600, .bg-blue-600 {
-            background-color: var(--btn-primary-bg) !important;
-            color: var(--btn-primary-text) !important;
+        .bg-sky-600, .bg-blue-600, .bg-sky-500, .bg-blue-500, .bg-sky-700, .bg-blue-700 {
+            background-color: var(--btn-primary-bg, #0A4744) !important;
+            color: var(--btn-primary-text, #ffffff) !important;
         }
 
-        .bg-sky-600:hover, .hover\:bg-sky-700:hover, .bg-blue-600:hover, .hover\:bg-blue-700:hover {
-            background-color: var(--btn-primary-hover) !important;
+        .bg-sky-600:hover, .hover\:bg-sky-700:hover, .bg-blue-600:hover, .hover\:bg-blue-700:hover,
+        .hover\:bg-sky-600:hover, .bg-sky-500:hover, .hover\:bg-sky-500:hover, .hover\:bg-sky-100:hover {
+            background-color: var(--btn-primary-hover, #063331) !important;
         }
 
-        .text-sky-600, .text-sky-700, .text-blue-600, .text-blue-700 {
-            color: var(--text-link) !important;
+        .text-sky-600, .text-sky-700, .text-sky-500, .text-blue-600, .text-blue-700, .text-blue-500 {
+            color: var(--text-link, #0A4744) !important;
         }
 
-        .text-sky-600:hover, .hover\:text-sky-600:hover, .text-blue-600:hover, .hover\:text-blue-600:hover {
-            color: var(--text-link-hover) !important;
+        .text-sky-600:hover, .hover\:text-sky-600:hover, .text-blue-600:hover, .hover\:text-blue-600:hover,
+        .hover\:text-sky-700:hover {
+            color: var(--text-link-hover, #063331) !important;
+        }
+
+        .bg-sky-50, .bg-sky-100, .bg-blue-50, .bg-blue-100 {
+            background-color: #f0f7f6 !important;
+        }
+
+        .border-sky-500, .border-sky-600, .border-blue-500, .border-blue-600 {
+            border-color: var(--btn-primary-bg, #0A4744) !important;
+        }
+
+        .border-sky-100, .border-sky-200, .border-blue-100, .border-blue-200 {
+            border-color: #cce5e3 !important;
         }
 
         /* Navbar Styling */
@@ -92,7 +106,7 @@
         }
 
         footer a:hover {
-            color: var(--footer-link-hover, #38bdf8) !important;
+            color: var(--footer-link-hover, #148f88) !important;
         }
 
         /* Inputs */
@@ -166,10 +180,10 @@
                     <div class="hidden sm:flex items-center space-x-3">
                         @auth
                             
-                            <a href="{{ route('member.dashboard') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0284c7);">My Dashboard</a>
+                            <a href="{{ route('member.dashboard') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0A4744);">My Dashboard</a>
                         @else
                             <a href="{{ route('login') }}" class="px-4 py-2 text-xs font-bold hover:opacity-80 transition" style="color: var(--text-primary, #0f172a);">Login</a>
-                            <a href="{{ route('register') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0284c7);">Join Now</a>
+                            <a href="{{ route('register') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0A4744);">Join Now</a>
                         @endauth
                     </div>
 
@@ -194,13 +208,13 @@
 
             <div class="pt-3 border-t space-y-2" style="border-color: var(--border-color, #e2e8f0);">
                 @auth
-                    <a href="{{ route('member.dashboard') }}" onclick="closePublicMobileNav()" class="block w-full text-center py-3 text-xs font-bold text-white rounded-xl shadow-md" style="background-color: var(--btn-primary-bg, #0284c7);">
+                    <a href="{{ route('member.dashboard') }}" onclick="closePublicMobileNav()" class="block w-full text-center py-3 text-xs font-bold text-white rounded-xl shadow-md" style="background-color: var(--btn-primary-bg, #0A4744);">
                         My Dashboard &rarr;
                     </a>
                 @else
                     <div class="grid grid-cols-2 gap-2">
                         <a href="{{ route('login') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold rounded-xl border" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #0f172a);">Login</a>
-                        <a href="{{ route('register') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold text-white rounded-xl shadow-sm" style="background-color: var(--btn-primary-bg, #0284c7);">Join Now</a>
+                        <a href="{{ route('register') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold text-white rounded-xl shadow-sm" style="background-color: var(--btn-primary-bg, #0A4744);">Join Now</a>
                     </div>
                 @endauth
             </div>
