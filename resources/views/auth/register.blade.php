@@ -89,7 +89,7 @@
                             <i class="fa-solid fa-rotate-right text-base"></i>
                         </button>
                     </div>
-                    <input type="text" name="captcha" placeholder="Enter text above" required autocomplete="off" class="flex-grow px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-bold uppercase tracking-widest">
+                    <input type="text" name="captcha" placeholder="Enter text above" required autocomplete="off" class="flex-grow px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-bold tracking-widest">
                 </div>
                 <span class="text-[11px] text-slate-500 mt-1 block">Click the refresh icon if text is hard to read.</span>
                 @error('captcha') <span class="text-xs text-rose-600 mt-1 block font-bold">{{ $message }}</span> @enderror
