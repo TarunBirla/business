@@ -28,6 +28,9 @@ class GroupAdminPromotionController extends Controller
             ->pluck('total', 'source')
             ->toArray();
 
+        $user = auth()->user();
+        $assignedGroups = $user->isSuperAdmin() ? Group::all() : $user->groups()->wherePivot('membership_role', 'group_admin')->get();
+
         return view('group_admin.promotion.index', compact(
             'group',
             'shareUrl',
@@ -35,7 +38,8 @@ class GroupAdminPromotionController extends Controller
             'defaultShareText',
             'qrCodeSvg',
             'referralsCount',
-            'sourcesCount'
+            'sourcesCount',
+            'assignedGroups'
         ));
     }
 

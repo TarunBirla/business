@@ -9,6 +9,18 @@
             <h1 class="text-2xl font-bold text-slate-900">Community Settings</h1>
             <p class="text-xs text-slate-500 mt-1">Manage details and view change audit history for <strong>{{ $group->name }}</strong>.</p>
         </div>
+        @if(isset($assignedGroups) && $assignedGroups->count() > 1)
+            <div class="flex items-center space-x-2">
+                <label class="text-xs font-bold text-slate-600 uppercase">Switch Community:</label>
+                <select onchange="window.location.href=this.value" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-sky-500 shadow-2xs">
+                    @foreach($assignedGroups as $ag)
+                        <option value="{{ route('group_admin.settings', $ag->id) }}" {{ $ag->id === $group->id ? 'selected' : '' }}>
+                            {{ $ag->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
     </div>
 
     @if(session('success'))

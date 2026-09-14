@@ -223,6 +223,10 @@
                         <i class="fa-solid fa-chart-line w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>Dashboard</span>
                     </a>
+                    <a href="{{ route('group_admin.communities.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.communities*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.communities*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <i class="fa-solid fa-layer-group w-5" style="color: var(--text-link, #0284c7);"></i>
+                        <span>Manage Communities</span>
+                    </a>
                     @if($adminGroup)
                         <a href="{{ route('group_admin.settings', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.settings*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.settings*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-sliders w-5" style="color: var(--text-link, #0284c7);"></i>

@@ -17,16 +17,20 @@ class GroupAdminMemberController extends Controller
     public function index(Group $group)
     {
         $this->authorizeAdmin($group);
+        $user = auth()->user();
+        $assignedGroups = $user->isSuperAdmin() ? Group::all() : $user->groups()->wherePivot('membership_role', 'group_admin')->get();
         $members = $group->members()->wherePivot('status', 'active')->where('users.id', '!=', auth()->id())->paginate(15);
         $pendingCount = $group->members()->wherePivot('status', 'pending')->count();
-        return view('group_admin.members.index', compact('group', 'members', 'pendingCount'));
+        return view('group_admin.members.index', compact('group', 'members', 'pendingCount', 'assignedGroups'));
     }
 
     public function pending(Group $group)
     {
         $this->authorizeAdmin($group);
+        $user = auth()->user();
+        $assignedGroups = $user->isSuperAdmin() ? Group::all() : $user->groups()->wherePivot('membership_role', 'group_admin')->get();
         $pendingMembers = $group->members()->wherePivot('status', 'pending')->paginate(15);
-        return view('group_admin.members.pending', compact('group', 'pendingMembers'));
+        return view('group_admin.members.pending', compact('group', 'pendingMembers', 'assignedGroups'));
     }
 
     public function approve(Group $group, User $user)

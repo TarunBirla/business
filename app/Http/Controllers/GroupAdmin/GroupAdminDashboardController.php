@@ -53,15 +53,40 @@ class GroupAdminDashboardController extends Controller
         ));
     }
 
+    public function communities()
+    {
+        $user = auth()->user();
+
+        if ($user->isSuperAdmin()) {
+            $assignedGroups = Group::withCount(['members', 'events', 'notices'])->with(['auditLogs.user'])->get();
+        } else {
+            $assignedGroups = $user->groups()
+                ->wherePivot('membership_role', 'group_admin')
+                ->withCount(['members', 'events', 'notices'])
+                ->with(['auditLogs.user'])
+                ->get();
+        }
+
+        return view('group_admin.communities.index', compact('assignedGroups'));
+    }
+
     public function settings(Group $group)
     {
         $this->authorizeAdmin($group);
+        $user = auth()->user();
+
+        if ($user->isSuperAdmin()) {
+            $assignedGroups = Group::all();
+        } else {
+            $assignedGroups = $user->groups()->wherePivot('membership_role', 'group_admin')->get();
+        }
+
         $auditLogs = CommunityAuditLog::where('group_id', $group->id)
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('group_admin.settings', compact('group', 'auditLogs'));
+        return view('group_admin.settings', compact('group', 'auditLogs', 'assignedGroups'));
     }
 
     public function updateSettings(Request $request, Group $group)

@@ -133,6 +133,7 @@ Route::middleware('auth')->group(function () {
 */
 Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_admin.')->group(function () {
     Route::get('/', [GroupAdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/communities', [GroupAdminDashboardController::class, 'communities'])->name('communities.index');
     Route::get('/profile', [MemberProfileController::class, 'edit'])->name('profile');
 
     // Group Member Management

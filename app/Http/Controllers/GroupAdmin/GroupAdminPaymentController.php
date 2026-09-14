@@ -32,9 +32,12 @@ class GroupAdminPaymentController extends Controller
             });
         }
 
+        $user = auth()->user();
+        $assignedGroups = $user->isSuperAdmin() ? Group::all() : $user->groups()->wherePivot('membership_role', 'group_admin')->get();
+
         $payments = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
-        return view('group_admin.payments.index', compact('group', 'payments'));
+        return view('group_admin.payments.index', compact('group', 'payments', 'assignedGroups'));
     }
 
     private function authorizeAdmin(Group $group)

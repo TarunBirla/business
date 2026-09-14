@@ -13,8 +13,10 @@ class GroupAdminEventController extends Controller
     public function index(Group $group)
     {
         $this->authorizeAdmin($group);
+        $user = auth()->user();
+        $assignedGroups = $user->isSuperAdmin() ? Group::all() : $user->groups()->wherePivot('membership_role', 'group_admin')->get();
         $events = $group->events()->withCount('registrations')->latest()->paginate(10);
-        return view('group_admin.events.index', compact('group', 'events'));
+        return view('group_admin.events.index', compact('group', 'events', 'assignedGroups'));
     }
 
     public function create(Group $group)
