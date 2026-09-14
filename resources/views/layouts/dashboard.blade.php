@@ -168,9 +168,13 @@
                         <i class="fa-solid fa-chart-pie w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('super_admin.groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.groups*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.groups*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                    <a href="{{ route('super_admin.groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.groups.index*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.groups.index*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-users-gear w-5" style="color: var(--text-link, #0284c7);"></i>
-                        <span>Manage Communities</span>
+                        <span>Communities</span>
+                    </a>
+                    <a href="{{ route('super_admin.groups.pending_members') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.groups.pending_members*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.groups.pending_members*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <i class="fa-solid fa-user-clock w-5" style="color: var(--text-link, #0284c7);"></i>
+                        <span>Pending Approvals</span>
                     </a>
                     <a href="{{ route('super_admin.group_admins.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.group_admins*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.group_admins*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-user-shield w-5" style="color: var(--text-link, #0284c7);"></i>
@@ -179,6 +183,22 @@
                     <a href="{{ route('super_admin.users.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.users*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.users*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-users w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>All Users</span>
+                    </a>
+                    <a href="{{ route('super_admin.events.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.events*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.events*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <i class="fa-solid fa-calendar-days w-5" style="color: var(--text-link, #0284c7);"></i>
+                        <span>Events</span>
+                    </a>
+                    <a href="{{ route('super_admin.payments.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.payments*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.payments*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <i class="fa-solid fa-credit-card w-5" style="color: var(--text-link, #0284c7);"></i>
+                        <span>Payments</span>
+                    </a>
+                    <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('announcements*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('announcements*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0284c7);"></i>
+                        <span>Announcements</span>
+                    </a>
+                    <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('notifications*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('notifications*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0284c7);"></i>
+                        <span>Notifications</span>
                     </a>
                     <a href="{{ route('super_admin.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('super_admin.projects*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('super_admin.projects*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-folder-open w-5" style="color: var(--text-link, #0284c7);"></i>
@@ -199,17 +219,33 @@
                         <span>Dashboard</span>
                     </a>
                     @if(isset($group))
-                        <a href="{{ route('group_admin.members.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <a href="{{ route('group_admin.members.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members.index*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members.index*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-users w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Members</span>
+                        </a>
+                        <a href="{{ route('group_admin.members.pending', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members.pending*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members.pending*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-user-clock w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Pending Approvals</span>
                         </a>
                         <a href="{{ route('group_admin.events.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.events*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.events*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-calendar-days w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Events</span>
                         </a>
-                        <a href="{{ route('group_admin.notices.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.notices*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.notices*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <a href="{{ route('group_admin.payments.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.payments*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.payments*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-credit-card w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Payments</span>
+                        </a>
+                        <a href="{{ route('group_admin.settings', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.settings*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.settings*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-sliders w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Community Settings</span>
+                        </a>
+                        <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('announcements*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('announcements*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0284c7);"></i>
-                            <span>Notices</span>
+                            <span>Announcements</span>
+                        </a>
+                        <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('notifications*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('notifications*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Notifications</span>
                         </a>
                         <a href="{{ route('group_admin.promotion.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.promotion*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.promotion*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-qrcode w-5" style="color: var(--text-link, #0284c7);"></i>
@@ -238,6 +274,17 @@
                         @if($sidebarUnreadCount > 0)
                             <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
                                 {{ $sidebarUnreadCount }}
+                            </span>
+                        @endif
+                    </a>
+                    <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('notifications*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('notifications*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Notifications</span>
+                        </div>
+                        @if(auth()->user()->unreadNotificationsCount() > 0)
+                            <span class="px-2 py-0.5 bg-sky-600 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
+                                {{ auth()->user()->unreadNotificationsCount() }}
                             </span>
                         @endif
                     </a>

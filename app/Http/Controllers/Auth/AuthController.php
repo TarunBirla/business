@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Group;
-use App\Services\StripePaymentService;
+use App\Mail\PasswordResetMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
@@ -26,9 +29,28 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $user = Auth::user();
+
+            if ($user->status === 'pending' && !$user->isSuperAdmin()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors([
+                    'email' => 'Your account is waiting for Community Admin approval.',
+                ])->onlyInput('email');
+            }
+
+            if ($user->status === 'rejected' && !$user->isSuperAdmin()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors([
+                    'email' => 'Your account application has been rejected by the admin.',
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
             
-            $user = Auth::user();
             if ($user->isSuperAdmin()) {
                 return redirect()->intended(route('super_admin.dashboard'));
             }
@@ -45,10 +67,10 @@ class AuthController extends Controller
                         } else {
                             $user->groups()->attach($group->id, [
                                 'membership_role' => 'member',
-                                'status' => 'active',
+                                'status' => 'pending',
                                 'joined_at' => now(),
                             ]);
-                            return redirect()->route('member.dashboard')->with('success', "Welcome back! You have joined {$group->name}.");
+                            return redirect()->route('member.dashboard')->with('success', "Your request to join {$group->name} has been submitted for admin approval.");
                         }
                     }
                 }
@@ -69,6 +91,62 @@ class AuthController extends Controller
         return view('auth.register', compact('group'));
     }
 
+    public function generateCaptcha()
+    {
+        $chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+        $code = '';
+        for ($i = 0; $i < 6; $i++) {
+            $code .= $chars[rand(0, strlen($chars) - 1)];
+        }
+
+        session(['captcha_code' => $code]);
+
+        $width = 170;
+        $height = 48;
+
+        $lines = '';
+        for ($i = 0; $i < 5; $i++) {
+            $x1 = rand(5, 40);
+            $y1 = rand(5, $height - 5);
+            $x2 = rand($width - 40, $width - 5);
+            $y2 = rand(5, $height - 5);
+            $color = ['#0284c7', '#0284c7', '#64748b', '#94a3b8', '#0369a1'][rand(0, 4)];
+            $lines .= "<line x1='{$x1}' y1='{$y1}' x2='{$x2}' y2='{$y2}' stroke='{$color}' stroke-width='1.5' stroke-dasharray='4,2' opacity='0.5'/>";
+        }
+
+        $circles = '';
+        for ($i = 0; $i < 12; $i++) {
+            $cx = rand(5, $width - 5);
+            $cy = rand(5, $height - 5);
+            $r = rand(1, 3);
+            $circles .= "<circle cx='{$cx}' cy='{$cy}' r='{$r}' fill='#cbd5e1' opacity='0.6'/>";
+        }
+
+        $textNodes = '';
+        $charArray = str_split($code);
+        $spacing = ($width - 24) / count($charArray);
+
+        foreach ($charArray as $index => $char) {
+            $x = 14 + ($index * $spacing);
+            $y = rand(31, 36);
+            $rotate = rand(-18, 18);
+            $fontSize = rand(22, 26);
+            $fill = ['#0f172a', '#0369a1', '#1e293b', '#0284c7', '#334155'][$index % 5];
+            $textNodes .= "<text x='{$x}' y='{$y}' fill='{$fill}' font-size='{$fontSize}' font-family='Courier, monospace' font-weight='bold' transform='rotate({$rotate}, {$x}, {$y})'>{$char}</text>";
+        }
+
+        $svg = <<<SVG
+<svg xmlns="http://www.w3.org/2000/svg" width="{$width}" height="{$height}" viewBox="0 0 {$width} {$height}">
+    <rect width="100%" height="100%" fill="#f1f5f9" rx="10" stroke="#cbd5e1" stroke-width="1.5"/>
+    {$lines}
+    {$circles}
+    {$textNodes}
+</svg>
+SVG;
+
+        return response($svg)->header('Content-Type', 'image/svg+xml')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -81,8 +159,14 @@ class AuthController extends Controller
             'city' => ['nullable', 'string', 'max:100'],
             'profession' => ['nullable', 'string', 'max:255'],
             'group_id' => ['nullable', 'exists:groups,id'],
+            'captcha' => ['required', 'string'],
             'terms' => ['accepted'],
         ]);
+
+        $expectedCaptcha = session('captcha_code');
+        if (!$expectedCaptcha || strtolower(trim($request->captcha)) !== strtolower(trim($expectedCaptcha))) {
+            return back()->withErrors(['captcha' => 'Incorrect CAPTCHA code. Please try again.'])->withInput();
+        }
 
         $user = User::create([
             'first_name' => $request->first_name,
@@ -100,10 +184,8 @@ class AuthController extends Controller
                 'allow_contact_requests' => true,
             ],
             'global_role' => 'user',
-            'status' => 'active',
+            'status' => 'pending',
         ]);
-
-        Auth::login($user);
 
         // Handle joining group if specified or stored in session
         $groupId = $request->group_id ?? session('join_group_id') ?? session('referral_group_id');
@@ -111,21 +193,71 @@ class AuthController extends Controller
             $group = Group::find($groupId);
             if ($group) {
                 session()->forget(['join_group_id', 'referral_group_id']);
-                if ($group->community_type === 'paid') {
-                    // Redirect to payment review page
-                    return redirect()->route('join.checkout', $group->id);
-                } else {
-                    // Free community join
-                    $user->groups()->attach($group->id, [
-                        'membership_role' => 'member',
-                        'status' => 'active',
-                        'joined_at' => now(),
-                    ]);
-                }
+                $user->groups()->attach($group->id, [
+                    'membership_role' => 'member',
+                    'status' => 'pending',
+                    'joined_at' => now(),
+                ]);
             }
         }
 
-        return redirect()->route('member.dashboard')->with('success', 'Welcome to the platform! Your account has been created.');
+        return redirect()->route('login')->with('success', 'Your account has been registered! Your account is waiting for Community Admin approval.');
+    }
+
+    public function showForgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function sendResetLink(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+
+        $token = Str::random(64);
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'token' => Hash::make($token),
+                'created_at' => now()
+            ]
+        );
+
+        try {
+            Mail::to($request->email)->send(new PasswordResetMail($token, $request->email));
+        } catch (\Exception $e) {
+            // Ignore mail transport errors in local env
+        }
+
+        return back()->with('status', 'We have emailed your password reset link!');
+    }
+
+    public function showResetPassword($token, Request $request)
+    {
+        return view('auth.reset-password', ['token' => $token, 'email' => $request->email]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $record = DB::table('password_reset_tokens')->where('email', $request->email)->first();
+
+        if (!$record || !Hash::check($request->token, $record->token)) {
+            return back()->withErrors(['email' => 'Invalid or expired password reset token.']);
+        }
+
+        User::where('email', $request->email)->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        return redirect()->route('login')->with('success', 'Your password has been reset successfully. Please log in with your new password.');
     }
 
     public function showCheckout(Group $group)
@@ -139,7 +271,6 @@ class AuthController extends Controller
         $user = Auth::user();
         $plan = $group->activeSubscriptionPlan;
 
-        // Process subscription payment via StripePaymentService
         StripePaymentService::processGroupSubscription($user, $group, $plan);
 
         return redirect()->route('member.dashboard')->with('success', "Payment successful! You are now an active member of {$group->name}.");

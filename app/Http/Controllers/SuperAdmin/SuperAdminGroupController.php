@@ -5,8 +5,11 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\User;
+use App\Models\Notification;
 use App\Models\GroupSubscription;
+use App\Mail\MemberApprovalMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class SuperAdminGroupController extends Controller
@@ -119,6 +122,77 @@ class SuperAdminGroupController extends Controller
         return view('super_admin.groups.members', compact('group', 'members'));
     }
 
+    public function pendingMembers(Request $request)
+    {
+        $pendingUsers = User::where('status', 'pending')
+            ->orWhereHas('groups', function($q) {
+                $q->where('group_user.status', 'pending');
+            })
+            ->with(['groups' => function($q) {
+                $q->where('group_user.status', 'pending');
+            }])
+            ->paginate(15);
+
+        return view('super_admin.groups.pending_members', compact('pendingUsers'));
+    }
+
+    public function approveMember(Group $group, User $user)
+    {
+        $group->members()->updateExistingPivot($user->id, [
+            'status' => 'active',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'rejected_by' => null,
+            'rejected_at' => null,
+        ]);
+
+        if ($user->status === 'pending') {
+            $user->update(['status' => 'active']);
+        }
+
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'approval',
+            'title' => 'Membership Approved',
+            'message' => "Your membership request for {$group->name} has been approved by Super Admin!",
+            'link' => route('groups.show', $group->slug),
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new MemberApprovalMail($user, 'approved', $group->name));
+        } catch (\Exception $e) {
+            // Ignore email errors in local env
+        }
+
+        return back()->with('success', "Member {$user->name} approved successfully for {$group->name}.");
+    }
+
+    public function rejectMember(Group $group, User $user)
+    {
+        $group->members()->updateExistingPivot($user->id, [
+            'status' => 'rejected',
+            'rejected_by' => auth()->id(),
+            'rejected_at' => now(),
+            'approved_by' => null,
+            'approved_at' => null,
+        ]);
+
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'approval',
+            'title' => 'Membership Request Update',
+            'message' => "Your membership request for {$group->name} was not approved.",
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new MemberApprovalMail($user, 'rejected', $group->name));
+        } catch (\Exception $e) {
+            // Ignore email errors in local env
+        }
+
+        return back()->with('success', "Member {$user->name} rejected for {$group->name}.");
+    }
+
     public function update(Request $request, Group $group)
     {
         $request->validate([
@@ -154,7 +228,6 @@ class SuperAdminGroupController extends Controller
         }
 
         if ($request->has('group_admins')) {
-            // Update group admin roles
             foreach ($request->group_admins as $adminId) {
                 if (!$group->members()->where('user_id', $adminId)->exists()) {
                     $group->members()->attach($adminId, ['membership_role' => 'group_admin', 'status' => 'active', 'joined_at' => now()]);

@@ -80,8 +80,18 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->belongsToMany(Group::class, 'group_user')
-            ->withPivot('membership_role', 'status', 'joined_at')
+            ->withPivot('membership_role', 'status', 'joined_at', 'approved_by', 'approved_at', 'rejected_by', 'rejected_at')
             ->withTimestamps();
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->orderBy('created_at', 'desc');
+    }
+
+    public function unreadNotificationsCount(): int
+    {
+        return $this->notifications()->where('is_read', false)->count();
     }
 
     public function subscriptions()

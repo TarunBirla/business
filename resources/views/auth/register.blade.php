@@ -80,6 +80,21 @@
                 </div>
             </div>
 
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Security CAPTCHA *</label>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="flex items-center space-x-2 shrink-0">
+                        <img id="captcha_img" src="{{ route('captcha.generate') }}" alt="CAPTCHA Code" class="h-12 w-44 rounded-xl border border-slate-200 select-none shadow-2xs">
+                        <button type="button" onclick="refreshCaptcha()" class="w-10 h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-black rounded-xl transition border border-slate-200 shrink-0" title="Refresh CAPTCHA Code">
+                            <i class="fa-solid fa-rotate-right text-base"></i>
+                        </button>
+                    </div>
+                    <input type="text" name="captcha" placeholder="Enter text above" required autocomplete="off" class="flex-grow px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-bold uppercase tracking-widest">
+                </div>
+                <span class="text-[11px] text-slate-500 mt-1 block">Click the refresh icon if text is hard to read.</span>
+                @error('captcha') <span class="text-xs text-rose-600 mt-1 block font-bold">{{ $message }}</span> @enderror
+            </div>
+
             <div class="space-y-3 pt-2">
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" name="terms" required class="mt-1 rounded border-slate-300 text-sky-600 focus:ring-sky-500">
@@ -99,6 +114,13 @@
 </div>
 
 <script>
+function refreshCaptcha() {
+    const img = document.getElementById('captcha_img');
+    if (img) {
+        img.src = "{{ route('captcha.generate') }}?t=" + new Date().getTime();
+    }
+}
+
 function togglePasswordVisibility(inputId, btn) {
     const input = document.getElementById(inputId);
     const icon = btn.querySelector('i');

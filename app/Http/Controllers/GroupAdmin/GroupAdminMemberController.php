@@ -5,8 +5,11 @@ namespace App\Http\Controllers\GroupAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\User;
+use App\Models\Notification;
+use App\Mail\MemberApprovalMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class GroupAdminMemberController extends Controller
@@ -14,8 +17,77 @@ class GroupAdminMemberController extends Controller
     public function index(Group $group)
     {
         $this->authorizeAdmin($group);
-        $members = $group->members()->paginate(15);
-        return view('group_admin.members.index', compact('group', 'members'));
+        $members = $group->members()->wherePivot('status', 'active')->paginate(15);
+        $pendingCount = $group->members()->wherePivot('status', 'pending')->count();
+        return view('group_admin.members.index', compact('group', 'members', 'pendingCount'));
+    }
+
+    public function pending(Group $group)
+    {
+        $this->authorizeAdmin($group);
+        $pendingMembers = $group->members()->wherePivot('status', 'pending')->paginate(15);
+        return view('group_admin.members.pending', compact('group', 'pendingMembers'));
+    }
+
+    public function approve(Group $group, User $user)
+    {
+        $this->authorizeAdmin($group);
+
+        $group->members()->updateExistingPivot($user->id, [
+            'status' => 'active',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'rejected_by' => null,
+            'rejected_at' => null,
+        ]);
+
+        if ($user->status === 'pending') {
+            $user->update(['status' => 'active']);
+        }
+
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'approval',
+            'title' => 'Membership Approved',
+            'message' => "Your membership request for {$group->name} has been approved!",
+            'link' => route('groups.show', $group->slug),
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new MemberApprovalMail($user, 'approved', $group->name));
+        } catch (\Exception $e) {
+            // Ignore email errors in local env
+        }
+
+        return back()->with('success', "Member {$user->name} has been approved successfully.");
+    }
+
+    public function reject(Group $group, User $user)
+    {
+        $this->authorizeAdmin($group);
+
+        $group->members()->updateExistingPivot($user->id, [
+            'status' => 'rejected',
+            'rejected_by' => auth()->id(),
+            'rejected_at' => now(),
+            'approved_by' => null,
+            'approved_at' => null,
+        ]);
+
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'approval',
+            'title' => 'Membership Request Update',
+            'message' => "Your membership request for {$group->name} was not approved.",
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new MemberApprovalMail($user, 'rejected', $group->name));
+        } catch (\Exception $e) {
+            // Ignore email errors in local env
+        }
+
+        return back()->with('success', "Member {$user->name}'s request has been rejected.");
     }
 
     public function create(Group $group)
@@ -57,6 +129,8 @@ class GroupAdminMemberController extends Controller
             $group->members()->attach($user->id, [
                 'membership_role' => 'member',
                 'status' => 'active',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
                 'joined_at' => now(),
             ]);
         }
@@ -67,7 +141,7 @@ class GroupAdminMemberController extends Controller
     public function exportCsv(Group $group)
     {
         $this->authorizeAdmin($group);
-        $members = $group->members()->get();
+        $members = $group->members()->wherePivot('status', 'active')->get();
 
         $headers = [
             "Content-type" => "text/csv",

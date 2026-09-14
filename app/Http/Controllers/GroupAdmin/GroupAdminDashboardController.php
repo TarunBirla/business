@@ -4,6 +4,7 @@ namespace App\Http\Controllers\GroupAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\CommunityAuditLog;
 use Illuminate\Http\Request;
 
 class GroupAdminDashboardController extends Controller
@@ -42,5 +43,54 @@ class GroupAdminDashboardController extends Controller
             'recentMembers',
             'upcomingEvents'
         ));
+    }
+
+    public function settings(Group $group)
+    {
+        $this->authorizeAdmin($group);
+        $auditLogs = CommunityAuditLog::where('group_id', $group->id)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        return view('group_admin.settings', compact('group', 'auditLogs'));
+    }
+
+    public function updateSettings(Request $request, Group $group)
+    {
+        $this->authorizeAdmin($group);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'tagline' => 'nullable|string|max:255',
+            'description' => 'required|string',
+            'city' => 'nullable|string|max:100',
+            'region' => 'nullable|string|max:100',
+        ]);
+
+        foreach ($validated as $field => $newValue) {
+            $oldValue = $group->$field;
+            if ($oldValue != $newValue) {
+                CommunityAuditLog::create([
+                    'group_id' => $group->id,
+                    'user_id' => auth()->id(),
+                    'field_name' => $field,
+                    'old_value' => (string) $oldValue,
+                    'new_value' => (string) $newValue,
+                ]);
+            }
+        }
+
+        $group->update($validated);
+
+        return back()->with('success', 'Community details updated successfully. Audit log entry recorded.');
+    }
+
+    private function authorizeAdmin(Group $group)
+    {
+        $user = auth()->user();
+        if (!$user->isGroupAdmin($group->id)) {
+            abort(403, 'Unauthorized access.');
+        }
     }
 }

@@ -20,9 +20,9 @@
                 <span>Digital Business Card</span>
             </div>
             
-            <button onclick="openShareModal()" class="relative z-10 w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white flex items-center justify-center transition shadow-md border border-white/30 hover:scale-105" title="Share Business Card">
+            <!-- <button onclick="openShareModal()" class="relative z-10 w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white flex items-center justify-center transition shadow-md border border-white/30 hover:scale-105" title="Share Business Card">
                 <i class="fa-solid fa-share-nodes text-base"></i>
-            </button>
+            </button> -->
         </div>
 
         <!-- Card Content Body: Responsive 2-Column Grid on Desktop -->

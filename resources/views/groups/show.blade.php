@@ -148,7 +148,7 @@
 
             <!-- Service Categories -->
             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-                <h2 class="text-2xl font-bold text-black mb-4">Available Services in Community</h2>
+                <h2 class="text-2xl font-bold text-black mb-4">Available Expert in Community</h2>
                 <p class="text-sm text-black mb-6">Members within this community offer and request services in these fields:</p>
                 <div class="flex flex-wrap gap-2">
                     @foreach(['Accounting', 'Legal & Legal Advice', 'Property & Estate Agents', 'Insurance', 'IT & Software', 'Marketing & Branding', 'Recruitment', 'Business Consulting', 'Education & Tutoring', 'Photography & Media'] as $category)
@@ -270,40 +270,42 @@
 </div>
 
 <!-- Share & QR Modal -->
-<div id="shareModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
-        <div class="flex items-center justify-between mb-4 border-b pb-3">
+<div id="shareModal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col relative my-auto">
+        <div class="flex items-center justify-between mb-4 border-b pb-3 shrink-0">
             <h3 class="text-lg font-bold text-black">Share {{ $group->name }}</h3>
-            <button onclick="document.getElementById('shareModal').classList.add('hidden')" class="text-slate-400 hover:text-black text-xl font-bold">&times;</button>
+            <button type="button" onclick="document.getElementById('shareModal').classList.add('hidden')" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-black font-bold transition text-lg cursor-pointer" title="Close Modal">&times;</button>
         </div>
 
-        <p class="text-sm text-black mb-4">Share this community link on social media or scan QR Code directly.</p>
+        <div class="overflow-y-auto space-y-4 pr-1">
+            <p class="text-sm text-black">Share this community link on social media or scan QR Code directly.</p>
 
-        <!-- Real Scannable QR Code inside Modal -->
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center mb-5">
-            {!! $qrCodeSvg !!}
-            <p class="text-xs text-black mt-2 font-medium">Scan with camera to open shareable join link</p>
-        </div>
+            <!-- Real Scannable QR Code inside Modal -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                {!! $qrCodeSvg !!}
+                <p class="text-xs text-black mt-2 font-medium">Scan with camera to open shareable join link</p>
+            </div>
 
-        <div class="space-y-3 mb-6">
-            <a href="https://api.whatsapp.com/send?text={{ urlencode('Join ' . $group->name . ' on Community UK: ' . $group->join_url) }}" target="_blank" class="flex items-center justify-center space-x-2 w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition text-sm">
-                <span class="flex items-center"><i class="fa-brands fa-whatsapp mr-2 text-base"></i> Share on WhatsApp</span>
-            </a>
-            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($group->join_url) }}" target="_blank" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-sm transition flex items-center justify-center space-x-2 border border-sky-100">
-                <span class="flex items-center"><i class="fa-brands fa-linkedin text-sky-700 mr-2 text-base"></i> Share on LinkedIn</span>
-            </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($group->join_url) }}" target="_blank" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-sm transition flex items-center justify-center space-x-2 border border-sky-100">
-                <span class="flex items-center"><i class="fa-brands fa-facebook text-blue-600 mr-2 text-base"></i> Share on Facebook</span>
-            </a>
-        </div>
+            <div class="space-y-3">
+                <a href="https://api.whatsapp.com/send?text={{ urlencode('Join ' . $group->name . ' on Community UK: ' . $group->join_url) }}" target="_blank" class="flex items-center justify-center space-x-2 w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition text-sm">
+                    <span class="flex items-center"><i class="fa-brands fa-whatsapp mr-2 text-base"></i> Share on WhatsApp</span>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($group->join_url) }}" target="_blank" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-sm transition flex items-center justify-center space-x-2 border border-sky-100">
+                    <span class="flex items-center"><i class="fa-brands fa-linkedin text-sky-700 mr-2 text-base"></i> Share on LinkedIn</span>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($group->join_url) }}" target="_blank" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold rounded-xl text-sm transition flex items-center justify-center space-x-2 border border-sky-100">
+                    <span class="flex items-center"><i class="fa-brands fa-facebook text-blue-600 mr-2 text-base"></i> Share on Facebook</span>
+                </a>
+            </div>
 
-        <div class="border-t pt-4">
-            <label class="block text-xs font-bold text-black mb-1">Direct Shareable Link</label>
-            <div class="flex space-x-2">
-                <input type="text" readonly value="{{ $group->join_url }}" class="flex-grow px-3 py-2 border border-slate-200 rounded-lg text-xs bg-slate-50">
-                <button onclick="navigator.clipboard.writeText('{{ $group->join_url }}'); alert('Link copied to clipboard!');" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition">
-                    Copy Link
-                </button>
+            <div class="border-t pt-4">
+                <label class="block text-xs font-bold text-black mb-1">Direct Shareable Link</label>
+                <div class="flex space-x-2">
+                    <input type="text" readonly value="{{ $group->join_url }}" class="flex-grow px-3 py-2 border border-slate-200 rounded-lg text-xs bg-slate-50">
+                    <button onclick="navigator.clipboard.writeText('{{ $group->join_url }}'); alert('Link copied to clipboard!');" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition shrink-0">
+                        Copy Link
+                    </button>
+                </div>
             </div>
         </div>
     </div>

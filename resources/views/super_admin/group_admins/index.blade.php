@@ -23,6 +23,12 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl font-medium">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -33,6 +39,7 @@
                     <th class="p-4">Managed Communities</th>
                     <th class="p-4">Global Role</th>
                     <th class="p-4">Status</th>
+                    <th class="p-4 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-sm">
@@ -73,10 +80,15 @@
                                 {{ $admin->status }}
                             </span>
                         </td>
+                        <td class="p-4 text-right">
+                            <a href="{{ route('super_admin.group_admins.edit', $admin->id) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition">
+                                <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                            </a>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="p-8 text-center text-slate-500 font-semibold">
+                        <td colspan="7" class="p-8 text-center text-slate-500 font-semibold">
                             No Group Administrators found matching criteria.
                         </td>
                     </tr>

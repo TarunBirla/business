@@ -64,6 +64,54 @@ class GroupAdminEventController extends Controller
         return redirect()->route('group_admin.events.index', $group->id)->with('success', 'Event created successfully.');
     }
 
+    public function edit(Group $group, Event $event)
+    {
+        $this->authorizeAdmin($group);
+        return view('group_admin.events.edit', compact('group', 'event'));
+    }
+
+    public function update(Request $request, Group $group, Event $event)
+    {
+        $this->authorizeAdmin($group);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'event_type' => 'required|in:free,paid',
+            'venue' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:100',
+            'meeting_url' => 'nullable|url|max:255',
+            'start_at' => 'required|date',
+            'end_at' => 'nullable|date|after_or_equal:start_at',
+            'capacity' => 'required|integer|min:1',
+            'price' => 'nullable|numeric|min:0',
+        ]);
+
+        $event->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'event_type' => $request->event_type,
+            'venue' => $request->venue,
+            'address' => $request->address,
+            'city' => $request->city,
+            'meeting_url' => $request->meeting_url,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
+            'capacity' => $request->capacity,
+            'price' => $request->event_type === 'paid' ? ($request->price ?? 10.00) : 0.00,
+        ]);
+
+        return redirect()->route('group_admin.events.index', $group->id)->with('success', 'Event updated successfully.');
+    }
+
+    public function destroy(Group $group, Event $event)
+    {
+        $this->authorizeAdmin($group);
+        $event->delete();
+        return redirect()->route('group_admin.events.index', $group->id)->with('success', 'Event deleted successfully.');
+    }
+
     public function attendees(Group $group, Event $event)
     {
         $this->authorizeAdmin($group);

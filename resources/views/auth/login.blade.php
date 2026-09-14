@@ -34,6 +34,7 @@
                     <input type="checkbox" name="remember" class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
                     <span class="text-slate-600">Remember me</span>
                 </label>
+                <a href="{{ route('password.request') }}" class="text-xs font-bold text-sky-600 hover:underline">Forgot password?</a>
             </div>
 
             <button type="submit" class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition text-base">

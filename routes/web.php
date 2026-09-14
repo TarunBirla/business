@@ -26,6 +26,11 @@ use App\Http\Controllers\SuperAdmin\SuperAdminProjectController;
 
 use App\Http\Controllers\PublicBusinessCardController;
 use App\Http\Controllers\Member\MemberProjectController;
+use App\Http\Controllers\GroupAdmin\GroupAdminPaymentController;
+use App\Http\Controllers\SuperAdmin\SuperAdminPaymentController;
+use App\Http\Controllers\SuperAdmin\SuperAdminEventController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +64,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/captcha/generate', [AuthController::class, 'generateCaptcha'])->name('captcha.generate');
+    
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
@@ -105,6 +116,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/member/chat-api/fetch', [MessageController::class, 'fetchMessages'])->name('member.chat.fetch');
     Route::get('/member/chat/{groupId?}/{receiverId?}', [MessageController::class, 'index'])->name('member.chat');
     Route::post('/member/chat/send', [MessageController::class, 'sendMessage'])->name('member.chat.send');
+
+    // Announcements & Notifications System
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark_read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark_all_read');
+
+    Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
 });
 
 /*
@@ -117,14 +136,27 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
 
     // Group Member Management
     Route::get('/group/{group}/members', [GroupAdminMemberController::class, 'index'])->name('members.index');
+    Route::get('/group/{group}/members/pending', [GroupAdminMemberController::class, 'pending'])->name('members.pending');
+    Route::post('/group/{group}/members/{user}/approve', [GroupAdminMemberController::class, 'approve'])->name('members.approve');
+    Route::post('/group/{group}/members/{user}/reject', [GroupAdminMemberController::class, 'reject'])->name('members.reject');
     Route::get('/group/{group}/members/create', [GroupAdminMemberController::class, 'create'])->name('members.create');
     Route::post('/group/{group}/members', [GroupAdminMemberController::class, 'store'])->name('members.store');
     Route::get('/group/{group}/members/export-csv', [GroupAdminMemberController::class, 'exportCsv'])->name('members.export_csv');
+
+    // Community Settings & Audit Trail
+    Route::get('/group/{group}/settings', [GroupAdminDashboardController::class, 'settings'])->name('settings');
+    Route::post('/group/{group}/settings', [GroupAdminDashboardController::class, 'updateSettings'])->name('settings.update');
+
+    // Community Payments
+    Route::get('/group/{group}/payments', [GroupAdminPaymentController::class, 'index'])->name('payments.index');
 
     // Group Event Management
     Route::get('/group/{group}/events', [GroupAdminEventController::class, 'index'])->name('events.index');
     Route::get('/group/{group}/events/create', [GroupAdminEventController::class, 'create'])->name('events.create');
     Route::post('/group/{group}/events', [GroupAdminEventController::class, 'store'])->name('events.store');
+    Route::get('/group/{group}/events/{event}/edit', [GroupAdminEventController::class, 'edit'])->name('events.edit');
+    Route::put('/group/{group}/events/{event}', [GroupAdminEventController::class, 'update'])->name('events.update');
+    Route::delete('/group/{group}/events/{event}', [GroupAdminEventController::class, 'destroy'])->name('events.destroy');
     Route::get('/group/{group}/events/{event}/attendees', [GroupAdminEventController::class, 'attendees'])->name('events.attendees');
     Route::get('/group/{group}/events/{event}/export-csv', [GroupAdminEventController::class, 'exportAttendeesCsv'])->name('events.export_csv');
 
@@ -147,6 +179,9 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
 
     // Community Management
     Route::get('/groups', [SuperAdminGroupController::class, 'index'])->name('groups.index');
+    Route::get('/groups/pending-members', [SuperAdminGroupController::class, 'pendingMembers'])->name('groups.pending_members');
+    Route::post('/groups/{group}/members/{user}/approve', [SuperAdminGroupController::class, 'approveMember'])->name('groups.approve_member');
+    Route::post('/groups/{group}/members/{user}/reject', [SuperAdminGroupController::class, 'rejectMember'])->name('groups.reject_member');
     Route::get('/groups/create', [SuperAdminGroupController::class, 'create'])->name('groups.create');
     Route::post('/groups', [SuperAdminGroupController::class, 'store'])->name('groups.store');
     Route::get('/groups/{group}/edit', [SuperAdminGroupController::class, 'edit'])->name('groups.edit');
@@ -157,6 +192,14 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     Route::get('/group-admins', [SuperAdminUserController::class, 'groupAdmins'])->name('group_admins.index');
     Route::get('/group-admins/create', [SuperAdminUserController::class, 'createGroupAdmin'])->name('group_admins.create');
     Route::post('/group-admins', [SuperAdminUserController::class, 'storeGroupAdmin'])->name('group_admins.store');
+    Route::get('/group-admins/{user}/edit', [SuperAdminUserController::class, 'editGroupAdmin'])->name('group_admins.edit');
+    Route::post('/group-admins/{user}', [SuperAdminUserController::class, 'updateGroupAdmin'])->name('group_admins.update');
+
+    // Global Events Management
+    Route::resource('events', SuperAdminEventController::class);
+
+    // Global Payments Management
+    Route::get('/payments', [SuperAdminPaymentController::class, 'index'])->name('payments.index');
 
     // User Management
     Route::get('/users', [SuperAdminUserController::class, 'index'])->name('users.index');
