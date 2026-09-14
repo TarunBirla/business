@@ -211,7 +211,12 @@ class MemberServiceController extends Controller
     {
         $user = auth()->user();
 
-        if ($serviceRequest->provider_id !== $user->id && !$user->isSuperAdmin()) {
+        $isProvider = (int)$serviceRequest->provider_id === (int)$user->id;
+        $isServiceOwner = $serviceRequest->service && (int)$serviceRequest->service->user_id === (int)$user->id;
+        $isGroupAdmin = $user->isGroupAdmin() && ($serviceRequest->service && $serviceRequest->service->group_id ? $user->isGroupAdmin($serviceRequest->service->group_id) : true);
+        $isSuperAdmin = $user->isSuperAdmin();
+
+        if (!$isProvider && !$isServiceOwner && !$isGroupAdmin && !$isSuperAdmin) {
             abort(403, 'Unauthorized.');
         }
 
@@ -222,21 +227,26 @@ class MemberServiceController extends Controller
             'user_id' => $serviceRequest->requester_id,
             'type' => 'service_request_accepted',
             'title' => 'Service Request Accepted!',
-            'message' => "{$user->name} accepted your request for '{$serviceRequest->service->title}'. You can now chat directly!",
+            'message' => "{$user->name} accepted your request for '" . ($serviceRequest->service->title ?? 'Service') . "'. You can now chat directly!",
             'link' => route('member.chat', [
                 'groupId' => $serviceRequest->service->group_id ?? 1,
                 'receiverId' => $serviceRequest->provider_id
             ]),
         ]);
 
-        return back()->with('success', 'Request accepted! You can now start chatting with the requester.');
+        return back()->with('success', 'Request accepted! You can now start chatting.');
     }
 
     public function rejectRequest(ServiceRequest $serviceRequest)
     {
         $user = auth()->user();
 
-        if ($serviceRequest->provider_id !== $user->id && !$user->isSuperAdmin()) {
+        $isProvider = (int)$serviceRequest->provider_id === (int)$user->id;
+        $isServiceOwner = $serviceRequest->service && (int)$serviceRequest->service->user_id === (int)$user->id;
+        $isGroupAdmin = $user->isGroupAdmin() && ($serviceRequest->service && $serviceRequest->service->group_id ? $user->isGroupAdmin($serviceRequest->service->group_id) : true);
+        $isSuperAdmin = $user->isSuperAdmin();
+
+        if (!$isProvider && !$isServiceOwner && !$isGroupAdmin && !$isSuperAdmin) {
             abort(403, 'Unauthorized.');
         }
 

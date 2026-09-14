@@ -257,7 +257,7 @@
                         </a>
                         <a href="{{ route('group_admin.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.services*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.services*') ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744);' : '' }}">
                             <i class="fa-solid fa-handshake w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Community Services</span>
+                            <span> Services</span>
                         </a>
                         <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('announcements*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('announcements*') ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744);' : '' }}">
                             <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0A4744);"></i>
@@ -351,7 +351,7 @@
                     </a>
                     <a href="{{ route('member.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('member.services*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('member.services*') ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744);' : '' }}">
                         <i class="fa-solid fa-handshake w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Services Exchange</span>
+                        <span>Services</span>
                     </a>
                     <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50">
                         <div class="flex items-center space-x-3">

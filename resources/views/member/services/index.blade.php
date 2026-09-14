@@ -7,7 +7,7 @@
     <!-- Header Banner -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">Services Exchange & Marketplace</h1>
+            <h1 class="text-2xl font-bold text-slate-900">Services & Marketplace</h1>
             <p class="text-xs text-slate-500 mt-1">Offer your skills, explore professional services from community members, and connect directly.</p>
         </div>
         <button onclick="openCreateServiceModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-2 shrink-0">
@@ -101,7 +101,7 @@
                                     @endif
                                 </span>
                                 <span class="text-slate-500 font-medium">
-                                    <i class="fa-solid fa-layer-group text-sky-600 mr-1"></i>{{ $service->group ? $service->group->name : 'All Communities' }}
+                                    <i class="fa-solid fa-layer-group text-sky-600 mr-1"></i>{{ $service->group ? $service->group->name : 'All My Communities' }}
                                 </span>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                                     {{ $service->category }}
                                 </span>
                                 <span class="text-[11px] font-semibold text-slate-500">
-                                    <i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $service->group ? $service->group->name : 'UK Wide' }}
+                                    <i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $service->group ? $service->group->name : 'All Joined Communities' }}
                                 </span>
                             </div>
 
@@ -370,7 +370,7 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Community</label>
                     <select name="group_id" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
-                        <option value="">All Communities (Public)</option>
+                        <option value="">All My Communities</option>
                         @foreach($groups as $group)
                             <option value="{{ $group->id }}">{{ $group->name }}</option>
                         @endforeach
@@ -507,7 +507,7 @@
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Target Community</label>
                 <select name="group_id" id="edit_group_id" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
-                    <option value="">All Communities (Public)</option>
+                    <option value="">All My Communities</option>
                     @foreach($groups as $group)
                         <option value="{{ $group->id }}">{{ $group->name }}</option>
                     @endforeach
