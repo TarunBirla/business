@@ -198,6 +198,8 @@
                             $sidebarMode = 'member';
                         }
                     }
+
+                    $navActiveStyle = 'background-color: #0A4744; color: #ffffff; font-weight: 700;';
                 @endphp
 
                 @if($sidebarMode === 'super_admin')
@@ -214,75 +216,75 @@
                     </a>
 
                     @php $active = request()->routeIs('super_admin.dashboard') || request()->is('super-admin'); @endphp
-                    <a href="{{ route('super_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-chart-pie w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Dashboard</span>
+                    <a href="{{ route('super_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-chart-pie w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Dashboard</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.groups*') && !request()->routeIs('super_admin.groups.pending_members*'); @endphp
-                    <a href="{{ route('super_admin.groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-users-gear w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Communities</span>
+                    <a href="{{ route('super_admin.groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-users-gear w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Communities</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.groups.pending_members*'); @endphp
-                    <a href="{{ route('super_admin.groups.pending_members') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-user-clock w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Pending Approvals</span>
+                    <a href="{{ route('super_admin.groups.pending_members') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.group_admins*'); @endphp
-                    <a href="{{ route('super_admin.group_admins.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-user-shield w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Group Admins</span>
+                    <a href="{{ route('super_admin.group_admins.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-user-shield w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Group Admins</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.users*'); @endphp
-                    <a href="{{ route('super_admin.users.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-users w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>All Users</span>
+                    <a href="{{ route('super_admin.users.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-users w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">All Users</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.events*'); @endphp
-                    <a href="{{ route('super_admin.events.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-calendar-days w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Events</span>
+                    <a href="{{ route('super_admin.events.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-calendar-days w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Events</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.payments*'); @endphp
-                    <a href="{{ route('super_admin.payments.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-credit-card w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Payments</span>
+                    <a href="{{ route('super_admin.payments.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-credit-card w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Payments</span>
                     </a>
 
                     @php $active = request()->routeIs('announcements*'); @endphp
-                    <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Announcements</span>
+                    <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-bullhorn w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Announcements</span>
                     </a>
 
                     @php $active = request()->routeIs('notifications*'); @endphp
-                    <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Notifications</span>
+                    <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-bell w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Notifications</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.projects*'); @endphp
-                    <a href="{{ route('super_admin.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-folder-open w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Member Projects</span>
+                    <a href="{{ route('super_admin.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-folder-open w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Member Projects</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.cms*'); @endphp
-                    <a href="{{ route('super_admin.cms.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-file-contract w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>CMS Pages</span>
+                    <a href="{{ route('super_admin.cms.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-file-contract w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">CMS Pages</span>
                     </a>
 
                     @php $active = request()->routeIs('super_admin.themes*'); @endphp
-                    <a href="{{ route('super_admin.themes.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-palette w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Theme Manager</span>
+                    <a href="{{ route('super_admin.themes.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-palette w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Theme Manager</span>
                     </a>
 
                 @elseif($sidebarMode === 'group_admin')
@@ -299,59 +301,59 @@
                     </a>
 
                     @php $active = request()->routeIs('group_admin.dashboard') || request()->is('group-admin'); @endphp
-                    <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-chart-line w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Dashboard</span>
+                    <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-chart-line w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Dashboard</span>
                     </a>
 
                     @php $active = request()->routeIs('group_admin.communities*'); @endphp
-                    <a href="{{ route('group_admin.communities.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-layer-group w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Manage Communities</span>
+                    <a href="{{ route('group_admin.communities.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-layer-group w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Manage Communities</span>
                     </a>
 
                     @if($adminGroup)
                         @php $active = request()->routeIs('group_admin.members.pending*'); @endphp
-                        <a href="{{ route('group_admin.members.pending', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-user-clock w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Pending Approvals</span>
+                        <a href="{{ route('group_admin.members.pending', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.members*') && !request()->routeIs('group_admin.members.pending*'); @endphp
-                        <a href="{{ route('group_admin.members.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-users w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Members List</span>
+                        <a href="{{ route('group_admin.members.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-users w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Members List</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.events*'); @endphp
-                        <a href="{{ route('group_admin.events.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-calendar-days w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Events</span>
+                        <a href="{{ route('group_admin.events.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-calendar-days w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Events</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.payments*'); @endphp
-                        <a href="{{ route('group_admin.payments.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-credit-card w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Payments</span>
+                        <a href="{{ route('group_admin.payments.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-credit-card w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Payments</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.services*'); @endphp
-                        <a href="{{ route('group_admin.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-handshake w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Services</span>
+                        <a href="{{ route('group_admin.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-handshake w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Services</span>
                         </a>
 
                         @php $active = request()->routeIs('announcements*'); @endphp
-                        <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Announcements</span>
+                        <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-bullhorn w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Announcements</span>
                         </a>
 
                         @php $active = request()->routeIs('member.chat*'); @endphp
-                        <a href="{{ route('member.chat') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
+                        <a href="{{ route('member.chat') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <div class="flex items-center space-x-3">
-                                <i class="fa-solid fa-comments w-5" style="color: var(--text-link, #0A4744);"></i>
-                                <span>Community Chat</span>
+                                <i class="fa-solid fa-comments w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                                <span style="{{ $active ? 'color: #ffffff;' : '' }}">Community Chat</span>
                             </div>
                             @if($sidebarUnreadCount > 0)
                                 <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
@@ -361,21 +363,21 @@
                         </a>
 
                         @php $active = request()->routeIs('notifications*'); @endphp
-                        <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Notifications</span>
+                        <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-bell w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Notifications</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.promotion*'); @endphp
-                        <a href="{{ route('group_admin.promotion.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-qrcode w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Promote & QR</span>
+                        <a href="{{ route('group_admin.promotion.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-qrcode w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Promote & QR</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.profile*'); @endphp
-                        <a href="{{ route('group_admin.profile') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                            <i class="fa-solid fa-user-gear w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>My Profile</span>
+                        <a href="{{ route('group_admin.profile') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-user-gear w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">My Profile</span>
                         </a>
                     @endif
 
@@ -401,28 +403,28 @@
                     <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0A4744);">Member Area</div>
 
                     @php $active = request()->routeIs('member.dashboard') || request()->is('dashboard'); @endphp
-                    <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-gauge-high w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Dashboard</span>
+                    <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-gauge-high w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Dashboard</span>
                     </a>
 
                     @php $active = request()->routeIs('member.directory*'); @endphp
-                    <a href="{{ route('member.directory') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-address-book w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Member Directory</span>
+                    <a href="{{ route('member.directory') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-address-book w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Member Directory</span>
                     </a>
 
                     @php $active = request()->routeIs('member.connections*'); @endphp
-                    <a href="{{ route('member.connections') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-user-group w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Connections</span>
+                    <a href="{{ route('member.connections') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-user-group w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Connections</span>
                     </a>
 
                     @php $active = request()->routeIs('member.chat*'); @endphp
-                    <a href="{{ route('member.chat') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
+                    <a href="{{ route('member.chat') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                         <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-comments w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Community Chat</span>
+                            <i class="fa-solid fa-comments w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Community Chat</span>
                         </div>
                         @if($sidebarUnreadCount > 0)
                             <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
@@ -432,10 +434,10 @@
                     </a>
 
                     @php $active = request()->routeIs('notifications*'); @endphp
-                    <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
+                    <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                         <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0A4744);"></i>
-                            <span>Notifications</span>
+                            <i class="fa-solid fa-bell w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Notifications</span>
                         </div>
                         @if(auth()->check() && auth()->user()->unreadNotificationsCount() > 0)
                             <span class="px-2 py-0.5 bg-sky-600 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
@@ -445,21 +447,21 @@
                     </a>
 
                     @php $active = request()->routeIs('member.profile*'); @endphp
-                    <a href="{{ route('member.profile.edit') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-user-gear w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>My Profile</span>
+                    <a href="{{ route('member.profile.edit') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-user-gear w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">My Profile</span>
                     </a>
 
                     @php $active = request()->routeIs('member.projects*'); @endphp
-                    <a href="{{ route('member.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-briefcase w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>My Projects</span>
+                    <a href="{{ route('member.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-briefcase w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">My Projects</span>
                     </a>
 
                     @php $active = request()->routeIs('member.services*'); @endphp
-                    <a href="{{ route('member.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-handshake w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Services</span>
+                    <a href="{{ route('member.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-handshake w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Services</span>
                     </a>
 
                     <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50">
@@ -471,9 +473,9 @@
                     </a>
 
                     @php $active = request()->routeIs('groups*'); @endphp
-                    <a href="{{ route('groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ $active ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? 'background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744); font-weight: 800;' : '' }}">
-                        <i class="fa-solid fa-compass w-5" style="color: var(--text-link, #0A4744);"></i>
-                        <span>Browse Communities</span>
+                    <a href="{{ route('groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-compass w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Browse Communities</span>
                     </a>
                 @endif
 
