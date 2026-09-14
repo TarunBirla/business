@@ -207,13 +207,7 @@
                         <span>Super Admin Panel</span>
                     </div>
 
-                    <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2 rounded-xl font-bold text-xs bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition mb-3">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-user"></i>
-                            <span>Switch to Member Area</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
+                    
 
                     @php $active = request()->routeIs('super_admin.dashboard') || request()->is('super-admin'); @endphp
                     <a href="{{ route('super_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
@@ -292,13 +286,7 @@
                         <span>Group Admin Panel</span>
                     </div>
 
-                    <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2 rounded-xl font-bold text-xs bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition mb-3">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-user"></i>
-                            <span>Switch to Member Area</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
+                    
 
                     @php $active = request()->routeIs('group_admin.dashboard') || request()->is('group-admin'); @endphp
                     <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
