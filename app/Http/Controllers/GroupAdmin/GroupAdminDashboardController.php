@@ -9,28 +9,36 @@ use Illuminate\Http\Request;
 
 class GroupAdminDashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
 
         if ($user->isSuperAdmin()) {
-            $assignedGroups = Group::withCount(['members', 'events', 'notices'])->get();
+            $assignedGroups = Group::withCount(['members', 'events', 'notices'])->with(['auditLogs.user'])->get();
         } else {
-            $assignedGroups = $user->groups()->wherePivot('membership_role', 'group_admin')->withCount(['members', 'events', 'notices'])->get();
+            $assignedGroups = $user->groups()
+                ->wherePivot('membership_role', 'group_admin')
+                ->withCount(['members', 'events', 'notices'])
+                ->with(['auditLogs.user'])
+                ->get();
         }
 
         if ($assignedGroups->isEmpty()) {
             return view('group_admin.no_groups');
         }
 
-        $activeGroup = $assignedGroups->first();
+        $activeGroupId = $request->get('group_id');
+        $activeGroup = $activeGroupId ? $assignedGroups->firstWhere('id', $activeGroupId) : null;
+        if (!$activeGroup) {
+            $activeGroup = $assignedGroups->first();
+        }
 
         $memberCount = $activeGroup->members()->count();
         $newMembersCount = $activeGroup->members()->where('group_user.created_at', '>=', now()->subDays(30))->count();
         $eventsCount = $activeGroup->events()->count();
         $noticesCount = $activeGroup->notices()->count();
 
-        $recentMembers = $activeGroup->members()->latest()->take(5)->get();
+        $recentMembers = $activeGroup->members()->where('users.id', '!=', auth()->id())->latest()->take(5)->get();
         $upcomingEvents = $activeGroup->upcomingEvents()->take(5)->get();
 
         return view('group_admin.dashboard', compact(

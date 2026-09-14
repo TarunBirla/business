@@ -17,7 +17,7 @@ class GroupAdminMemberController extends Controller
     public function index(Group $group)
     {
         $this->authorizeAdmin($group);
-        $members = $group->members()->wherePivot('status', 'active')->paginate(15);
+        $members = $group->members()->wherePivot('status', 'active')->where('users.id', '!=', auth()->id())->paginate(15);
         $pendingCount = $group->members()->wherePivot('status', 'pending')->count();
         return view('group_admin.members.index', compact('group', 'members', 'pendingCount'));
     }
@@ -141,7 +141,7 @@ class GroupAdminMemberController extends Controller
     public function exportCsv(Group $group)
     {
         $this->authorizeAdmin($group);
-        $members = $group->members()->wherePivot('status', 'active')->get();
+        $members = $group->members()->wherePivot('status', 'active')->where('users.id', '!=', auth()->id())->get();
 
         $headers = [
             "Content-type" => "text/csv",

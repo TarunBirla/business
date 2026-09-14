@@ -20,6 +20,7 @@ use App\Models\CmsPage;
 use App\Models\Payment;
 use App\Models\Announcement;
 use App\Models\Notification;
+use App\Models\CommunityAuditLog;
 
 class DatabaseSeeder extends Seeder
 {
@@ -277,5 +278,33 @@ class DatabaseSeeder extends Seeder
         foreach ($cmsPages as $cp) {
             CmsPage::create(array_merge($cp, ['is_published' => true]));
         }
+
+        // 11. Create Sample Community Audit Logs
+        CommunityAuditLog::create([
+            'group_id' => $londonGroup->id,
+            'user_id' => $groupAdmin->id,
+            'field_name' => 'tagline',
+            'old_value' => 'London Business Hub',
+            'new_value' => 'London B2B Business & Networking Hub',
+            'created_at' => now()->subHours(5),
+        ]);
+
+        CommunityAuditLog::create([
+            'group_id' => $londonGroup->id,
+            'user_id' => $groupAdmin->id,
+            'field_name' => 'city',
+            'old_value' => 'Greater London',
+            'new_value' => 'London',
+            'created_at' => now()->subDays(1),
+        ]);
+
+        CommunityAuditLog::create([
+            'group_id' => $propertyGroup->id,
+            'user_id' => $groupAdmin->id,
+            'field_name' => 'name',
+            'old_value' => 'UK Property Network',
+            'new_value' => 'UK Property & Real Estate Network',
+            'created_at' => now()->subDays(2),
+        ]);
     }
 }

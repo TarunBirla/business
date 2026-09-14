@@ -217,12 +217,6 @@
                         <i class="fa-solid fa-palette w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>Theme Manager</span>
                     </a>
-                    <div class="pt-3 border-t border-slate-100 mt-3">
-                        <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-arrow-left-long w-5"></i>
-                            <span>Switch to Member View</span>
-                        </a>
-                    </div>
                 @elseif(request()->is('group-admin*'))
                     <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0284c7);">Group Admin Panel</div>
                     <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.dashboard') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.dashboard') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
@@ -262,13 +256,11 @@
                             <i class="fa-solid fa-qrcode w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Promote & QR</span>
                         </a>
-                    @endif
-                    <div class="pt-3 border-t border-slate-100 mt-3">
-                        <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-arrow-left-long w-5"></i>
-                            <span>Switch to Member View</span>
+                        <a href="{{ route('group_admin.profile') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.profile*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.profile*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-user-gear w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>My Profile</span>
                         </a>
-                    </div>
+                    @endif
                 @else
                     @if($authUser && $authUser->isSuperAdmin())
                         <a href="{{ route('super_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition mb-3">
