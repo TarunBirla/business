@@ -84,6 +84,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function communityServices()
+    {
+        return $this->hasMany(CommunityService::class);
+    }
+
     public function notifications()
     {
         return $this->hasMany(Notification::class)->orderBy('created_at', 'desc');

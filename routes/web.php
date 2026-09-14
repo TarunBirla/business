@@ -31,6 +31,8 @@ use App\Http\Controllers\SuperAdmin\SuperAdminPaymentController;
 use App\Http\Controllers\SuperAdmin\SuperAdminEventController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Member\MemberServiceController;
+use App\Http\Controllers\GroupAdmin\GroupAdminServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,6 +128,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
     Route::put('/announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
     Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
+    // Services Exchange & Marketplace
+    Route::get('/member/services', [MemberServiceController::class, 'index'])->name('member.services.index');
+    Route::post('/member/services', [MemberServiceController::class, 'store'])->name('member.services.store');
+    Route::put('/member/services/{service}', [MemberServiceController::class, 'update'])->name('member.services.update');
+    Route::delete('/member/services/{service}', [MemberServiceController::class, 'destroy'])->name('member.services.destroy');
+    Route::post('/member/services/{service}/request', [MemberServiceController::class, 'sendRequest'])->name('member.services.request');
+    Route::post('/member/services/requests/{serviceRequest}/approve', [MemberServiceController::class, 'approveRequest'])->name('member.services.requests.approve');
+    Route::post('/member/services/requests/{serviceRequest}/reject', [MemberServiceController::class, 'rejectRequest'])->name('member.services.requests.reject');
 });
 
 /*
@@ -136,6 +147,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_admin.')->group(function () {
     Route::get('/', [GroupAdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/communities', [GroupAdminDashboardController::class, 'communities'])->name('communities.index');
+    Route::get('/services', [GroupAdminServiceController::class, 'index'])->name('services.index');
     Route::get('/profile', [MemberProfileController::class, 'edit'])->name('profile');
 
     // Group Member Management
