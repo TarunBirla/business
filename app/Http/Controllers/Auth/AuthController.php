@@ -56,6 +56,10 @@ class AuthController extends Controller
                 return redirect()->intended(route('super_admin.dashboard'));
             }
 
+            if ($user->isGroupAdmin()) {
+                return redirect()->intended(route('group_admin.dashboard'));
+            }
+
             // Check if user was trying to join a group stored in session
             $groupId = session('join_group_id') ?? session('referral_group_id');
             if ($groupId) {

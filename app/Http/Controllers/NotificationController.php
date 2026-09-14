@@ -31,7 +31,7 @@ class NotificationController extends Controller
             return redirect($notification->link);
         }
 
-        return back()->with('success', 'Notification marked as read.');
+        return redirect()->route('notifications.index')->with('success', 'Notification marked as read.');
     }
 
     public function markAllAsRead()

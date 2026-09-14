@@ -112,6 +112,11 @@
 
     @php
         $sidebarUnreadCount = auth()->check() ? auth()->user()->receivedMessages()->where('is_read', false)->count() : 0;
+        $authUser = auth()->user();
+        $adminGroup = null;
+        if ($authUser && ($authUser->isGroupAdmin() || $authUser->isSuperAdmin())) {
+            $adminGroup = $group ?? $activeGroup ?? $authUser->groups()->wherePivot('membership_role', 'group_admin')->first() ?? \App\Models\Group::first();
+        }
     @endphp
 
     <!-- Mobile Top Header Bar -->
@@ -212,32 +217,38 @@
                         <i class="fa-solid fa-palette w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>Theme Manager</span>
                     </a>
+                    <div class="pt-3 border-t border-slate-100 mt-3">
+                        <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-arrow-left-long w-5"></i>
+                            <span>Switch to Member View</span>
+                        </a>
+                    </div>
                 @elseif(request()->is('group-admin*'))
-                    <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0284c7);">Group Admin</div>
+                    <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0284c7);">Group Admin Panel</div>
                     <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.dashboard') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.dashboard') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-chart-line w-5" style="color: var(--text-link, #0284c7);"></i>
                         <span>Dashboard</span>
                     </a>
-                    @if(isset($group))
-                        <a href="{{ route('group_admin.members.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members.index*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members.index*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
-                            <i class="fa-solid fa-users w-5" style="color: var(--text-link, #0284c7);"></i>
-                            <span>Members</span>
+                    @if($adminGroup)
+                        <a href="{{ route('group_admin.settings', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.settings*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.settings*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-sliders w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Community Settings</span>
                         </a>
-                        <a href="{{ route('group_admin.members.pending', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members.pending*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members.pending*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <a href="{{ route('group_admin.members.pending', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members.pending*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members.pending*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-user-clock w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Pending Approvals</span>
                         </a>
-                        <a href="{{ route('group_admin.events.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.events*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.events*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <a href="{{ route('group_admin.members.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.members.index*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.members.index*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                            <i class="fa-solid fa-users w-5" style="color: var(--text-link, #0284c7);"></i>
+                            <span>Members List</span>
+                        </a>
+                        <a href="{{ route('group_admin.events.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.events*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.events*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-calendar-days w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Events</span>
                         </a>
-                        <a href="{{ route('group_admin.payments.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.payments*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.payments*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <a href="{{ route('group_admin.payments.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.payments*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.payments*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-credit-card w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Payments</span>
-                        </a>
-                        <a href="{{ route('group_admin.settings', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.settings*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.settings*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
-                            <i class="fa-solid fa-sliders w-5" style="color: var(--text-link, #0284c7);"></i>
-                            <span>Community Settings</span>
                         </a>
                         <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('announcements*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('announcements*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-bullhorn w-5" style="color: var(--text-link, #0284c7);"></i>
@@ -247,12 +258,36 @@
                             <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Notifications</span>
                         </a>
-                        <a href="{{ route('group_admin.promotion.index', $group->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.promotion*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.promotion*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
+                        <a href="{{ route('group_admin.promotion.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('group_admin.promotion*') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('group_admin.promotion*') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                             <i class="fa-solid fa-qrcode w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Promote & QR</span>
                         </a>
                     @endif
+                    <div class="pt-3 border-t border-slate-100 mt-3">
+                        <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-arrow-left-long w-5"></i>
+                            <span>Switch to Member View</span>
+                        </a>
+                    </div>
                 @else
+                    @if($authUser && $authUser->isSuperAdmin())
+                        <a href="{{ route('super_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition mb-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-user-shield text-purple-600"></i>
+                                <span>Super Admin Panel</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </a>
+                    @elseif($authUser && $authUser->isGroupAdmin())
+                        <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 transition mb-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-users-gear text-sky-600"></i>
+                                <span>Group Admin Panel</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </a>
+                    @endif
+
                     <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider" style="color: var(--text-link, #0284c7);">Member Area</div>
                     <a href="{{ route('member.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm {{ request()->routeIs('member.dashboard') ? 'shadow-2xs' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ request()->routeIs('member.dashboard') ? 'background-color: var(--input-bg, #f0f9ff); color: var(--text-link, #0284c7);' : '' }}">
                         <i class="fa-solid fa-gauge-high w-5" style="color: var(--text-link, #0284c7);"></i>
@@ -282,7 +317,7 @@
                             <i class="fa-solid fa-bell w-5" style="color: var(--text-link, #0284c7);"></i>
                             <span>Notifications</span>
                         </div>
-                        @if(auth()->user()->unreadNotificationsCount() > 0)
+                        @if(auth()->check() && auth()->user()->unreadNotificationsCount() > 0)
                             <span class="px-2 py-0.5 bg-sky-600 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
                                 {{ auth()->user()->unreadNotificationsCount() }}
                             </span>

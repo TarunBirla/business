@@ -31,6 +31,7 @@ class StripePaymentService
             'provider' => $provider,
             'transaction_id' => $transactionId,
             'status' => 'completed',
+            'type' => 'subscription',
             'metadata' => [
                 'type' => 'group_subscription',
                 'group_name' => $group->name,

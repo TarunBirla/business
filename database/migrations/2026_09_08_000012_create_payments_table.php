@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('provider')->default('stripe'); // stripe, manual, test
             $table->string('transaction_id')->unique();
             $table->string('status')->default('completed'); // pending, completed, failed, refunded
+            $table->string('type')->default('subscription'); // subscription, event
             $table->json('metadata')->nullable();
             $table->timestamps();
         });
