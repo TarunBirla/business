@@ -32,9 +32,21 @@
 
                 <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
                     <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-ticket text-sky-600 mr-1"></i>{{ $event->registrations_count }} Registered</span>
-                    <a href="{{ route('group_admin.events.attendees', [$group->id, $event->id]) }}" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition">
-                        View Attendees & CSV
-                    </a>
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('group_admin.events.edit', [$group->id, $event->id]) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                        </a>
+                        <form action="{{ route('group_admin.events.destroy', [$group->id, $event->id]) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs rounded-lg transition">
+                                Delete
+                            </button>
+                        </form>
+                        <a href="{{ route('group_admin.events.attendees', [$group->id, $event->id]) }}" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition">
+                            Attendees
+                        </a>
+                    </div>
                 </div>
             </div>
         @endforeach

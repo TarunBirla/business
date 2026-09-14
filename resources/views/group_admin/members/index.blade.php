@@ -10,6 +10,10 @@
             <p class="text-xs sm:text-sm text-slate-600 mt-1">Manage community registrations, invite members, and export attendance records.</p>
         </div>
         <div class="flex items-center space-x-2.5">
+            <a href="{{ route('group_admin.members.pending', $group->id) }}" class="px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs rounded-xl transition inline-flex items-center space-x-1.5 border border-amber-200">
+                <i class="fa-solid fa-user-clock text-amber-600"></i>
+                <span>Pending Requests ({{ $pendingCount ?? 0 }})</span>
+            </a>
             <a href="{{ route('group_admin.members.export_csv', $group->id) }}" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition inline-flex items-center space-x-1.5">
                 <i class="fa-solid fa-file-csv text-slate-500"></i>
                 <span>Export CSV</span>

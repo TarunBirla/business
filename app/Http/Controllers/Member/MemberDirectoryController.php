@@ -18,8 +18,11 @@ class MemberDirectoryController extends Controller
         $myGroupIds = $authUser->groups->pluck('id');
 
         $query = User::whereHas('groups', function($q) use ($myGroupIds) {
-            $q->whereIn('groups.id', $myGroupIds);
-        })->where('users.id', '!=', $authUser->id);
+            $q->whereIn('groups.id', $myGroupIds)
+              ->where('group_user.status', 'active');
+        })->where('users.id', '!=', $authUser->id)
+          ->where('users.status', 'active')
+          ->where('users.global_role', '!=', 'super_admin');
 
         if ($request->filled('group_id')) {
             $query->whereHas('groups', function($q) use ($request) {

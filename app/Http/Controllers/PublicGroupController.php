@@ -91,14 +91,14 @@ class PublicGroupController extends Controller
             return redirect()->route('join.checkout', $group->id);
         }
 
-        // Free community join
+        // Free community join request
         $user->groups()->attach($group->id, [
             'membership_role' => 'member',
-            'status' => 'active',
+            'status' => 'pending',
             'joined_at' => now(),
         ]);
 
-        return redirect()->route('member.dashboard')->with('success', "You have successfully joined {$group->name}!");
+        return redirect()->route('member.dashboard')->with('success', "Your request to join {$group->name} has been submitted for Community Admin approval.");
     }
 
     public function qr(string $slug)
