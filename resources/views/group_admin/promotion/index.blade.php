@@ -11,13 +11,22 @@
 
     @if(isset($assignedGroups) && $assignedGroups->count() > 1)
         <!-- Community Switcher Tabs -->
-        <div class="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto">
-            <span class="text-xs font-extrabold uppercase text-slate-400 mr-2 shrink-0">Switch Community:</span>
-            @foreach($assignedGroups as $ag)
-                <a href="{{ route('group_admin.promotion.index', $ag->id) }}" class="px-4 py-2 rounded-xl text-xs font-bold transition shrink-0 flex items-center space-x-2 {{ $ag->id === $group->id ? 'bg-sky-600 text-white shadow-2xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
-                    <span>{{ $ag->name }}</span>
-                </a>
-            @endforeach
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-2">
+            <div class="text-xs font-extrabold uppercase text-slate-500 flex items-center space-x-2">
+                <i class="fa-solid fa-layer-group text-sky-600"></i>
+                <span>Switch Community to Promote:</span>
+            </div>
+            <div class="flex items-center space-x-2 overflow-x-auto pt-1">
+                @foreach($assignedGroups as $ag)
+                    <a href="{{ route('group_admin.promotion.index', $ag->id) }}" class="px-4 py-2.5 rounded-xl text-xs font-bold transition shrink-0 flex items-center space-x-2 {{ $ag->id === $group->id ? 'text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' }}" style="{{ $ag->id === $group->id ? 'background-color: var(--btn-primary-bg, #0A4744);' : '' }}">
+                        <i class="fa-solid fa-users text-[11px] {{ $ag->id === $group->id ? 'text-white' : 'text-slate-500' }}"></i>
+                        <span>{{ $ag->name }}</span>
+                        @if($ag->id === $group->id)
+                            <span class="px-2 py-0.5 bg-white/20 text-[9px] rounded-full font-extrabold uppercase ml-1">Active</span>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
         </div>
     @endif
 

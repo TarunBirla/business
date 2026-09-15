@@ -65,6 +65,9 @@
                                 </span>
                             </td>
                             <td class="py-4 px-6 text-right space-x-2">
+                                <a href="{{ route('groups.show', $g->slug) }}" target="_blank" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow-2xs inline-flex items-center">
+                                    <i class="fa-solid fa-arrow-up-right-from-square mr-1.5"></i> View Page
+                                </a>
                                 <a href="{{ route('group_admin.settings', $g->id) }}" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl transition shadow-2xs inline-flex items-center">
                                     <i class="fa-solid fa-pen-to-square mr-1.5"></i> Edit Settings
                                 </a>

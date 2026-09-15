@@ -277,14 +277,60 @@
                     </a>
 
                 @elseif($sidebarMode === 'group_admin')
+                    @php
+                        $myAdminGroups = $authUser->isSuperAdmin()
+                            ? \App\Models\Group::all()
+                            : $authUser->groups()->wherePivot('membership_role', 'group_admin')->get();
+                        $currentAdminGroup = $group ?? $activeGroup ?? $myAdminGroups->first();
+                    @endphp
+
                     <div class="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider flex items-center justify-between" style="color: var(--text-link, #0A4744);">
                         <span>Group Admin Panel</span>
+                        @if($myAdminGroups->count() > 1)
+                            <span class="text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-extrabold">
+                                {{ $myAdminGroups->count() }} Communities
+                            </span>
+                        @endif
                     </div>
 
-                    
+                    @if($myAdminGroups->count() > 1)
+                        <!-- Sidebar Active Community Selector Dropdown -->
+                        <div class="px-3 mb-3">
+                            <label class="block text-[10px] font-extrabold uppercase text-slate-400 mb-1">Select Active Community:</label>
+                            <select onchange="window.location.href=this.value" class="w-full text-xs font-bold py-2 px-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-800 shadow-2xs focus:ring-2 focus:ring-sky-500 transition cursor-pointer">
+                                @foreach($myAdminGroups as $mag)
+                                    @php
+                                        $selUrl = route('group_admin.promotion.index', $mag->id);
+                                        if (request()->routeIs('group_admin.members.pending*')) {
+                                            $selUrl = route('group_admin.members.pending', $mag->id);
+                                        } elseif (request()->routeIs('group_admin.members*')) {
+                                            $selUrl = route('group_admin.members.index', $mag->id);
+                                        } elseif (request()->routeIs('group_admin.events*')) {
+                                            $selUrl = route('group_admin.events.index', $mag->id);
+                                        } elseif (request()->routeIs('group_admin.payments*')) {
+                                            $selUrl = route('group_admin.payments.index', $mag->id);
+                                        } elseif (request()->routeIs('group_admin.promotion*')) {
+                                            $selUrl = route('group_admin.promotion.index', $mag->id);
+                                        } elseif (request()->routeIs('group_admin.dashboard')) {
+                                            $selUrl = route('group_admin.dashboard', ['group_id' => $mag->id]);
+                                        }
+                                    @endphp
+                                    <option value="{{ $selUrl }}" {{ ($currentAdminGroup && $currentAdminGroup->id === $mag->id) ? 'selected' : '' }}>
+                                        {{ $mag->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @elseif($currentAdminGroup)
+                        <div class="px-3 mb-2">
+                            <span class="inline-block text-[11px] font-extrabold px-2.5 py-1 rounded-lg bg-sky-50 text-sky-800 border border-sky-200 truncate max-w-full" title="{{ $currentAdminGroup->name }}">
+                                <i class="fa-solid fa-users text-[10px] mr-1"></i> {{ $currentAdminGroup->name }}
+                            </span>
+                        </div>
+                    @endif
 
                     @php $active = request()->routeIs('group_admin.dashboard') || request()->is('group-admin'); @endphp
-                    <a href="{{ route('group_admin.dashboard') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                    <a href="{{ route('group_admin.dashboard', ['group_id' => $currentAdminGroup?->id]) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                         <i class="fa-solid fa-chart-line w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                         <span style="{{ $active ? 'color: #ffffff;' : '' }}">Dashboard</span>
                     </a>
@@ -295,27 +341,27 @@
                         <span style="{{ $active ? 'color: #ffffff;' : '' }}">Manage Communities</span>
                     </a>
 
-                    @if($adminGroup)
+                    @if($currentAdminGroup)
                         @php $active = request()->routeIs('group_admin.members.pending*'); @endphp
-                        <a href="{{ route('group_admin.members.pending', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <a href="{{ route('group_admin.members.pending', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.members*') && !request()->routeIs('group_admin.members.pending*'); @endphp
-                        <a href="{{ route('group_admin.members.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <a href="{{ route('group_admin.members.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-users w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Members List</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.events*'); @endphp
-                        <a href="{{ route('group_admin.events.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <a href="{{ route('group_admin.events.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-calendar-days w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Events</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.payments*'); @endphp
-                        <a href="{{ route('group_admin.payments.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <a href="{{ route('group_admin.payments.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-credit-card w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Payments</span>
                         </a>
@@ -358,7 +404,7 @@
                         </a>
 
                         @php $active = request()->routeIs('group_admin.promotion*'); @endphp
-                        <a href="{{ route('group_admin.promotion.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <a href="{{ route('group_admin.promotion.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-qrcode w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Promote & QR</span>
                         </a>
