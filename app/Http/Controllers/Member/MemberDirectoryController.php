@@ -79,10 +79,16 @@ class MemberDirectoryController extends Controller
         );
 
         if (empty($sharedGroupIds) && !$authUser->isSuperAdmin()) {
-            abort(403, 'You must share a community to view this member profile.');
+            $targetUserGroupIds = $user->groups->pluck('id')->toArray();
+            $authUserAdminGroupIds = $authUser->isGroupAdmin() ? $authUser->groups()->wherePivot('membership_role', 'group_admin')->pluck('groups.id')->toArray() : [];
+            $hasGroupAdminRelation = !empty(array_intersect($targetUserGroupIds, $authUserAdminGroupIds));
+
+            if (!$hasGroupAdminRelation) {
+                abort(403, 'You must share a community to view this profile.');
+            }
         }
 
-        $activeGroupId = reset($sharedGroupIds) ?: 1;
+        $activeGroupId = !empty($sharedGroupIds) ? reset($sharedGroupIds) : ($user->groups->first()?->id ?? 1);
 
         // Check connection status
         $connection = Connection::where(function($q) use ($authUser, $user) {
@@ -96,9 +102,14 @@ class MemberDirectoryController extends Controller
             ->where('receiver_id', $user->id)
             ->first();
 
-        // Privacy enforcement
-        $canSeeEmail = ($user->privacy_settings['show_email'] ?? false) || ($contactRequest && $contactRequest->status === 'accepted') || $authUser->isSuperAdmin();
-        $canSeePhone = ($user->privacy_settings['show_phone'] ?? false) || ($contactRequest && $contactRequest->status === 'accepted') || $authUser->isSuperAdmin();
+        $isConnected = $connection && $connection->status === 'accepted';
+        $isContactAccepted = $contactRequest && $contactRequest->status === 'accepted';
+        $isOwnProfile = $authUser->id === $user->id;
+        $isSuperAdmin = $authUser->isSuperAdmin();
+
+        // Email and phone visible ONLY IF connected (accepted) or own profile or super admin
+        $canSeeEmail = $isOwnProfile || $isSuperAdmin || $isConnected || $isContactAccepted;
+        $canSeePhone = $isOwnProfile || $isSuperAdmin || $isConnected || $isContactAccepted;
 
         return view('member.directory.show', compact('user', 'connection', 'contactRequest', 'canSeeEmail', 'canSeePhone', 'activeGroupId'));
     }

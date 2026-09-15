@@ -38,9 +38,7 @@
                     <i class="fa-solid fa-comments text-sky-400 mr-1.5"></i> Direct Message
                 </a>
 
-                <a href="{{ route('bizcard.show', $user->id) }}" target="_blank" class="px-6 py-2.5 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold rounded-xl text-sm border border-sky-200 shadow-sm transition flex items-center">
-                    <i class="fa-solid fa-id-card text-sky-600 mr-1.5"></i> Business Card
-                </a>
+               
             </div>
         </div>
     </div>
@@ -69,24 +67,7 @@
             </div>
         </div>
 
-        @if(!$canSeeEmail && !$canSeePhone)
-            <div class="pt-4 border-t border-slate-100">
-                @if(!$contactRequest)
-                    <form action="{{ route('member.contact_request.send') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="receiver_id" value="{{ $user->id }}">
-                        <input type="hidden" name="group_id" value="{{ $activeGroupId }}">
-                        <button type="submit" class="px-5 py-2 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs rounded-lg transition border border-sky-200" style="background-color: var(--input-bg, #f0f7f6); color: var(--text-link, #0A4744);">
-                            Request Contact Details Access
-                        </button>
-                    </form>
-                @else
-                    <span class="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg inline-block">
-                        Contact details request: {{ ucfirst($contactRequest->status) }}
-                    </span>
-                @endif
-            </div>
-        @endif
+       
     </div>
 
     <!-- Biography -->

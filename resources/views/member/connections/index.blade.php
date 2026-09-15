@@ -67,25 +67,6 @@
         </div>
     </div>
 
-    <!-- Suggested Connections -->
-    @if($suggestedConnections->count() > 0)
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 class="text-xl font-bold text-black mb-6">Suggested Connections for You</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach($suggestedConnections as $sug)
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
-                        <div>
-                            <div class="font-bold text-black text-sm">{{ $sug->name }}</div>
-                            <div class="text-xs text-sky-600 font-medium">{{ $sug->profession ?? 'Member' }}</div>
-                            <div class="text-xs text-black mt-1"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $sug->city }}</div>
-                        </div>
-                        <a href="{{ route('member.directory.show', $sug->id) }}" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-center font-bold text-xs rounded-lg transition">
-                            View Profile & Connect
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
+   
 </div>
 @endsection

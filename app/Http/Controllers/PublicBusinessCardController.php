@@ -16,15 +16,25 @@ class PublicBusinessCardController extends Controller
             $q->where('status', 'active')->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
         }]);
 
-        $privacy = $userModel->privacy_settings ?? [];
-        $showEmail = $privacy['show_email'] ?? false;
-        $showPhone = $privacy['show_phone'] ?? false;
+        $showEmail = false;
+        $showPhone = false;
 
-        // If logged in as super admin or viewing own card, or if user is connected
+        // Email and Phone number visible IF own card, super admin, or accepted connection
         if (auth()->check()) {
             if (auth()->id() === $userModel->id || auth()->user()->isSuperAdmin()) {
                 $showEmail = true;
                 $showPhone = true;
+            } else {
+                $connection = \App\Models\Connection::where(function($q) use ($userModel) {
+                    $q->where('sender_id', auth()->id())->where('receiver_id', $userModel->id);
+                })->orWhere(function($q) use ($userModel) {
+                    $q->where('sender_id', $userModel->id)->where('receiver_id', auth()->id());
+                })->where('status', 'accepted')->first();
+
+                if ($connection) {
+                    $showEmail = true;
+                    $showPhone = true;
+                }
             }
         }
 

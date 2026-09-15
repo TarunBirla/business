@@ -176,6 +176,11 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::get('/group/{group}/settings', [GroupAdminDashboardController::class, 'settings'])->name('settings');
     Route::post('/group/{group}/settings', [GroupAdminDashboardController::class, 'updateSettings'])->name('settings.update');
 
+    // Group Admin Connections System
+    Route::get('/connections', [\App\Http\Controllers\GroupAdmin\GroupAdminConnectionController::class, 'index'])->name('connections');
+    Route::post('/connections/{connection}/accept', [\App\Http\Controllers\GroupAdmin\GroupAdminConnectionController::class, 'accept'])->name('connections.accept');
+    Route::post('/connections/{connection}/reject', [\App\Http\Controllers\GroupAdmin\GroupAdminConnectionController::class, 'reject'])->name('connections.reject');
+
     // Community Payments
     Route::get('/group/{group}/payments', [GroupAdminPaymentController::class, 'index'])->name('payments.index');
 

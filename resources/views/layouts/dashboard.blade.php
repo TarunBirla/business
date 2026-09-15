@@ -371,6 +371,22 @@
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Promote & QR</span>
                         </a>
 
+                        @php $active = request()->routeIs('group_admin.connections*'); @endphp
+                        <a href="{{ route('group_admin.connections') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-user-group w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                                <span style="{{ $active ? 'color: #ffffff;' : '' }}">Connections</span>
+                            </div>
+                            @php
+                                $pendingAdminConnCount = auth()->check() ? \App\Models\Connection::where('receiver_id', auth()->id())->where('status', 'pending')->count() : 0;
+                            @endphp
+                            @if($pendingAdminConnCount > 0)
+                                <span class="px-2 py-0.5 bg-rose-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
+                                    {{ $pendingAdminConnCount }}
+                                </span>
+                            @endif
+                        </a>
+
                         @php $active = request()->routeIs('group_admin.payments*'); @endphp
                         <a href="{{ route('group_admin.payments.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-credit-card w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
