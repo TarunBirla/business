@@ -153,6 +153,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-slate-50 antialiased">
 
+    @unless(View::hasSection('hide_header_footer'))
     <!-- Navigation Header -->
     <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 shadow-2xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -220,6 +221,7 @@
             </div>
         </div>
     </nav>
+    @endunless
 
     <!-- Main Content -->
     <main class="flex-grow">
@@ -246,6 +248,7 @@
         @yield('content')
     </main>
 
+    @unless(View::hasSection('hide_header_footer'))
     <!-- Footer -->
     <footer class="border-t shadow-inner" style="background-color: var(--footer-bg, #0f172a); color: var(--footer-text, #f8fafc); border-color: var(--border-color, #1e293b);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -288,6 +291,7 @@
             </div>
         </div>
     </footer>
+    @endunless
 
     <script>
         function togglePublicMobileNav() {

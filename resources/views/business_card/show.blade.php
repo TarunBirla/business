@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('hide_header_footer', true)
+
 @section('title', $userModel->name . ' - Digital Business Card')
 @section('og_title', $userModel->name . ' - Digital Business Card')
 @section('og_description', $userModel->profession . ($userModel->company ? ' at ' . $userModel->company : '') . ' - Community UK Member')
@@ -260,14 +262,30 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 @foreach($userModel->projects as $project)
-                                    <div class="p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition hover:border-sky-400 hover:shadow-md group" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                                    <div class="p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition hover:border-sky-400 hover:shadow-md group overflow-hidden" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
                                         <div class="space-y-2">
-                                            <div class="flex items-center justify-between gap-2">
-                                                @if($project->category)
-                                                    <span class="text-[9px] font-extrabold px-2 py-0.5 rounded uppercase border" style="background-color: var(--card-bg, #ffffff); color: var(--text-secondary, #64748b); border-color: var(--border-color, #e2e8f0);">
-                                                        {{ $project->category }}
+                                            @if($project->image_url)
+                                                <div class="h-36 -mx-4 -mt-4 mb-3 overflow-hidden bg-slate-100 border-b border-slate-200/60 relative">
+                                                    <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                                    <span class="absolute top-2.5 left-2.5 text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase shadow-xs border bg-slate-900/80 backdrop-blur-md text-white border-white/20">
+                                                        <i class="fa-solid fa-list-ol text-[8px] mr-1 text-sky-400"></i>Seq #{{ $project->sort_order ?? $loop->iteration }}
                                                     </span>
-                                                @endif
+                                                </div>
+                                            @endif
+
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center space-x-1.5">
+                                                    @if(!$project->image_url)
+                                                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase border shadow-2xs" style="background-color: var(--card-bg, #ffffff); color: var(--text-link, #0A4744); border-color: var(--input-border, #cce5e3);">
+                                                            <i class="fa-solid fa-list-ol text-[8px] mr-0.5 text-sky-600"></i>Seq #{{ $project->sort_order ?? $loop->iteration }}
+                                                        </span>
+                                                    @endif
+                                                    @if($project->category)
+                                                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded uppercase border" style="background-color: var(--card-bg, #ffffff); color: var(--text-secondary, #64748b); border-color: var(--border-color, #e2e8f0);">
+                                                            {{ $project->category }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                                 @if($project->completion_date)
                                                     <span class="text-[9px] text-slate-400 font-medium">
                                                         {{ \Carbon\Carbon::parse($project->completion_date)->format('M Y') }}
