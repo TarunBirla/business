@@ -11,18 +11,17 @@
     <div class="max-w-5xl w-full rounded-[32px] border shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden relative transition-all duration-300" style="background-color: var(--card-bg, #ffffff); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #0f172a);">
 
         <!-- Top Cover Header Banner -->
-        <div class="h-44 md:h-52 relative p-6 md:p-8 flex justify-between items-start overflow-hidden shadow-md" style="background: linear-gradient(135deg, var(--btn-primary-bg, #0A4744) 0%, var(--text-link-hover, #0369a1) 100%);">
-            <!-- Decorative Subtle Grid Pattern Overlay -->
-            <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1.5px,transparent_1.5px)] [background-size:20px_20px]"></div>
+        <div class="h-44 md:h-52 relative p-6 md:p-8 flex justify-between items-start overflow-hidden shadow-md"
+            style="background: {{ $userModel->banner_photo ? 'url(' . asset('storage/' . $userModel->banner_photo) . ') center/cover no-repeat' : 'linear-gradient(135deg, var(--btn-primary-bg, #0A4744) 0%, var(--text-link-hover, #0369a1) 100%)' }};">
+            
+            <!-- Dark Gradient & Subtle Pattern Overlay for Text Contrast -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30 z-0"></div>
+            <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1.5px,transparent_1.5px)] [background-size:20px_20px] z-0"></div>
 
             <div class="relative z-10 flex items-center space-x-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-white text-xs font-extrabold uppercase tracking-wider border border-white/30 shadow-sm">
                 <i class="fa-solid fa-id-card"></i>
                 <span>Digital Business Card</span>
             </div>
-            
-            <!-- <button onclick="openShareModal()" class="relative z-10 w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white flex items-center justify-center transition shadow-md border border-white/30 hover:scale-105" title="Share Business Card">
-                <i class="fa-solid fa-share-nodes text-base"></i>
-            </button> -->
         </div>
 
         <!-- Card Content Body: Responsive 2-Column Grid on Desktop -->
@@ -121,12 +120,37 @@
                         </button>
                     </div>
 
-                    <!-- About / Summary -->
+                    <!-- Prominent QR Code Card (On Page) -->
+                    <div class="p-5 rounded-2xl border text-center space-y-3 shadow-xs" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                        <div class="flex items-center justify-center space-x-2 text-xs font-extrabold uppercase tracking-wider" style="color: var(--text-heading, #0f172a);">
+                            <i class="fa-solid fa-qrcode" style="color: var(--text-link, #0A4744);"></i>
+                            <span>Scan QR Code</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl inline-block shadow-sm border border-slate-200">
+                            <img src="{{ $qrCodeUrl }}" alt="{{ $userModel->name }} Business Card QR Code" class="w-36 h-36 mx-auto rounded-lg">
+                        </div>
+                        <p class="text-[11px] font-medium text-slate-500">Scan with camera to open business card on mobile</p>
+                        <div class="pt-1">
+                            <a href="{{ route('bizcard.vcard', $userModel->id) }}" class="w-full py-2.5 px-4 bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition inline-flex items-center justify-center space-x-2 shadow-2xs">
+                                <i class="fa-solid fa-address-card" style="color: var(--text-link, #0A4744);"></i>
+                                <span>Save Contact (vCard)</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- About / Summary Section -->
                     @if($userModel->description)
                         <div class="space-y-2 text-left pt-2">
-                            <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">About {{ $userModel->first_name }}</h3>
-                            <div class="p-4 rounded-2xl border text-xs leading-relaxed font-normal" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #334155);">
-                                {{ $userModel->description }}
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2 h-2 rounded-full" style="background-color: var(--text-link, #0A4744);"></span>
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider" style="color: var(--text-heading, #0f172a);">About {{ $userModel->first_name }}</h3>
+                            </div>
+                            <div class="relative p-5 rounded-2xl border shadow-xs leading-relaxed text-xs font-medium space-y-2 overflow-hidden transition"
+                                 style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #334155); border-left: 4px solid var(--text-link, #0A4744);">
+                                <i class="fa-solid fa-quote-left absolute -bottom-2 -right-1 text-slate-200/50 dark:text-slate-700/20 text-5xl pointer-events-none"></i>
+                                <p class="relative z-10 italic leading-relaxed text-slate-700 dark:text-slate-300">
+                                    "{{ $userModel->description }}"
+                                </p>
                             </div>
                         </div>
                     @endif
@@ -324,44 +348,7 @@
                         </div>
                     @endif
 
-                    <!-- Upcoming Admin Scheduled Community Events -->
-                    @if(isset($upcomingEvents) && $upcomingEvents->isNotEmpty())
-                        <div class="space-y-4 pt-2">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">Upcoming Community Events</h3>
-                                <span class="text-[10px] font-extrabold px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
-                                    Admin Scheduled
-                                </span>
-                            </div>
-
-                            <div class="space-y-3">
-                                @foreach($upcomingEvents as $event)
-                                    <div class="p-3.5 rounded-2xl border flex items-center justify-between space-x-3 transition hover:border-emerald-300" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
-                                        <div class="flex items-center space-x-3.5 min-w-0">
-                                            <div class="w-12 h-12 text-white rounded-xl flex flex-col items-center justify-center shrink-0 font-black shadow-sm" style="background-color: var(--btn-primary-bg, #0A4744);">
-                                                <span class="text-[9px] uppercase font-extrabold tracking-wider">{{ $event->start_at ? $event->start_at->format('M') : 'UP' }}</span>
-                                                <span class="text-base leading-none">{{ $event->start_at ? $event->start_at->format('d') : 'EV' }}</span>
-                                            </div>
-                                            <div class="min-w-0">
-                                                <h4 class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $event->title }}</h4>
-                                                <p class="text-[10px] mt-0.5 flex items-center space-x-2" style="color: var(--text-secondary, #64748b);">
-                                                    @if($event->group)
-                                                        <span class="font-bold truncate" style="color: var(--text-link, #0A4744);">{{ $event->group->name }}</span>
-                                                        <span>•</span>
-                                                    @endif
-                                                    <span class="truncate"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->city ?? 'UK' }}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <a href="{{ route('events.show', $event->slug) }}" target="_blank" class="px-3.5 py-1.5 text-white text-[10px] font-bold rounded-xl shadow-2xs shrink-0 transition flex items-center space-x-1" style="background-color: var(--btn-primary-bg, #0A4744);">
-                                            <span>Register</span>
-                                            <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
+                    
 
                 </div>
 
@@ -388,13 +375,7 @@
 
         <div class="text-center space-y-1">
             <h3 class="text-xl font-black text-slate-900">Share Business Card</h3>
-            <p class="text-xs text-slate-500">Scan QR Code or copy direct card URL</p>
-        </div>
-
-        <!-- High-Res QR Code Card -->
-        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center shadow-inner">
-            <img src="{{ $qrCodeUrl }}" alt="Business Card QR Code" class="w-48 h-48 mx-auto rounded-xl shadow-md border-2 border-white">
-            <p class="text-[11px] text-slate-600 mt-3 font-semibold">Scan with smartphone camera to view card</p>
+            <p class="text-xs text-slate-500">Share via social media or copy direct card link</p>
         </div>
 
         <!-- Social Share Shortcuts -->

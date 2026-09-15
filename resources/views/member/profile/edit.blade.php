@@ -43,6 +43,34 @@
                 </div>
             </div>
 
+            <!-- Business Card Banner Upload -->
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50">
+                <div class="relative w-44 h-24 rounded-xl overflow-hidden shrink-0 shadow-md border-2 border-white bg-gradient-to-r from-teal-700 to-sky-700 flex items-center justify-center">
+                    @if($user->banner_photo)
+                        <img id="bannerPreview" src="{{ asset('storage/' . $user->banner_photo) }}" alt="Banner Preview" class="w-full h-full object-cover">
+                    @else
+                        <div id="bannerFallback" class="w-full h-full flex flex-col items-center justify-center text-white/80 p-2 text-center">
+                            <i class="fa-solid fa-image text-xl mb-1"></i>
+                            <span class="text-[10px] font-bold uppercase">Default Gradient Banner</span>
+                        </div>
+                        <img id="bannerPreview" src="" alt="Banner Preview" class="w-full h-full object-cover hidden">
+                    @endif
+                </div>
+
+                <div class="space-y-2 text-center sm:text-left flex-grow">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">Business Card Banner / Cover Image</label>
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                        <label class="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl cursor-pointer shadow-2xs transition inline-flex items-center space-x-2">
+                            <i class="fa-solid fa-image text-sky-600"></i>
+                            <span>Upload Banner Image</span>
+                            <input type="file" name="banner_photo" accept="image/*" class="hidden" onchange="previewBannerImage(this)">
+                        </label>
+                        <span class="text-xs text-slate-400">JPG, PNG, WEBP max 5MB</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500">This banner photo will be displayed at the top of your Digital Business Card.</p>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">First Name *</label>
@@ -216,6 +244,20 @@
             reader.onload = function(e) {
                 const preview = document.getElementById('avatarPreview');
                 const fallback = document.getElementById('avatarFallback');
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                if (fallback) fallback.classList.add('hidden');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewBannerImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('bannerPreview');
+                const fallback = document.getElementById('bannerFallback');
                 preview.src = e.target.result;
                 preview.classList.remove('hidden');
                 if (fallback) fallback.classList.add('hidden');

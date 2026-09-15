@@ -18,6 +18,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'profile_photo',
+        'banner_photo',
         'profession',
         'company',
         'job_title',

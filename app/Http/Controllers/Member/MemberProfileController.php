@@ -27,6 +27,7 @@ class MemberProfileController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:4096',
+            'banner_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'phone' => 'nullable|string|max:50',
             'profession' => 'nullable|string|max:255',
             'company' => 'nullable|string|max:255',
@@ -67,6 +68,11 @@ class MemberProfileController extends Controller
         if ($request->hasFile('profile_photo')) {
             $path = $request->file('profile_photo')->store('profile_photos', 'public');
             $updateData['profile_photo'] = $path;
+        }
+
+        if ($request->hasFile('banner_photo')) {
+            $path = $request->file('banner_photo')->store('banners', 'public');
+            $updateData['banner_photo'] = $path;
         }
 
         $user->update($updateData);
