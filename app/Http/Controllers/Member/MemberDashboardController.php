@@ -36,6 +36,7 @@ class MemberDashboardController extends Controller
             ->count();
 
         $upcomingEvents = EventRegistration::where('user_id', $user->id)
+            ->whereIn('registration_status', ['confirmed', 'approved'])
             ->whereHas('event', function($q) {
                 $q->where('start_at', '>=', now())->where('status', 'published');
             })

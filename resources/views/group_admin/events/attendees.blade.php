@@ -57,25 +57,25 @@
                             @endif
                         </td>
                         <td class="p-4 text-xs text-slate-500">{{ $reg->registered_at ? $reg->registered_at->format('d M Y, h:i A') : 'N/A' }}</td>
-                        <td class="p-4 text-right space-x-1.5">
-                            @if($reg->registration_status !== 'confirmed' && $reg->registration_status !== 'approved')
-                                <form action="{{ route('group_admin.events.registrations.approve', [$group->id, $event->id, $reg->id]) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    <button type="submit" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-2xs transition inline-flex items-center space-x-1">
-                                        <i class="fa-solid fa-check text-[10px]"></i>
-                                        <span>Approve</span>
-                                    </button>
-                                </form>
-                            @endif
-                            @if($reg->registration_status !== 'rejected')
-                                <form action="{{ route('group_admin.events.registrations.reject', [$group->id, $event->id, $reg->id]) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    <button type="submit" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition inline-flex items-center space-x-1">
-                                        <i class="fa-solid fa-xmark text-[10px]"></i>
-                                        <span>Decline</span>
-                                    </button>
-                                </form>
-                            @endif
+                        <td class="p-4 text-right space-x-1.5 whitespace-nowrap">
+                            <form action="{{ route('group_admin.events.registrations.approve', [$group->id, $event->id, $reg->id]) }}" method="POST" class="inline-block">
+                                @csrf
+                                <button type="submit" 
+                                    class="px-3 py-1.5 font-bold text-xs rounded-xl shadow-2xs transition inline-flex items-center space-x-1 {{ ($reg->registration_status === 'confirmed' || $reg->registration_status === 'approved') ? 'bg-emerald-700 text-white cursor-default opacity-90' : 'bg-emerald-600 hover:bg-emerald-700 text-white' }}"
+                                    {{ ($reg->registration_status === 'confirmed' || $reg->registration_status === 'approved') ? 'disabled' : '' }}>
+                                    <i class="fa-solid fa-check text-[10px]"></i>
+                                    <span>Approve</span>
+                                </button>
+                            </form>
+                            <form action="{{ route('group_admin.events.registrations.reject', [$group->id, $event->id, $reg->id]) }}" method="POST" class="inline-block">
+                                @csrf
+                                <button type="submit" 
+                                    class="px-3 py-1.5 font-bold text-xs rounded-xl transition inline-flex items-center space-x-1 {{ $reg->registration_status === 'rejected' ? 'bg-rose-700 text-white cursor-default opacity-90' : 'bg-slate-200 hover:bg-slate-300 text-slate-700' }}"
+                                    {{ $reg->registration_status === 'rejected' ? 'disabled' : '' }}>
+                                    <i class="fa-solid fa-xmark text-[10px]"></i>
+                                    <span>Decline</span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty
