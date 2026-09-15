@@ -44,6 +44,10 @@ class SuperAdminEventController extends Controller
             'group_id' => 'required|exists:groups,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'overview' => 'nullable|string',
+            'agenda' => 'nullable|string',
+            'banner_img' => 'nullable|image|max:5120',
+            'event_img' => 'nullable|image|max:5120',
             'event_type' => 'required|in:free,paid',
             'venue' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -57,12 +61,27 @@ class SuperAdminEventController extends Controller
 
         $slug = Str::slug($request->title) . '-' . Str::random(5);
 
+        $bannerPath = null;
+        if ($request->hasFile('banner_img')) {
+            $bannerPath = $request->file('banner_img')->store('events/banners', 'public');
+        }
+
+        $eventImgPath = null;
+        if ($request->hasFile('event_img')) {
+            $eventImgPath = $request->file('event_img')->store('events/images', 'public');
+        }
+
         Event::create([
             'group_id' => $request->group_id,
             'created_by' => auth()->id(),
             'title' => $request->title,
             'slug' => $slug,
             'description' => $request->description,
+            'overview' => $request->overview,
+            'agenda' => $request->agenda,
+            'banner_img' => $bannerPath,
+            'event_img' => $eventImgPath,
+            'banner' => $bannerPath,
             'event_type' => $request->event_type,
             'venue' => $request->venue,
             'address' => $request->address,
@@ -91,6 +110,10 @@ class SuperAdminEventController extends Controller
             'group_id' => 'required|exists:groups,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'overview' => 'nullable|string',
+            'agenda' => 'nullable|string',
+            'banner_img' => 'nullable|image|max:5120',
+            'event_img' => 'nullable|image|max:5120',
             'event_type' => 'required|in:free,paid',
             'venue' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -102,10 +125,12 @@ class SuperAdminEventController extends Controller
             'price' => 'nullable|numeric|min:0',
         ]);
 
-        $event->update([
+        $data = [
             'group_id' => $request->group_id,
             'title' => $request->title,
             'description' => $request->description,
+            'overview' => $request->overview,
+            'agenda' => $request->agenda,
             'event_type' => $request->event_type,
             'venue' => $request->venue,
             'address' => $request->address,
@@ -115,7 +140,19 @@ class SuperAdminEventController extends Controller
             'end_at' => $request->end_at,
             'capacity' => $request->capacity,
             'price' => $request->event_type === 'paid' ? ($request->price ?? 10.00) : 0.00,
-        ]);
+        ];
+
+        if ($request->hasFile('banner_img')) {
+            $bannerPath = $request->file('banner_img')->store('events/banners', 'public');
+            $data['banner_img'] = $bannerPath;
+            $data['banner'] = $bannerPath;
+        }
+
+        if ($request->hasFile('event_img')) {
+            $data['event_img'] = $request->file('event_img')->store('events/images', 'public');
+        }
+
+        $event->update($data);
 
         return redirect()->route('super_admin.events.index')->with('success', 'Event updated successfully.');
     }

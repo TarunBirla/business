@@ -15,7 +15,11 @@ class Event extends Model
         'title',
         'slug',
         'description',
+        'overview',
+        'agenda',
         'banner',
+        'banner_img',
+        'event_img',
         'event_type',
         'venue',
         'address',
@@ -36,6 +40,42 @@ class Event extends Model
         'end_at' => 'datetime',
         'registration_deadline' => 'datetime',
     ];
+
+    public function getBannerImageUrlAttribute(): ?string
+    {
+        $path = $this->banner_img ?? $this->banner;
+        if (!$path) {
+            return null;
+        }
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        if (str_starts_with($path, 'public/')) {
+            $path = substr($path, 7);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+        return asset('storage/' . $path);
+    }
+
+    public function getEventImageUrlAttribute(): ?string
+    {
+        $path = $this->event_img ?? $this->banner_img ?? $this->banner;
+        if (!$path) {
+            return null;
+        }
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        if (str_starts_with($path, 'public/')) {
+            $path = substr($path, 7);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+        return asset('storage/' . $path);
+    }
 
     public function group()
     {
