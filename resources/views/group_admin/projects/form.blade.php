@@ -32,20 +32,21 @@
                 <input type="text" name="category" value="{{ old('category', $project->category) }}" placeholder="e.g. Web Development, Legal Advisory, Construction" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
             </div>
 
-            <div>
+            <!-- <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Completion Date</label>
                 <input type="date" name="completion_date" value="{{ old('completion_date', optional($project->completion_date)->format('Y-m-d')) }}" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
-            </div>
-        </div>
-
-        <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Live Project / Website URL</label>
+            </div> -->
+            <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1"> Website URL</label>
             <input type="url" name="project_url" value="{{ old('project_url', $project->project_url) }}" placeholder="https://example.com/project" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
             @error('project_url') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
         </div>
+        </div>
+
+        
 
         <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Technologies / Key Skills Used</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Short Description</label>
             <input type="text" name="technologies" value="{{ old('technologies', $project->technologies) }}" placeholder="e.g. Laravel, React, Tax Audit, Architectural Design (comma separated)" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
         </div>
 
