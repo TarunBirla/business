@@ -12,7 +12,7 @@
 
         <!-- Top Cover Header Banner -->
         <div class="h-44 md:h-52 relative p-6 md:p-8 flex justify-between items-start overflow-hidden shadow-md"
-            style="background: {{ $userModel->banner_photo ? 'url(' . asset('storage/' . $userModel->banner_photo) . ') center/cover no-repeat' : 'linear-gradient(135deg, var(--btn-primary-bg, #0A4744) 0%, var(--text-link-hover, #0369a1) 100%)' }};">
+            style="background: {{ $userModel->banner_photo_url ? 'url(' . e($userModel->banner_photo_url) . ') center/cover no-repeat' : 'linear-gradient(135deg, var(--btn-primary-bg, #0A4744) 0%, var(--text-link-hover, #0369a1) 100%)' }};">
             
             <!-- Dark Gradient & Subtle Pattern Overlay for Text Contrast -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30 z-0"></div>
@@ -33,8 +33,8 @@
                     
                     <!-- Avatar Ring -->
                     <div class="w-36 h-36 rounded-full p-1.5 shadow-2xl mx-auto lg:mx-0 border-4 border-white relative z-20 group" style="background-color: var(--card-bg, #ffffff);">
-                        @if($userModel->profile_photo)
-                            <img src="{{ asset('storage/' . $userModel->profile_photo) }}" alt="{{ $userModel->name }}" class="w-full h-full rounded-full object-cover shadow-sm">
+                        @if($userModel->profile_photo_url)
+                            <img src="{{ $userModel->profile_photo_url }}" alt="{{ $userModel->name }}" class="w-full h-full rounded-full object-cover shadow-sm">
                         @else
                             <div class="w-full h-full rounded-full flex items-center justify-center font-extrabold text-4xl uppercase text-white shadow-inner" style="background-color: var(--btn-primary-bg, #0A4744);">
                                 {{ substr($userModel->first_name, 0, 1) }}{{ substr($userModel->last_name, 0, 1) }}

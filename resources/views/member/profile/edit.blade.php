@@ -19,8 +19,8 @@
             <!-- Profile Photo Upload & Initial Fallback Avatar -->
             <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50">
                 <div class="relative w-24 h-24 rounded-full overflow-hidden shrink-0 shadow-md border-4 border-white bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center">
-                    @if($user->profile_photo)
-                        <img id="avatarPreview" src="{{ asset('storage/' . $user->profile_photo) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                    @if($user->profile_photo_url)
+                        <img id="avatarPreview" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                     @else
                         <div id="avatarFallback" class="w-full h-full flex items-center justify-center font-extrabold text-2xl uppercase text-white tracking-wider">
                             {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name, 0, 1)) }}
@@ -46,8 +46,8 @@
             <!-- Business Card Banner Upload -->
             <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50">
                 <div class="relative w-44 h-24 rounded-xl overflow-hidden shrink-0 shadow-md border-2 border-white bg-gradient-to-r from-teal-700 to-sky-700 flex items-center justify-center">
-                    @if($user->banner_photo)
-                        <img id="bannerPreview" src="{{ asset('storage/' . $user->banner_photo) }}" alt="Banner Preview" class="w-full h-full object-cover">
+                    @if($user->banner_photo_url)
+                        <img id="bannerPreview" src="{{ $user->banner_photo_url }}" alt="Banner Preview" class="w-full h-full object-cover">
                     @else
                         <div id="bannerFallback" class="w-full h-full flex flex-col items-center justify-center text-white/80 p-2 text-center">
                             <i class="fa-solid fa-image text-xl mb-1"></i>

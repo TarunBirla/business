@@ -50,6 +50,48 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function getProfilePhotoUrlAttribute(): ?string
+    {
+        if (empty($this->profile_photo)) {
+            return null;
+        }
+
+        if (str_starts_with($this->profile_photo, 'http://') || str_starts_with($this->profile_photo, 'https://')) {
+            return $this->profile_photo;
+        }
+
+        $path = ltrim($this->profile_photo, '/');
+        if (str_starts_with($path, 'public/')) {
+            $path = substr($path, 7);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+
+        return asset('storage/' . $path);
+    }
+
+    public function getBannerPhotoUrlAttribute(): ?string
+    {
+        if (empty($this->banner_photo)) {
+            return null;
+        }
+
+        if (str_starts_with($this->banner_photo, 'http://') || str_starts_with($this->banner_photo, 'https://')) {
+            return $this->banner_photo;
+        }
+
+        $path = ltrim($this->banner_photo, '/');
+        if (str_starts_with($path, 'public/')) {
+            $path = substr($path, 7);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+
+        return asset('storage/' . $path);
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->global_role === 'super_admin';
