@@ -57,6 +57,17 @@ Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
 Route::get('/bizcard/{user}', [PublicBusinessCardController::class, 'show'])->name('bizcard.show');
 Route::get('/bizcard/{user}/vcard', [PublicBusinessCardController::class, 'downloadVcard'])->name('bizcard.vcard');
 
+// cPanel Deployment Helper Route (1-Click Storage Link Fix)
+Route::get('/fix-storage-link', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        return '<h1 style="color:green;font-family:sans-serif;text-align:center;margin-top:50px;">SUCCESS: Storage Link Connected & Views Cleared Successfully!</h1>';
+    } catch (\Exception $e) {
+        return '<h1 style="color:red;font-family:sans-serif;text-align:center;margin-top:50px;">STATUS: ' . $e->getMessage() . '</h1>';
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Authentication Routes
