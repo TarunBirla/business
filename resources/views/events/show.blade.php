@@ -72,15 +72,7 @@
                     </div>
                 </div>
 
-                <!-- Quick share / actions (desktop) -->
-                <div class="hidden md:flex items-center gap-2 shrink-0">
-                    <button type="button" class="w-11 h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-500 hover:text-sky-600 transition shadow-xs" title="Share">
-                        <i class="fa-solid fa-share-nodes"></i>
-                    </button>
-                    <button type="button" class="w-11 h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-500 hover:text-rose-500 transition shadow-xs" title="Save">
-                        <i class="fa-regular fa-bookmark"></i>
-                    </button>
-                </div>
+                
             </div>
         </div>
     </div>
