@@ -5,6 +5,7 @@ namespace App\Http\Controllers\GroupAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\Event;
+use App\Models\EventRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
