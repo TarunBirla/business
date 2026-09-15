@@ -47,7 +47,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Short Description</label>
-            <input type="text" name="technologies" value="{{ old('technologies', $project->technologies) }}" placeholder="e.g. Laravel, React, Tax Audit, Architectural Design (comma separated)" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+            <input type="text" name="technologies" value="{{ old('technologies', $project->technologies) }}" placeholder="e.g. short description" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
         </div>
 
         <div>
