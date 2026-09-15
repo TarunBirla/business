@@ -130,69 +130,12 @@
                             <img src="{{ $qrCodeUrl }}" alt="{{ $userModel->name }} Business Card QR Code" class="w-36 h-36 mx-auto rounded-lg">
                         </div>
                         <p class="text-[11px] font-medium text-slate-500">Scan with camera to open business card on mobile</p>
-                        <div class="pt-1">
-                            <a href="{{ route('bizcard.vcard', $userModel->id) }}" class="w-full py-2.5 px-4 bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition inline-flex items-center justify-center space-x-2 shadow-2xs">
-                                <i class="fa-solid fa-address-card" style="color: var(--text-link, #0A4744);"></i>
-                                <span>Save Contact (vCard)</span>
-                            </a>
-                        </div>
+                        
                     </div>
 
-                    <!-- About / Summary Section -->
-                    @if($userModel->description)
-                        <div class="space-y-2 text-left pt-2">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 rounded-full" style="background-color: var(--text-link, #0A4744);"></span>
-                                <h3 class="text-xs font-extrabold uppercase tracking-wider" style="color: var(--text-heading, #0f172a);">About {{ $userModel->first_name }}</h3>
-                            </div>
-                            <div class="relative p-5 rounded-2xl border shadow-xs leading-relaxed text-xs font-medium space-y-2 overflow-hidden transition"
-                                 style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #334155); border-left: 4px solid var(--text-link, #0A4744);">
-                                <i class="fa-solid fa-quote-left absolute -bottom-2 -right-1 text-slate-200/50 dark:text-slate-700/20 text-5xl pointer-events-none"></i>
-                                <p class="relative z-10 italic leading-relaxed text-slate-700 dark:text-slate-300">
-                                    "{{ $userModel->description }}"
-                                </p>
-                            </div>
-                        </div>
-                    @endif
+                    
 
-                    <!-- Services Exchange -->
-                    @if($userModel->servicesOffered->isNotEmpty() || $userModel->servicesNeeded->isNotEmpty())
-                        <div class="space-y-4 text-left pt-2">
-                            <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">Services Exchange</h3>
-
-                            @if($userModel->servicesOffered->isNotEmpty())
-                                <div>
-                                    <div class="text-[11px] font-bold uppercase mb-2 flex items-center gap-1.5" style="color: var(--text-link, #0A4744);">
-                                        <i class="fa-solid fa-hand-holding-hand"></i>
-                                        <span>Services Offered</span>
-                                    </div>
-                                    <div class="flex flex-wrap gap-1.5">
-                                        @foreach($userModel->servicesOffered as $service)
-                                            <span class="px-3 py-1 bg-sky-50 text-sky-800 border border-sky-200 text-[11px] font-bold rounded-xl">
-                                                {{ $service->name }}
-                                            </span>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if($userModel->servicesNeeded->isNotEmpty())
-                                <div>
-                                    <div class="text-[11px] font-bold uppercase mb-2 flex items-center gap-1.5 text-amber-700">
-                                        <i class="fa-solid fa-magnifying-glass-chart"></i>
-                                        <span>Services Needed</span>
-                                    </div>
-                                    <div class="flex flex-wrap gap-1.5">
-                                        @foreach($userModel->servicesNeeded as $service)
-                                            <span class="px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-bold rounded-xl">
-                                                {{ $service->name }}
-                                            </span>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endif
+                   
                 </div>
 
                 <!-- RIGHT COLUMN: Contact Details, Portfolio & Community Events -->
@@ -287,6 +230,23 @@
                             @endif
                         </div>
                     </div>
+
+                    <!-- About / Summary Section -->
+                    @if($userModel->description)
+                        <div class="space-y-2 text-left pt-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2 h-2 rounded-full" style="background-color: var(--text-link, #0A4744);"></span>
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider" style="color: var(--text-heading, #0f172a);">About {{ $userModel->first_name }}</h3>
+                            </div>
+                            <div class="relative p-5 rounded-2xl border shadow-xs leading-relaxed text-xs font-medium space-y-2 overflow-hidden transition"
+                                 style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #334155); border-left: 4px solid var(--text-link, #0A4744);">
+                                <i class="fa-solid fa-quote-left absolute -bottom-2 -right-1 text-slate-200/50 dark:text-slate-700/20 text-5xl pointer-events-none"></i>
+                                <p class="relative z-10 italic leading-relaxed text-slate-700 dark:text-slate-300">
+                                    "{{ $userModel->description }}"
+                                </p>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Featured Portfolio Showcase Grid -->
                     @if($userModel->projects->isNotEmpty())
