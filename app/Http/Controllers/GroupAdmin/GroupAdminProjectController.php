@@ -123,8 +123,9 @@ class GroupAdminProjectController extends Controller
 
     public function edit(Project $project)
     {
-        if ($project->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized action. You can only edit your own projects.');
+        $user = auth()->user();
+        if (!$this->canManageProject($user, $project)) {
+            abort(403, 'Unauthorized action. You can only edit projects in your assigned communities.');
         }
 
         return view('group_admin.projects.form', compact('project'));
@@ -132,8 +133,9 @@ class GroupAdminProjectController extends Controller
 
     public function update(Request $request, Project $project)
     {
-        if ($project->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized action. You can only edit your own projects.');
+        $user = auth()->user();
+        if (!$this->canManageProject($user, $project)) {
+            abort(403, 'Unauthorized action. You can only edit projects in your assigned communities.');
         }
 
         $request->validate([
@@ -177,8 +179,9 @@ class GroupAdminProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if ($project->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized action. You can only delete your own projects.');
+        $user = auth()->user();
+        if (!$this->canManageProject($user, $project)) {
+            abort(403, 'Unauthorized action. You can only delete projects in your assigned communities.');
         }
 
         if ($project->image && Storage::disk('public')->exists($project->image)) {
@@ -189,5 +192,37 @@ class GroupAdminProjectController extends Controller
 
         return redirect()->route('group_admin.projects.index', ['tab' => 'my_projects'])
             ->with('success', 'Project deleted successfully.');
+    }
+
+    private function canManageProject(User $user, Project $project): bool
+    {
+        if ($project->user_id === $user->id) {
+            return true;
+        }
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        if ($user->isGroupAdmin()) {
+            $adminGroupIds = $user->groups()
+                ->wherePivot('membership_role', 'group_admin')
+                ->pluck('groups.id')
+                ->toArray();
+
+            if (!empty($adminGroupIds)) {
+                $isMemberInAdminGroup = User::where('id', $project->user_id)
+                    ->whereHas('groups', function ($q) use ($adminGroupIds) {
+                        $q->whereIn('groups.id', $adminGroupIds);
+                    })
+                    ->exists();
+
+                if ($isMemberInAdminGroup) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

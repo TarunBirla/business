@@ -244,10 +244,22 @@
                                     <span class="text-xs text-slate-400 font-medium">Internal Case Study</span>
                                 @endif
                             </div>
-                            <a href="{{ route('member.chat', ['groupId' => $selectedGroupId !== 'all' ? $selectedGroupId : 1, 'receiverId' => $project->user_id]) }}" class="px-3 py-1.5 bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 rounded-lg text-xs font-bold transition flex items-center space-x-1">
-                                <i class="fa-solid fa-comments text-[11px]"></i>
-                                <span>Chat</span>
-                            </a>
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ route('group_admin.projects.edit', $project->id) }}" class="p-1.5 text-slate-600 hover:text-sky-600 hover:bg-white rounded-lg transition" title="Edit Project">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <form action="{{ route('group_admin.projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-white rounded-lg transition" title="Delete Project">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
+                                <a href="{{ route('member.chat', ['groupId' => $selectedGroupId !== 'all' ? $selectedGroupId : 1, 'receiverId' => $project->user_id]) }}" class="px-2.5 py-1.5 bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 rounded-lg text-xs font-bold transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-comments text-[11px]"></i>
+                                    <span>Chat</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @endforeach
