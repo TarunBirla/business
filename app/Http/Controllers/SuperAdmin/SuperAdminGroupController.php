@@ -23,12 +23,7 @@ class SuperAdminGroupController extends Controller
     public function create()
     {
         $users = User::where('status', 'active')
-            ->where(function($q) {
-                $q->whereIn('global_role', ['group_admin', 'super_admin'])
-                  ->orWhereHas('groups', function($gq) {
-                      $gq->where('group_user.membership_role', 'group_admin');
-                  });
-            })
+            ->where('global_role', '!=', 'super_admin')
             ->orderBy('first_name')
             ->get();
         return view('super_admin.groups.create', compact('users'));
@@ -90,12 +85,7 @@ class SuperAdminGroupController extends Controller
     public function edit(Group $group)
     {
         $users = User::where('status', 'active')
-            ->where(function($q) {
-                $q->whereIn('global_role', ['group_admin', 'super_admin'])
-                  ->orWhereHas('groups', function($gq) {
-                      $gq->where('group_user.membership_role', 'group_admin');
-                  });
-            })
+            ->where('global_role', '!=', 'super_admin')
             ->orderBy('first_name')
             ->get();
         $groupAdmins = $group->groupAdmins->pluck('id')->toArray();
