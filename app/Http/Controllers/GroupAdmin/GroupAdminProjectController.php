@@ -35,7 +35,7 @@ class GroupAdminProjectController extends Controller
                   ->orWhere('technologies', 'like', "%{$search}%");
             });
         }
-        $myProjects = $myProjectsQuery->latest()->paginate(9, ['*'], 'my_page');
+        $myProjects = $myProjectsQuery->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'my_page');
 
         // Member Projects (Projects created by members of communities where user is Group Admin)
         if ($selectedGroupId !== 'all' && in_array((int)$selectedGroupId, $adminGroupIds)) {
@@ -63,7 +63,7 @@ class GroupAdminProjectController extends Controller
             });
         }
 
-        $memberProjects = $memberProjectsQuery->latest()->paginate(9, ['*'], 'member_page');
+        $memberProjects = $memberProjectsQuery->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc')->paginate(9, ['*'], 'member_page');
 
         return view('group_admin.projects.index', compact(
             'tab',
@@ -92,6 +92,7 @@ class GroupAdminProjectController extends Controller
             'technologies' => 'nullable|string|max:255',
             'completion_date' => 'nullable|date',
             'status' => 'nullable|in:active,archived',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $data = $request->only([
@@ -102,10 +103,12 @@ class GroupAdminProjectController extends Controller
             'technologies',
             'completion_date',
             'status',
+            'sort_order',
         ]);
 
         $data['user_id'] = auth()->id();
         $data['status'] = $request->status ?? 'active';
+        $data['sort_order'] = $request->filled('sort_order') ? (int)$request->sort_order : 0;
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('projects', 'public');
@@ -142,6 +145,7 @@ class GroupAdminProjectController extends Controller
             'technologies' => 'nullable|string|max:255',
             'completion_date' => 'nullable|date',
             'status' => 'nullable|in:active,archived',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $data = $request->only([
@@ -152,7 +156,10 @@ class GroupAdminProjectController extends Controller
             'technologies',
             'completion_date',
             'status',
+            'sort_order',
         ]);
+
+        $data['sort_order'] = $request->filled('sort_order') ? (int)$request->sort_order : 0;
 
         if ($request->hasFile('image')) {
             if ($project->image && Storage::disk('public')->exists($project->image)) {

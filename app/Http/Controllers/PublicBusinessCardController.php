@@ -13,7 +13,7 @@ class PublicBusinessCardController extends Controller
     {
         $userModel = User::where('id', $user)->firstOrFail();
         $userModel->load(['servicesOffered', 'servicesNeeded', 'groups', 'projects' => function ($q) {
-            $q->where('status', 'active')->orderBy('created_at', 'desc');
+            $q->where('status', 'active')->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
         }]);
 
         $privacy = $userModel->privacy_settings ?? [];

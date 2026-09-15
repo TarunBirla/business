@@ -21,6 +21,7 @@ class Project extends Model
         'technologies',
         'completion_date',
         'status',
+        'sort_order',
     ];
 
     protected $casts = [

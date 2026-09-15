@@ -11,7 +11,10 @@ class MemberProjectController extends Controller
 {
     public function index()
     {
-        $projects = auth()->user()->projects()->latest()->paginate(9);
+        $projects = auth()->user()->projects()
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
         return view('member.projects.index', compact('projects'));
     }
 
@@ -32,6 +35,7 @@ class MemberProjectController extends Controller
             'technologies' => 'nullable|string|max:255',
             'completion_date' => 'nullable|date',
             'status' => 'nullable|in:active,archived',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $data = $request->only([
@@ -42,10 +46,12 @@ class MemberProjectController extends Controller
             'technologies',
             'completion_date',
             'status',
+            'sort_order',
         ]);
 
         $data['user_id'] = auth()->id();
         $data['status'] = $request->status ?? 'active';
+        $data['sort_order'] = $request->filled('sort_order') ? (int)$request->sort_order : 0;
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('projects', 'public');
@@ -81,6 +87,7 @@ class MemberProjectController extends Controller
             'technologies' => 'nullable|string|max:255',
             'completion_date' => 'nullable|date',
             'status' => 'nullable|in:active,archived',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $data = $request->only([
@@ -91,7 +98,10 @@ class MemberProjectController extends Controller
             'technologies',
             'completion_date',
             'status',
+            'sort_order',
         ]);
+
+        $data['sort_order'] = $request->filled('sort_order') ? (int)$request->sort_order : 0;
 
         if ($request->hasFile('image')) {
             if ($project->image && Storage::disk('public')->exists($project->image)) {

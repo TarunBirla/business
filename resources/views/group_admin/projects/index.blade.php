@@ -60,6 +60,10 @@
                                         <p class="text-xs font-semibold uppercase tracking-wider">No Image Uploaded</p>
                                     </div>
                                 @endif
+                                <span class="absolute top-3 left-3 px-2.5 py-1 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold rounded-full shadow-sm flex items-center space-x-1">
+                                    <i class="fa-solid fa-list-ol text-[10px]"></i>
+                                    <span>Seq #{{ $project->sort_order ?? 1 }}</span>
+                                </span>
                                 @if($project->category)
                                     <span class="absolute top-3 right-3 px-3 py-1 bg-white/90 backdrop-blur-md text-slate-800 text-xs font-bold rounded-full shadow-sm">
                                         {{ $project->category }}
@@ -199,6 +203,10 @@
                                         <p class="text-[10px] font-semibold uppercase tracking-wider">No Cover Image</p>
                                     </div>
                                 @endif
+                                <span class="absolute top-3 left-3 px-2.5 py-1 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold rounded-full shadow-sm flex items-center space-x-1">
+                                    <i class="fa-solid fa-list-ol text-[10px]"></i>
+                                    <span>Seq #{{ $project->sort_order ?? 1 }}</span>
+                                </span>
                                 @if($project->category)
                                     <span class="absolute top-3 right-3 px-3 py-1 bg-white/90 backdrop-blur-md text-slate-800 text-xs font-bold rounded-full shadow-sm">
                                         {{ $project->category }}

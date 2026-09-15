@@ -26,7 +26,7 @@
             @error('title') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Category / Industry</label>
                 <input type="text" name="category" value="{{ old('category', $project->category) }}" placeholder="e.g. Web Development, Legal Advisory, Construction" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
@@ -35,6 +35,12 @@
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Completion Date</label>
                 <input type="date" name="completion_date" value="{{ old('completion_date', optional($project->completion_date)->format('Y-m-d')) }}" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Sequence Number (Order) *</label>
+                <input type="number" name="sort_order" value="{{ old('sort_order', $project->sort_order ?? 1) }}" min="1" placeholder="e.g. 1, 2, 3..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                <p class="text-[11px] text-slate-400 mt-1">Set position (e.g. 1 shows first)</p>
             </div>
         </div>
 
