@@ -33,6 +33,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Member\MemberServiceController;
 use App\Http\Controllers\GroupAdmin\GroupAdminServiceController;
+use App\Http\Controllers\GroupAdmin\GroupAdminProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -183,6 +184,14 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
 
     // Promotion & QR Code System
     Route::get('/group/{group}/promotion', [GroupAdminPromotionController::class, 'index'])->name('promotion.index');
+
+    // Group Admin Projects / Showcase
+    Route::get('/projects', [GroupAdminProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/create', [GroupAdminProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [GroupAdminProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{project}/edit', [GroupAdminProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('/projects/{project}', [GroupAdminProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{project}', [GroupAdminProjectController::class, 'destroy'])->name('projects.destroy');
 });
 
 /*

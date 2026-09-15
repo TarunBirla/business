@@ -181,22 +181,17 @@
                     $authUser = auth()->user();
                     $isSuperAdminRoute = request()->is('super-admin*') || request()->routeIs('super_admin.*');
                     $isGroupAdminRoute = request()->is('group-admin*') || request()->routeIs('group_admin.*');
-                    $isMemberRoute     = request()->is('member*') || request()->routeIs('member.*') || request()->is('dashboard');
 
-                    if ($authUser && $authUser->isSuperAdmin() && $isSuperAdminRoute) {
-                        $sidebarMode = 'super_admin';
-                    } elseif ($authUser && $authUser->isGroupAdmin() && $isGroupAdminRoute) {
-                        $sidebarMode = 'group_admin';
-                    } elseif ($isMemberRoute) {
-                        $sidebarMode = 'member';
-                    } else {
-                        if ($authUser && $authUser->isSuperAdmin()) {
-                            $sidebarMode = 'super_admin';
-                        } elseif ($authUser && $authUser->isGroupAdmin()) {
+                    if ($authUser && $authUser->isSuperAdmin()) {
+                        if ($isGroupAdminRoute) {
                             $sidebarMode = 'group_admin';
                         } else {
-                            $sidebarMode = 'member';
+                            $sidebarMode = 'super_admin';
                         }
+                    } elseif ($authUser && $authUser->isGroupAdmin()) {
+                        $sidebarMode = 'group_admin';
+                    } else {
+                        $sidebarMode = 'member';
                     }
 
                     $navActiveStyle = 'background-color: #0A4744; color: #ffffff; font-weight: 700;';
@@ -331,6 +326,12 @@
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Services</span>
                         </a>
 
+                        @php $active = request()->routeIs('group_admin.projects*'); @endphp
+                        <a href="{{ route('group_admin.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-briefcase w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Member Projects</span>
+                        </a>
+
                         @php $active = request()->routeIs('announcements*'); @endphp
                         <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-bullhorn w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
@@ -360,6 +361,14 @@
                         <a href="{{ route('group_admin.promotion.index', $adminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-qrcode w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Promote & QR</span>
+                        </a>
+
+                        <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-id-card w-5" style="color: var(--text-link, #0A4744);"></i>
+                                <span>Business Card</span>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400"></i>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.profile*'); @endphp
