@@ -169,6 +169,7 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::post('/group/{group}/members/{user}/reject', [GroupAdminMemberController::class, 'reject'])->name('members.reject');
     Route::get('/group/{group}/members/create', [GroupAdminMemberController::class, 'create'])->name('members.create');
     Route::post('/group/{group}/members', [GroupAdminMemberController::class, 'store'])->name('members.store');
+    Route::post('/group/{group}/members/{user}/status', [GroupAdminMemberController::class, 'updateStatus'])->name('members.update_status');
     Route::get('/group/{group}/members/export-csv', [GroupAdminMemberController::class, 'exportCsv'])->name('members.export_csv');
 
     // Community Settings & Audit Trail

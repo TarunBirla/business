@@ -360,6 +360,17 @@
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Events</span>
                         </a>
 
+                        @php $active = request()->routeIs('announcements*'); @endphp
+                        <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-bullhorn w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Announcements</span>
+                        </a>
+                         @php $active = request()->routeIs('group_admin.promotion*'); @endphp
+                        <a href="{{ route('group_admin.promotion.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-qrcode w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Promote & QR</span>
+                        </a>
+
                         @php $active = request()->routeIs('group_admin.payments*'); @endphp
                         <a href="{{ route('group_admin.payments.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-credit-card w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
@@ -369,7 +380,7 @@
                         @php $active = request()->routeIs('group_admin.services*'); @endphp
                         <a href="{{ route('group_admin.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-handshake w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
-                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Services</span>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}"> Manage Services</span>
                         </a>
 
                         @php $active = request()->routeIs('group_admin.projects*'); @endphp
@@ -378,11 +389,7 @@
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Member Projects</span>
                         </a>
 
-                        @php $active = request()->routeIs('announcements*'); @endphp
-                        <a href="{{ route('announcements.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
-                            <i class="fa-solid fa-bullhorn w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
-                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Announcements</span>
-                        </a>
+                        
 
                         @php $active = request()->routeIs('member.chat*'); @endphp
                         <a href="{{ route('member.chat') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
@@ -403,11 +410,7 @@
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Notifications</span>
                         </a>
 
-                        @php $active = request()->routeIs('group_admin.promotion*'); @endphp
-                        <a href="{{ route('group_admin.promotion.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
-                            <i class="fa-solid fa-qrcode w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
-                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Promote & QR</span>
-                        </a>
+                       
 
                         <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50">
                             <div class="flex items-center space-x-3">
@@ -515,11 +518,6 @@
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400"></i>
                     </a>
 
-                    @php $active = request()->routeIs('groups*'); @endphp
-                    <a href="{{ route('groups.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
-                        <i class="fa-solid fa-compass w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
-                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Browse Communities</span>
-                    </a>
                 @endif
 
                 <!-- User Profile & Logout Button (Inside Nav Menu) -->

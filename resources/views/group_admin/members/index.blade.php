@@ -54,7 +54,7 @@
                         <th class="p-4">Profession</th>
                         <th class="p-4">City</th>
                         <th class="p-4">Role</th>
-                        <th class="p-4">Joined Date</th>
+                        <th class="p-4">Account Status</th>
                         <th class="p-4 text-right">Action</th>
                     </tr>
                 </thead>
@@ -85,8 +85,18 @@
                                     {{ str_replace('_', ' ', $m->pivot->membership_role ?? 'member') }}
                                 </span>
                             </td>
-                            <td class="p-3.5 sm:p-4 text-xs text-slate-500">
-                                {{ \Carbon\Carbon::parse($m->pivot->joined_at)->format('d M Y') }}
+                            <td class="p-3.5 sm:p-4">
+                                @php
+                                    $currentStatus = $m->pivot->status ?? $m->status ?? 'active';
+                                @endphp
+                                <form action="{{ route('group_admin.members.update_status', [$group->id, $m->id]) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    <select name="status" onchange="this.form.submit()" class="text-xs font-bold py-1.5 px-2.5 rounded-xl border transition cursor-pointer shadow-2xs {{ $currentStatus === 'active' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : ($currentStatus === 'suspended' ? 'bg-rose-50 text-rose-800 border-rose-300' : 'bg-slate-100 text-slate-800 border-slate-300') }}">
+                                        <option value="active" {{ $currentStatus === 'active' ? 'selected' : '' }}>● Active</option>
+                                        <option value="inactive" {{ $currentStatus === 'inactive' ? 'selected' : '' }}>● Inactive</option>
+                                        <option value="suspended" {{ $currentStatus === 'suspended' ? 'selected' : '' }}>● Suspended</option>
+                                    </select>
+                                </form>
                             </td>
                             <td class="p-3.5 sm:p-4 text-right">
                                 <a href="{{ route('member.directory.show', $m->id) }}" class="inline-flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition">

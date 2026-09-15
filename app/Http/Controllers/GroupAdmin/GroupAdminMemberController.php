@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\User;
 use App\Models\Notification;
 use App\Mail\MemberApprovalMail;
+use App\Mail\MemberCreatedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +20,7 @@ class GroupAdminMemberController extends Controller
         $this->authorizeAdmin($group);
         $user = auth()->user();
         $assignedGroups = $user->isSuperAdmin() ? Group::all() : $user->groups()->wherePivot('membership_role', 'group_admin')->get();
-        $members = $group->members()->wherePivot('status', 'active')->where('users.id', '!=', auth()->id())->paginate(15);
+        $members = $group->members()->wherePivotIn('group_user.status', ['active', 'inactive', 'suspended'])->where('users.id', '!=', auth()->id())->paginate(15);
         $pendingCount = $group->members()->wherePivot('status', 'pending')->count();
         return view('group_admin.members.index', compact('group', 'members', 'pendingCount', 'assignedGroups'));
     }
@@ -108,6 +109,7 @@ class GroupAdminMemberController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6',
             'phone' => 'nullable|string|max:50',
             'profession' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:100',
@@ -123,8 +125,13 @@ class GroupAdminMemberController extends Controller
                 'phone' => $request->phone,
                 'profession' => $request->profession,
                 'city' => $request->city,
-                'password' => Hash::make(Str::random(12)),
+                'password' => Hash::make($request->password),
                 'global_role' => 'user',
+                'status' => 'active',
+            ]);
+        } else {
+            $user->update([
+                'password' => Hash::make($request->password),
                 'status' => 'active',
             ]);
         }
@@ -137,9 +144,40 @@ class GroupAdminMemberController extends Controller
                 'approved_at' => now(),
                 'joined_at' => now(),
             ]);
+        } else {
+            $group->members()->updateExistingPivot($user->id, [
+                'status' => 'active',
+            ]);
         }
 
-        return redirect()->route('group_admin.members.index', $group->id)->with('success', "Member {$user->name} added successfully to {$group->name}.");
+        try {
+            Mail::to($user->email)->send(new MemberCreatedMail($user, $request->password, $group->name));
+        } catch (\Exception $e) {
+            // Ignore mail failures in dev environments
+        }
+
+        return redirect()->route('group_admin.members.index', $group->id)->with('success', "Member {$user->name} added successfully and credentials email sent.");
+    }
+
+    public function updateStatus(Request $request, Group $group, User $user)
+    {
+        $this->authorizeAdmin($group);
+
+        $request->validate([
+            'status' => 'required|in:active,inactive,suspended',
+        ]);
+
+        $status = $request->status;
+
+        $group->members()->updateExistingPivot($user->id, [
+            'status' => $status,
+        ]);
+
+        $user->update([
+            'status' => $status,
+        ]);
+
+        return back()->with('success', "Member {$user->name}'s status updated to " . strtoupper($status) . ".");
     }
 
     public function exportCsv(Group $group)

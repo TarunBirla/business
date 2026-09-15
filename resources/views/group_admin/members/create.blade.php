@@ -28,6 +28,12 @@
             <input type="email" name="email" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
         </div>
 
+        <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Account Password *</label>
+            <input type="password" name="password" required minlength="6" placeholder="Set initial password (min. 6 chars)" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+            <p class="text-[11px] text-slate-500 mt-1">This password and login details will be sent directly to the member's email address.</p>
+        </div>
+
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Phone Number</label>
