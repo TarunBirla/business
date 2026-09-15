@@ -117,7 +117,18 @@ class User extends Authenticatable
 
     public function isMemberOf(int $groupId): bool
     {
-        return $this->groups()->where('group_id', $groupId)->exists();
+        return $this->groups()
+            ->where('group_id', $groupId)
+            ->wherePivot('status', 'active')
+            ->exists();
+    }
+
+    public function isPendingMemberOf(int $groupId): bool
+    {
+        return $this->groups()
+            ->where('group_id', $groupId)
+            ->wherePivot('status', 'pending')
+            ->exists();
     }
 
     public function groups()

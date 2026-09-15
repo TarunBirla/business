@@ -33,7 +33,7 @@
                 @if($event->address)
                     <p class="text-sm text-black mt-1">{{ $event->address }}, {{ $event->city }}, {{ $event->country }}</p>
                 @endif
-                @if($event->meeting_url && auth()->check() && $isRegistered)
+                @if($event->meeting_url && auth()->check() && $userRegistration && in_array($userRegistration->registration_status, ['confirmed', 'approved']))
                     <div class="mt-4 p-4 bg-sky-50 border border-sky-200 rounded-xl">
                         <p class="text-xs font-bold text-sky-800 uppercase">Online Meeting Join Link:</p>
                         <a href="{{ $event->meeting_url }}" target="_blank" class="text-sm font-bold text-sky-600 underline hover:text-sky-700">{{ $event->meeting_url }}</a>
@@ -50,10 +50,20 @@
                 <p class="text-xs text-black mb-6 font-medium">{{ $event->available_seats }} seats remaining</p>
 
                 @auth
-                    @if($isRegistered)
-                        <div class="w-full py-4 bg-emerald-100 text-emerald-800 font-bold rounded-xl text-sm">
-                            ✓ You Are Registered for This Event
-                        </div>
+                    @if($userRegistration)
+                        @if($userRegistration->registration_status === 'pending')
+                            <div class="w-full py-4 bg-amber-100 text-amber-900 font-bold rounded-xl text-sm border border-amber-300">
+                                ⏳ Registration Pending Group Admin Approval
+                            </div>
+                        @elseif($userRegistration->registration_status === 'rejected')
+                            <div class="w-full py-4 bg-rose-100 text-rose-800 font-bold rounded-xl text-sm border border-rose-300">
+                                ✕ Registration Request Declined
+                            </div>
+                        @else
+                            <div class="w-full py-4 bg-emerald-100 text-emerald-800 font-bold rounded-xl text-sm">
+                                ✓ You Are Registered for This Event
+                            </div>
+                        @endif
                     @else
                         <form action="{{ route('member.events.register', $event->id) }}" method="POST">
                             @csrf

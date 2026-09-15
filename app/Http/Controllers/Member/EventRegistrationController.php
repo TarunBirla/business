@@ -30,16 +30,16 @@ class EventRegistrationController extends Controller
             return redirect()->route('events.show', $event->slug)->with('success', 'Payment successful! You are now registered for this event.');
         }
 
-        // Free event registration
+        // Free event registration request
         EventRegistration::create([
             'event_id' => $event->id,
             'user_id' => $user->id,
             'amount' => 0.00,
             'payment_status' => 'completed',
-            'registration_status' => 'confirmed',
+            'registration_status' => 'pending',
             'registered_at' => now(),
         ]);
 
-        return redirect()->route('events.show', $event->slug)->with('success', 'Registration confirmed! See you at the event.');
+        return redirect()->route('events.show', $event->slug)->with('success', 'Registration request submitted! Your attendance is waiting for Group Admin approval.');
     }
 }

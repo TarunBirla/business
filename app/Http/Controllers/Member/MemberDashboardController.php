@@ -22,7 +22,7 @@ class MemberDashboardController extends Controller
             return redirect()->route('group_admin.dashboard');
         }
 
-        $myGroups = $user->groups()->with(['events', 'notices'])->get();
+        $myGroups = $user->groups()->wherePivot('status', 'active')->with(['events', 'notices'])->get();
         $groupIds = $myGroups->pluck('id');
 
         $pendingConnectionsCount = Connection::where('receiver_id', $user->id)

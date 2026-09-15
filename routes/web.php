@@ -192,6 +192,8 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::put('/group/{group}/events/{event}', [GroupAdminEventController::class, 'update'])->name('events.update');
     Route::delete('/group/{group}/events/{event}', [GroupAdminEventController::class, 'destroy'])->name('events.destroy');
     Route::get('/group/{group}/events/{event}/attendees', [GroupAdminEventController::class, 'attendees'])->name('events.attendees');
+    Route::post('/group/{group}/events/{event}/registrations/{registration}/approve', [GroupAdminEventController::class, 'approveRegistration'])->name('events.registrations.approve');
+    Route::post('/group/{group}/events/{event}/registrations/{registration}/reject', [GroupAdminEventController::class, 'rejectRegistration'])->name('events.registrations.reject');
     Route::get('/group/{group}/events/{event}/export-csv', [GroupAdminEventController::class, 'exportAttendeesCsv'])->name('events.export_csv');
 
     // Group Notice Board

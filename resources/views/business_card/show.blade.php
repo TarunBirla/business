@@ -273,13 +273,9 @@
                                                 </div>
                                             @endif
 
-                                            <div class="flex items-center justify-between gap-2">
-                                                <div class="flex items-center space-x-1.5">
-                                                    @if(!$project->image_url)
-                                                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase border shadow-2xs" style="background-color: var(--card-bg, #ffffff); color: var(--text-link, #0A4744); border-color: var(--input-border, #cce5e3);">
-                                                            <i class="fa-solid fa-list-ol text-[8px] mr-0.5 text-sky-600"></i>Seq #{{ $project->sort_order ?? $loop->iteration }}
-                                                        </span>
-                                                    @endif
+                                            <div class=" items-center  gap-2">
+                                                <div class=" items-center space-x-1.5">
+                                                    
                                                     @if($project->category)
                                                         <span class="text-[9px] font-extrabold px-2 py-0.5 rounded uppercase border" style="background-color: var(--card-bg, #ffffff); color: var(--text-secondary, #64748b); border-color: var(--border-color, #e2e8f0);">
                                                             {{ $project->category }}

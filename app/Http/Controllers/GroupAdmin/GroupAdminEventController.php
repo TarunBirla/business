@@ -121,6 +121,51 @@ class GroupAdminEventController extends Controller
         return view('group_admin.events.attendees', compact('group', 'event', 'attendees'));
     }
 
+    public function approveRegistration(Group $group, Event $event, EventRegistration $registration)
+    {
+        $this->authorizeAdmin($group);
+
+        if ((int)$registration->event_id !== (int)$event->id) {
+            abort(404);
+        }
+
+        $registration->update([
+            'registration_status' => 'confirmed',
+        ]);
+
+        \App\Models\Notification::create([
+            'user_id' => $registration->user_id,
+            'type' => 'approval',
+            'title' => 'Event Registration Approved!',
+            'message' => "Your registration request for {$event->title} has been approved by the Group Admin!",
+            'link' => route('events.show', $event->slug),
+        ]);
+
+        return back()->with('success', "Attendee {$registration->user->name}'s event registration approved successfully.");
+    }
+
+    public function rejectRegistration(Group $group, Event $event, EventRegistration $registration)
+    {
+        $this->authorizeAdmin($group);
+
+        if ((int)$registration->event_id !== (int)$event->id) {
+            abort(404);
+        }
+
+        $registration->update([
+            'registration_status' => 'rejected',
+        ]);
+
+        \App\Models\Notification::create([
+            'user_id' => $registration->user_id,
+            'type' => 'approval',
+            'title' => 'Event Registration Update',
+            'message' => "Your registration request for {$event->title} was not approved by the Group Admin.",
+        ]);
+
+        return back()->with('success', "Attendee {$registration->user->name}'s registration request was declined.");
+    }
+
     public function exportAttendeesCsv(Group $group, Event $event)
     {
         $this->authorizeAdmin($group);

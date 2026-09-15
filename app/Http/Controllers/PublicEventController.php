@@ -28,12 +28,14 @@ class PublicEventController extends Controller
     public function show(string $slug)
     {
         $event = Event::where('slug', $slug)->with(['group', 'creator'])->firstOrFail();
-        $isRegistered = false;
+        $userRegistration = null;
 
         if (auth()->check()) {
-            $isRegistered = $event->registrations()->where('user_id', auth()->id())->exists();
+            $userRegistration = $event->registrations()->where('user_id', auth()->id())->first();
         }
 
-        return view('events.show', compact('event', 'isRegistered'));
+        $isRegistered = $userRegistration && in_array($userRegistration->registration_status, ['confirmed', 'approved']);
+
+        return view('events.show', compact('event', 'isRegistered', 'userRegistration'));
     }
 }

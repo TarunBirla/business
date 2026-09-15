@@ -83,6 +83,10 @@ class PublicGroupController extends Controller
     {
         $user = auth()->user();
 
+        if ($user->isPendingMemberOf($group->id)) {
+            return redirect()->route('member.dashboard')->with('info', "Your request to join {$group->name} is pending Community Admin approval.");
+        }
+
         if ($user->isMemberOf($group->id)) {
             return redirect()->route('member.dashboard')->with('info', "You are already a member of {$group->name}.");
         }
