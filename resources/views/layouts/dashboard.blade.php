@@ -16,52 +16,80 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-primary);
+            background-color: var(--bg-page, #f8fafc);
+            color: var(--text-primary, #0f172a);
         }
 
         aside {
-            background-color: var(--card-bg);
-            border-color: var(--border-color);
+            background-color: var(--card-bg, #ffffff);
+            border-color: var(--border-color, #e2e8f0);
         }
 
-        /* Primary Brand Accents & Links */
-        .bg-sky-600, .bg-blue-600, .bg-sky-500, .bg-blue-500, .bg-sky-700, .bg-blue-700 {
+        /* Primary Brand Accents & Buttons across all color variants */
+        .bg-sky-600, .bg-blue-600, .bg-sky-500, .bg-blue-500, .bg-sky-700, .bg-blue-700,
+        .bg-teal-600, .bg-teal-700, .bg-teal-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-500 {
             background-color: var(--btn-primary-bg, #0A4744) !important;
             color: var(--btn-primary-text, #ffffff) !important;
         }
 
         .bg-sky-600:hover, .hover\:bg-sky-700:hover, .bg-blue-600:hover, .hover\:bg-blue-700:hover,
-        .hover\:bg-sky-600:hover, .bg-sky-500:hover, .hover\:bg-sky-500:hover, .hover\:bg-sky-100:hover {
+        .hover\:bg-sky-600:hover, .bg-sky-500:hover, .hover\:bg-sky-500:hover,
+        .bg-teal-600:hover, .hover\:bg-teal-700:hover, .bg-emerald-600:hover, .hover\:bg-emerald-700:hover,
+        .hover\:bg-emerald-600:hover, .bg-emerald-500:hover, .hover\:bg-emerald-500:hover {
             background-color: var(--btn-primary-hover, #063331) !important;
         }
 
-        .text-sky-600, .text-sky-700, .text-sky-500, .text-blue-600, .text-blue-700, .text-blue-500 {
+        .text-sky-600, .text-sky-700, .text-sky-500, .text-blue-600, .text-blue-700, .text-blue-500,
+        .text-teal-600, .text-teal-700, .text-teal-500, .text-emerald-600, .text-emerald-700, .text-emerald-500 {
             color: var(--text-link, #0A4744) !important;
         }
 
         .text-sky-600:hover, .hover\:text-sky-600:hover, .text-blue-600:hover, .hover\:text-blue-600:hover,
-        .hover\:text-sky-700:hover {
+        .hover\:text-sky-700:hover, .text-teal-600:hover, .hover\:text-teal-600:hover,
+        .text-emerald-600:hover, .hover\:text-emerald-600:hover {
             color: var(--text-link-hover, #063331) !important;
         }
 
-        .bg-sky-50, .bg-sky-100, .bg-blue-50, .bg-blue-100 {
-            background-color: #f0f7f6 !important;
+        .bg-sky-50, .bg-sky-100, .bg-blue-50, .bg-blue-100, .bg-teal-50, .bg-teal-100, .bg-emerald-50, .bg-emerald-100 {
+            background-color: var(--badge-info-bg, #f0f7f6) !important;
+            color: var(--badge-info-text, var(--text-primary, #0f172a)) !important;
         }
 
-        .border-sky-500, .border-sky-600, .border-blue-500, .border-blue-600 {
+        .border-sky-500, .border-sky-600, .border-blue-500, .border-blue-600,
+        .border-teal-500, .border-teal-600, .border-emerald-500, .border-emerald-600 {
             border-color: var(--btn-primary-bg, #0A4744) !important;
         }
 
-        .border-sky-100, .border-sky-200, .border-blue-100, .border-blue-200 {
-            border-color: #cce5e3 !important;
+        .border-sky-100, .border-sky-200, .border-blue-100, .border-blue-200,
+        .border-teal-100, .border-teal-200, .border-emerald-100, .border-emerald-200 {
+            border-color: var(--border-color, #e2e8f0) !important;
         }
 
         /* Inputs */
         input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea, select {
-            background-color: var(--input-bg);
-            border-color: var(--input-border);
-            color: var(--text-primary);
+            background-color: var(--input-bg, #ffffff) !important;
+            border-color: var(--input-border, #cbd5e1) !important;
+            color: var(--text-primary, #0f172a) !important;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="url"]:focus, textarea:focus, select:focus {
+            border-color: var(--input-focus, var(--btn-primary-bg, #0A4744)) !important;
+        }
+
+        /* Tables */
+        table thead {
+            background-color: var(--table-header-bg, #f8fafc) !important;
+            color: var(--table-header-text, #475569) !important;
+        }
+
+        table tbody tr {
+            background-color: var(--table-row-bg, #ffffff) !important;
+            color: var(--table-row-text, #0f172a) !important;
+            border-color: var(--table-border, #e2e8f0) !important;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: var(--table-row-alt, #f1f5f9) !important;
         }
 
         /* Dark Mode Text & Surface Rules */
@@ -93,8 +121,8 @@
             color: var(--text-secondary, #94a3b8) !important;
         }
 
-        html.dark .border-slate-200, html.dark .border-slate-100, html.dark .border-sky-100,
-        [data-theme*="dark"] .border-slate-200, [data-theme*="dark"] .border-slate-100, [data-theme*="dark"] .border-sky-100 {
+        html.dark .border-slate-200, html.dark .border-slate-100, html.dark .border-slate-300, html.dark .border-sky-100,
+        [data-theme*="dark"] .border-slate-200, [data-theme*="dark"] .border-slate-100, [data-theme*="dark"] .border-slate-300, [data-theme*="dark"] .border-sky-100 {
             border-color: var(--border-color, #334155) !important;
         }
     </style>
@@ -194,7 +222,7 @@
                         $sidebarMode = 'member';
                     }
 
-                    $navActiveStyle = 'background-color: #0A4744; color: #ffffff; font-weight: 700;';
+                    $navActiveStyle = 'background-color: var(--navbar-active, var(--btn-primary-bg, #0A4744)); color: var(--btn-primary-text, #ffffff); font-weight: 700;';
                 @endphp
 
                 @if($sidebarMode === 'super_admin')
