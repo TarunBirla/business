@@ -53,6 +53,42 @@ class PublicBusinessCardController extends Controller
         return view('business_card.show', compact('userModel', 'showEmail', 'showPhone', 'cardUrl', 'qrCodeUrl', 'upcomingEvents'));
     }
 
+    public function manifest($user)
+    {
+        $userModel = User::where('id', $user)->firstOrFail();
+        $iconUrl = $userModel->profile_photo_url ?: 'https://ui-avatars.com/api/?name=' . urlencode($userModel->name) . '&background=0A4744&color=fff&size=512';
+
+        $cardUrl = route('bizcard.show', $userModel->id);
+
+        $manifest = [
+            'name' => $userModel->name . ' - Digital Card',
+            'short_name' => $userModel->first_name ?: 'Biz Card',
+            'description' => $userModel->name . ($userModel->profession ? ' - ' . $userModel->profession : '') . ' Digital Business Card',
+            'start_url' => $cardUrl,
+            'scope' => $cardUrl,
+            'display' => 'standalone',
+            'orientation' => 'portrait',
+            'background_color' => '#ffffff',
+            'theme_color' => '#0A4744',
+            'icons' => [
+                [
+                    'src' => $iconUrl,
+                    'sizes' => '192x192',
+                    'type' => 'image/png',
+                    'purpose' => 'any'
+                ],
+                [
+                    'src' => $iconUrl,
+                    'sizes' => '512x512',
+                    'type' => 'image/png',
+                    'purpose' => 'any'
+                ]
+            ]
+        ];
+
+        return response()->json($manifest)->header('Content-Type', 'application/manifest+json');
+    }
+
     public function downloadVcard($user)
     {
         $userModel = User::where('id', $user)->firstOrFail();

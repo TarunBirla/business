@@ -53,9 +53,10 @@ Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('even
 
 Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
 
-// Public Digital Business Card & vCard Export
+// Public Digital Business Card & vCard Export & PWA Manifest
 Route::get('/bizcard/{user}', [PublicBusinessCardController::class, 'show'])->name('bizcard.show');
 Route::get('/bizcard/{user}/vcard', [PublicBusinessCardController::class, 'downloadVcard'])->name('bizcard.vcard');
+Route::get('/bizcard/{user}/manifest.json', [PublicBusinessCardController::class, 'manifest'])->name('bizcard.manifest');
 
 // cPanel Deployment Helper Route (1-Click Storage Link Fix)
 Route::get('/fix-storage-link', function () {

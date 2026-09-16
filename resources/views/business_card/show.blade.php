@@ -6,6 +6,12 @@
 @section('og_title', $userModel->name . ' - Digital Business Card')
 @section('og_description', $userModel->profession . ($userModel->company ? ' at ' . $userModel->company : '') . ' - Community UK Member')
 
+<link rel="manifest" href="{{ route('bizcard.manifest', $userModel->id) }}">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="{{ $userModel->first_name ?: $userModel->name }}">
+
 @section('content')
 <div class="py-10 md:py-16 min-h-screen flex items-center justify-center px-4 sm:px-6 transition-colors duration-300" style="background-color: var(--bg-page, #f8fafc);">
     
@@ -114,11 +120,16 @@
                         @endif
                     </div>
 
-                    <!-- Primary Share Action Button -->
-                    <div>
+                    <!-- Primary Share & App Install Action Buttons -->
+                    <div class="space-y-2.5">
                         <button onclick="openShareModal()" class="w-full py-3.5 px-4 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2 transform active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
                             <i class="fa-solid fa-qrcode text-sm"></i>
                             <span>Share Digital Business Card</span>
+                        </button>
+
+                        <button onclick="openInstallAppModal()" class="w-full py-3.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2 transform active:scale-95">
+                            <i class="fa-solid fa-mobile-screen-button text-sm"></i>
+                            <span>Download / Install Card App</span>
                         </button>
                     </div>
 
@@ -380,7 +391,84 @@
     </div>
 </div>
 
+<!-- Install Card App Modal -->
+<div id="installAppModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-[28px] max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative border border-slate-100 transform transition-all scale-100">
+        <button onclick="closeInstallAppModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+
+        <div class="text-center space-y-2">
+            <div class="w-14 h-14 rounded-2xl bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center mx-auto shadow-sm text-2xl">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900">Install {{ $userModel->first_name }}'s Card App</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Install as a standalone app on your mobile home screen. Opening the app will launch <strong>only {{ $userModel->name }}'s card</strong>!</p>
+        </div>
+
+        <!-- OS Selector Tabs (Android / iOS) -->
+        <div class="flex p-1 bg-slate-100 rounded-xl space-x-1 text-xs font-bold">
+            <button id="androidTabBtn" onclick="switchOsTab('android')" class="flex-1 py-2.5 rounded-lg transition flex items-center justify-center space-x-2 bg-white text-slate-900 shadow-2xs">
+                <i class="fa-brands fa-android text-emerald-600 text-base"></i>
+                <span>Android</span>
+            </button>
+            <button id="iosTabBtn" onclick="switchOsTab('ios')" class="flex-1 py-2.5 rounded-lg transition flex items-center justify-center space-x-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-brands fa-apple text-slate-800 text-base"></i>
+                <span>iPhone / iOS</span>
+            </button>
+        </div>
+
+        <!-- Android Tab Content -->
+        <div id="androidContent" class="space-y-4">
+            <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2 text-left">
+                <h4 class="text-xs font-bold text-emerald-900 uppercase flex items-center">
+                    <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Fast App Installation
+                </h4>
+                <p class="text-xs text-emerald-800 leading-relaxed">Tap below to add {{ $userModel->first_name }}'s Digital Card directly onto your Android home screen.</p>
+                <button id="pwaNativeInstallBtn" onclick="triggerPwaPrompt()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Install App on Android</span>
+                </button>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-left space-y-2 text-xs text-slate-600">
+                <p class="font-bold text-slate-800">Manual Steps (Chrome / Edge):</p>
+                <ol class="list-decimal list-inside space-y-1 text-slate-600">
+                    <li>Tap the <strong>⋮ (3 dots)</strong> menu in browser.</li>
+                    <li>Tap <strong>"Install App"</strong> or <strong>"Add to Home screen"</strong>.</li>
+                    <li>Confirm <strong>Install</strong>. Opening the app loads only this card!</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- iOS Tab Content -->
+        <div id="iosContent" class="space-y-4 hidden">
+            <div class="p-4 bg-sky-50 border border-sky-200 rounded-2xl space-y-2 text-left">
+                <h4 class="text-xs font-bold text-sky-900 uppercase flex items-center">
+                    <i class="fa-brands fa-apple text-sky-700 mr-1.5"></i> iPhone / Safari Instructions
+                </h4>
+                <ol class="list-decimal list-inside space-y-2 text-xs text-sky-900 font-medium">
+                    <li>Tap the <strong>Share</strong> button <i class="fa-solid fa-arrow-up-from-bracket text-sky-600 mx-1"></i> at the bottom of Safari.</li>
+                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong> <i class="fa-regular fa-square-plus text-sky-600 mx-1"></i>.</li>
+                    <li>Tap <strong>Add</strong> at top right. Launch the app from your iPhone screen anytime!</li>
+                </ol>
+            </div>
+        </div>
+
+        <button onclick="closeInstallAppModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+            Close
+        </button>
+    </div>
+</div>
+
 <script>
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+    });
+
     function openShareModal() {
         const modal = document.getElementById('shareModal');
         modal.classList.remove('hidden');
@@ -391,6 +479,59 @@
         const modal = document.getElementById('shareModal');
         modal.classList.remove('flex');
         modal.classList.add('hidden');
+    }
+
+    function openInstallAppModal() {
+        const modal = document.getElementById('installAppModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Auto-detect iOS vs Android
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            switchOsTab('ios');
+        } else {
+            switchOsTab('android');
+        }
+    }
+
+    function closeInstallAppModal() {
+        const modal = document.getElementById('installAppModal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+
+    function switchOsTab(os) {
+        const androidBtn = document.getElementById('androidTabBtn');
+        const iosBtn = document.getElementById('iosTabBtn');
+        const androidContent = document.getElementById('androidContent');
+        const iosContent = document.getElementById('iosContent');
+
+        if (os === 'android') {
+            androidBtn.className = "flex-1 py-2.5 rounded-lg transition flex items-center justify-center space-x-2 bg-white text-slate-900 shadow-2xs font-bold";
+            iosBtn.className = "flex-1 py-2.5 rounded-lg transition flex items-center justify-center space-x-2 text-slate-600 hover:text-slate-900 font-semibold";
+            androidContent.classList.remove('hidden');
+            iosContent.classList.add('hidden');
+        } else {
+            iosBtn.className = "flex-1 py-2.5 rounded-lg transition flex items-center justify-center space-x-2 bg-white text-slate-900 shadow-2xs font-bold";
+            androidBtn.className = "flex-1 py-2.5 rounded-lg transition flex items-center justify-center space-x-2 text-slate-600 hover:text-slate-900 font-semibold";
+            iosContent.classList.remove('hidden');
+            androidContent.classList.add('hidden');
+        }
+    }
+
+    function triggerPwaPrompt() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the PWA install prompt');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            alert('To install on Android:\n1. Tap browser menu (⋮)\n2. Select "Install App" or "Add to Home screen".');
+        }
     }
 
     function copyCardLink() {
