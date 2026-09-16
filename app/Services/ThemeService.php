@@ -12,6 +12,7 @@ class ThemeService
      */
     public static function getActiveTheme(): Theme
     {
+        // 1. User Personal Theme Preference (if explicitly set by member)
         if (Auth::check() && Auth::user()->theme_id) {
             $userTheme = Auth::user()->theme;
             if ($userTheme && $userTheme->is_active) {
@@ -19,7 +20,27 @@ class ThemeService
             }
         }
 
-        // Fallback to Admin Default Theme
+        // 2. Community / Group Theme Preference (set by Group Admin for community)
+        if (Auth::check()) {
+            $user = Auth::user();
+            $activeGroupId = session('active_group_id');
+            if ($activeGroupId) {
+                $group = \App\Models\Group::find($activeGroupId);
+                if ($group && $group->theme_id && $group->theme && $group->theme->is_active) {
+                    return $group->theme;
+                }
+            }
+
+            $firstGroupWithTheme = $user->groups()->whereHas('theme', function($q) {
+                $q->where('is_active', true);
+            })->first();
+
+            if ($firstGroupWithTheme && $firstGroupWithTheme->theme) {
+                return $firstGroupWithTheme->theme;
+            }
+        }
+
+        // 3. Fallback to Super Admin Global Default Theme
         return Theme::getDefaultTheme() ?? static::getFallbackDefaultTheme();
     }
 

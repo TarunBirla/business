@@ -34,6 +34,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Member\MemberServiceController;
 use App\Http\Controllers\GroupAdmin\GroupAdminServiceController;
 use App\Http\Controllers\GroupAdmin\GroupAdminProjectController;
+use App\Http\Controllers\GroupAdmin\GroupAdminThemeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,6 +206,15 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     // Promotion & QR Code System
     Route::get('/group/{group}/promotion', [GroupAdminPromotionController::class, 'index'])->name('promotion.index');
     Route::post('/group/{group}/promotion/message', [GroupAdminPromotionController::class, 'updateMessage'])->name('promotion.update_message');
+
+    // Group Admin Theme Management
+    Route::get('/group/{group}/themes', [GroupAdminThemeController::class, 'index'])->name('themes.index');
+    Route::get('/group/{group}/themes/create', [GroupAdminThemeController::class, 'create'])->name('themes.create');
+    Route::post('/group/{group}/themes', [GroupAdminThemeController::class, 'store'])->name('themes.store');
+    Route::get('/group/{group}/themes/{theme}/edit', [GroupAdminThemeController::class, 'edit'])->name('themes.edit');
+    Route::put('/group/{group}/themes/{theme}', [GroupAdminThemeController::class, 'update'])->name('themes.update');
+    Route::post('/group/{group}/themes/{theme}/set-default', [GroupAdminThemeController::class, 'setCommunityDefault'])->name('themes.set_default');
+    Route::post('/group/{group}/themes/{theme}/duplicate', [GroupAdminThemeController::class, 'duplicate'])->name('themes.duplicate');
 
     // Group Admin Projects / Showcase
     Route::get('/projects', [GroupAdminProjectController::class, 'index'])->name('projects.index');

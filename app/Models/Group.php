@@ -26,7 +26,13 @@ class Group extends Model
         'state',
         'city',
         'status',
+        'theme_id',
     ];
+
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
 
     protected $casts = [
         'who_can_join' => 'array',

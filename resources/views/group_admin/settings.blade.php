@@ -61,6 +61,23 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        <i class="fa-solid fa-palette text-sky-600 mr-1"></i> Community Theme (Applies to Members)
+                    </label>
+                    <select name="theme_id" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                        <option value="">Default Platform Theme (Original Teal)</option>
+                        @if(isset($themes))
+                            @foreach($themes as $theme)
+                                <option value="{{ $theme->id }}" {{ old('theme_id', $group->theme_id) == $theme->id ? 'selected' : '' }}>
+                                    {{ $theme->name }} {{ $theme->is_default ? '(Global Default)' : '' }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <p class="text-[11px] text-slate-400 mt-1">Select a custom theme for members in {{ $group->name }}.</p>
+                </div>
+
                 <button type="submit" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl transition shadow-sm">
                     Save Changes & Log Audit
                 </button>

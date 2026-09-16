@@ -86,7 +86,9 @@ class GroupAdminDashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('group_admin.settings', compact('group', 'auditLogs', 'assignedGroups'));
+        $themes = \App\Models\Theme::where('is_active', true)->orderBy('is_default', 'desc')->get();
+
+        return view('group_admin.settings', compact('group', 'auditLogs', 'assignedGroups', 'themes'));
     }
 
     public function updateSettings(Request $request, Group $group)
@@ -99,6 +101,7 @@ class GroupAdminDashboardController extends Controller
             'description' => 'required|string',
             'city' => 'nullable|string|max:100',
             'region' => 'nullable|string|max:100',
+            'theme_id' => 'nullable|exists:themes,id',
         ]);
 
         foreach ($validated as $field => $newValue) {
@@ -116,7 +119,7 @@ class GroupAdminDashboardController extends Controller
 
         $group->update($validated);
 
-        return back()->with('success', 'Community details updated successfully. Audit log entry recorded.');
+        return back()->with('success', 'Community details & theme updated successfully. Audit log entry recorded.');
     }
 
     private function authorizeAdmin(Group $group)
