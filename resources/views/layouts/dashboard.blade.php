@@ -393,7 +393,7 @@
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Payments</span>
                         </a>
 
-                        @php $active = request()->routeIs('group_admin.services*'); @endphp
+                        <!-- @php $active = request()->routeIs('group_admin.services*'); @endphp
                         <a href="{{ route('group_admin.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-handshake w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}"> Manage Services</span>
@@ -403,7 +403,7 @@
                         <a href="{{ route('group_admin.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-briefcase w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Member Projects</span>
-                        </a>
+                        </a> -->
 
                         
 
@@ -420,27 +420,27 @@
                             @endif
                         </a>
 
-                        @php $active = request()->routeIs('notifications*'); @endphp
+                        <!-- @php $active = request()->routeIs('notifications*'); @endphp
                         <a href="{{ route('notifications.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-bell w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Notifications</span>
-                        </a>
+                        </a> -->
 
                        
 
-                        <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50">
+                        <!-- <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50">
                             <div class="flex items-center space-x-3">
                                 <i class="fa-solid fa-id-card w-5" style="color: var(--text-link, #0A4744);"></i>
                                 <span>Business Card</span>
                             </div>
                             <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400"></i>
-                        </a>
+                        </a> -->
 
-                        @php $active = request()->routeIs('group_admin.profile*'); @endphp
+                        <!-- @php $active = request()->routeIs('group_admin.profile*'); @endphp
                         <a href="{{ route('group_admin.profile') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-user-gear w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">My Profile</span>
-                        </a>
+                        </a> -->
                     @endif
 
                 @else
