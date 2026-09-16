@@ -47,15 +47,7 @@
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Referral Tracking URL</label>
-                <div class="flex space-x-2">
-                    <input type="text" readonly value="{{ $referralUrl }}" class="flex-grow px-4 py-3 border border-slate-200 rounded-xl text-sm font-medium bg-slate-50">
-                    <button onclick="navigator.clipboard.writeText('{{ $referralUrl }}'); alert('Referral link copied!');" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl transition">
-                        Copy Referral URL
-                    </button>
-                </div>
-            </div>
+            
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Editable Promotional Message</label>
