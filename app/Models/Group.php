@@ -15,6 +15,7 @@ class Group extends Model
         'logo',
         'cover_image',
         'description',
+        'promotional_message',
         'purpose',
         'why_join',
         'who_can_join',

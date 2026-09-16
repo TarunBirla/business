@@ -203,6 +203,7 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
 
     // Promotion & QR Code System
     Route::get('/group/{group}/promotion', [GroupAdminPromotionController::class, 'index'])->name('promotion.index');
+    Route::post('/group/{group}/promotion/message', [GroupAdminPromotionController::class, 'updateMessage'])->name('promotion.update_message');
 
     // Group Admin Projects / Showcase
     Route::get('/projects', [GroupAdminProjectController::class, 'index'])->name('projects.index');

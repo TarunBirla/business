@@ -49,28 +49,63 @@
 
             
 
-            <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Editable Promotional Message</label>
-                <textarea id="shareText" rows="3" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">{{ $defaultShareText }}</textarea>
-            </div>
+            <!-- Editable Promotional Message Form -->
+            <form action="{{ route('group_admin.promotion.update_message', $group->id) }}" method="POST" class="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                @csrf
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">
+                        <i class="fa-solid fa-pen-to-square text-sky-600 mr-1"></i> Editable Promotional Message
+                    </label>
+                    <span class="text-[11px] text-slate-400 font-medium">Auto-populates when sharing</span>
+                </div>
+                <textarea name="promotional_message" id="shareText" rows="3" required class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium bg-white text-slate-800 shadow-2xs" placeholder="Write custom promotional message for {{ $group->name }}...">{{ old('promotional_message', $defaultShareText) }}</textarea>
+                <div class="flex items-center justify-between pt-1">
+                    <p class="text-[11px] text-slate-500">Edit and save to permanently update your default promotional invite text.</p>
+                    <button type="submit" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center space-x-1.5 shrink-0">
+                        <i class="fa-solid fa-floppy-disk text-sky-400"></i>
+                        <span>Save Message</span>
+                    </button>
+                </div>
+            </form>
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-3">One-Click Social Sharing</label>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <a href="https://api.whatsapp.com/send?text={{ urlencode($defaultShareText . ' ' . $shareUrl) }}" target="_blank" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
+                    <a id="whatsappShareBtn" href="https://api.whatsapp.com/send?text={{ urlencode($defaultShareText . ' ' . $shareUrl) }}" target="_blank" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow transition">
                         <span><i class="fa-brands fa-whatsapp text-sm mr-1"></i> WhatsApp</span>
                     </a>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($shareUrl) }}" target="_blank" class="px-4 py-3 bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
+                    <a id="linkedinShareBtn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($shareUrl) }}" target="_blank" class="px-4 py-3 bg-sky-700 hover:bg-sky-800 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow transition">
                         <span><i class="fa-brands fa-linkedin text-sm mr-1"></i> LinkedIn</span>
                     </a>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
+                    <a id="facebookShareBtn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow transition">
                         <span><i class="fa-brands fa-facebook text-sm mr-1"></i> Facebook</span>
                     </a>
-                    <a href="mailto:?subject={{ urlencode('Join ' . $group->name) }}&body={{ urlencode($defaultShareText . ' ' . $shareUrl) }}" class="px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow">
+                    <a id="emailShareBtn" href="mailto:?subject={{ urlencode('Join ' . $group->name) }}&body={{ urlencode($defaultShareText . ' ' . $shareUrl) }}" class="px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow transition">
                         <span><i class="fa-solid fa-envelope text-sm mr-1"></i> Email</span>
                     </a>
                 </div>
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const shareText = document.getElementById('shareText');
+                    const shareUrl = "{{ $shareUrl }}";
+                    const whatsappBtn = document.getElementById('whatsappShareBtn');
+                    const emailBtn = document.getElementById('emailShareBtn');
+
+                    if (shareText) {
+                        shareText.addEventListener('input', function() {
+                            const fullMsg = this.value.trim() + ' ' + shareUrl;
+                            if (whatsappBtn) {
+                                whatsappBtn.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(fullMsg);
+                            }
+                            if (emailBtn) {
+                                emailBtn.href = 'mailto:?subject=' + encodeURIComponent('Join {{ $group->name }}') + '&body=' + encodeURIComponent(fullMsg);
+                            }
+                        });
+                    }
+                });
+            </script>
         </div>
 
         <!-- QR Code Printable Card -->

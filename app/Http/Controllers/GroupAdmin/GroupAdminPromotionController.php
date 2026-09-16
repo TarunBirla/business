@@ -17,7 +17,7 @@ class GroupAdminPromotionController extends Controller
         $shareUrl = $group->join_url;
         $referralUrl = $shareUrl . '?ref=admin_' . auth()->id();
 
-        $defaultShareText = "Join {$group->name} and connect with people, professionals and businesses from our community. Discover services, events and new opportunities.";
+        $defaultShareText = $group->promotional_message ?: "Join {$group->name} and connect with people, professionals and businesses from our community. Discover services, events and new opportunities.";
 
         $qrCodeSvg = QrCodeService::renderInlineSvg($shareUrl, 260);
 
@@ -41,6 +41,21 @@ class GroupAdminPromotionController extends Controller
             'sourcesCount',
             'assignedGroups'
         ));
+    }
+
+    public function updateMessage(Request $request, Group $group)
+    {
+        $this->authorizeAdmin($group);
+
+        $request->validate([
+            'promotional_message' => 'required|string|max:1000',
+        ]);
+
+        $group->update([
+            'promotional_message' => $request->promotional_message,
+        ]);
+
+        return back()->with('success', 'Promotional message saved successfully!');
     }
 
     private function authorizeAdmin(Group $group)
