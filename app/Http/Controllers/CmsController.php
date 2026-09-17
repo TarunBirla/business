@@ -13,7 +13,7 @@ class CmsController extends Controller
 
         if ($groupId && in_array($slug, ['terms', 'privacy'])) {
             $groupPage = CmsPage::where('group_id', $groupId)
-                ->where(function($q) use ($slug) {
+                ->where(function($q) use ($slug, $groupId) {
                     $q->where('page_type', $slug)
                       ->orWhere('slug', "{$slug}-group-{$groupId}");
                 })
