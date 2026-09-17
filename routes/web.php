@@ -35,6 +35,7 @@ use App\Http\Controllers\Member\MemberServiceController;
 use App\Http\Controllers\GroupAdmin\GroupAdminServiceController;
 use App\Http\Controllers\GroupAdmin\GroupAdminProjectController;
 use App\Http\Controllers\GroupAdmin\GroupAdminThemeController;
+use App\Http\Controllers\GroupAdmin\GroupAdminPolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -225,6 +226,14 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::get('/projects/{project}/edit', [GroupAdminProjectController::class, 'edit'])->name('projects.edit');
     Route::put('/projects/{project}', [GroupAdminProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}', [GroupAdminProjectController::class, 'destroy'])->name('projects.destroy');
+
+    // Community Terms & Privacy Policies
+    Route::get('/policies', [GroupAdminPolicyController::class, 'index'])->name('policies.index');
+    Route::get('/policies/create', [GroupAdminPolicyController::class, 'create'])->name('policies.create');
+    Route::post('/policies', [GroupAdminPolicyController::class, 'store'])->name('policies.store');
+    Route::get('/policies/{policy}/edit', [GroupAdminPolicyController::class, 'edit'])->name('policies.edit');
+    Route::put('/policies/{policy}', [GroupAdminPolicyController::class, 'update'])->name('policies.update');
+    Route::delete('/policies/{policy}', [GroupAdminPolicyController::class, 'destroy'])->name('policies.destroy');
 });
 
 /*
