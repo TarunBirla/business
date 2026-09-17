@@ -56,6 +56,11 @@ class Group extends Model
         return $this->members()->wherePivot('status', 'active');
     }
 
+    public function pendingMembers()
+    {
+        return $this->members()->wherePivot('status', 'pending');
+    }
+
     public function subscriptions()
     {
         return $this->hasMany(GroupSubscription::class);
