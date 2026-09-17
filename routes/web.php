@@ -279,8 +279,11 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
 
     // CMS Pages Management
     Route::get('/cms', [SuperAdminCmsController::class, 'index'])->name('cms.index');
+    Route::get('/cms/create', [SuperAdminCmsController::class, 'create'])->name('cms.create');
+    Route::post('/cms', [SuperAdminCmsController::class, 'store'])->name('cms.store');
     Route::get('/cms/{page}/edit', [SuperAdminCmsController::class, 'edit'])->name('cms.edit');
     Route::put('/cms/{page}', [SuperAdminCmsController::class, 'update'])->name('cms.update');
+    Route::delete('/cms/{page}', [SuperAdminCmsController::class, 'destroy'])->name('cms.destroy');
 
     // Theme Manager
     Route::get('/themes', [ThemeController::class, 'index'])->name('themes.index');
