@@ -14,9 +14,18 @@ class Announcement extends Model
         'created_by',
         'title',
         'content',
+        'image',
         'target_role',
         'is_email_sent',
     ];
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+        return null;
+    }
 
     public function group()
     {

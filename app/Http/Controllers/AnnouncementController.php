@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Mail\AnnouncementMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AnnouncementController extends Controller
@@ -29,6 +30,20 @@ class AnnouncementController extends Controller
         return view('announcements.index', compact('announcements', 'groups'));
     }
 
+    public function create()
+    {
+        $user = auth()->user();
+
+        if ($user->isSuperAdmin()) {
+            $groups = Group::orderBy('name')->get();
+        } else {
+            $adminGroupIds = $user->groups()->wherePivot('membership_role', 'group_admin')->pluck('groups.id');
+            $groups = Group::whereIn('id', $adminGroupIds)->orderBy('name')->get();
+        }
+
+        return view('announcements.create', compact('groups'));
+    }
+
     public function store(Request $request)
     {
         $user = auth()->user();
@@ -37,6 +52,7 @@ class AnnouncementController extends Controller
             'group_id' => 'nullable|exists:groups,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'target_role' => 'required|in:all,member,group_admin',
             'send_email' => 'nullable|boolean',
         ]);
@@ -51,11 +67,17 @@ class AnnouncementController extends Controller
             }
         }
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('announcements', 'public');
+        }
+
         $announcement = Announcement::create([
             'group_id' => $request->group_id,
             'created_by' => $user->id,
             'title' => $request->title,
             'content' => $request->content,
+            'image' => $imagePath,
             'target_role' => $request->target_role,
             'is_email_sent' => $request->boolean('send_email'),
         ]);
@@ -97,7 +119,30 @@ class AnnouncementController extends Controller
             }
         }
 
-        return back()->with('success', 'Announcement published successfully to target members.');
+        return redirect()->route('announcements.index')->with('success', 'Announcement published successfully to target members.');
+    }
+
+    public function edit(Announcement $announcement)
+    {
+        $user = auth()->user();
+
+        if (!$user->isSuperAdmin()) {
+            if ($announcement->group_id) {
+                if (!$user->isGroupAdmin($announcement->group_id)) {
+                    abort(403, 'Unauthorized to edit this announcement.');
+                }
+            } else {
+                if ($announcement->created_by !== $user->id) {
+                    abort(403, 'Unauthorized to edit this announcement.');
+                }
+            }
+            $adminGroupIds = $user->groups()->wherePivot('membership_role', 'group_admin')->pluck('groups.id');
+            $groups = Group::whereIn('id', $adminGroupIds)->orderBy('name')->get();
+        } else {
+            $groups = Group::orderBy('name')->get();
+        }
+
+        return view('announcements.edit', compact('announcement', 'groups'));
     }
 
     public function update(Request $request, Announcement $announcement)
@@ -120,6 +165,7 @@ class AnnouncementController extends Controller
             'group_id' => 'nullable|exists:groups,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'target_role' => 'required|in:all,member,group_admin',
         ]);
 
@@ -129,14 +175,23 @@ class AnnouncementController extends Controller
             }
         }
 
+        $imagePath = $announcement->image;
+        if ($request->hasFile('image')) {
+            if ($announcement->image && Storage::disk('public')->exists($announcement->image)) {
+                Storage::disk('public')->delete($announcement->image);
+            }
+            $imagePath = $request->file('image')->store('announcements', 'public');
+        }
+
         $announcement->update([
             'group_id' => $request->filled('group_id') ? $request->group_id : null,
             'title' => $request->title,
             'content' => $request->content,
+            'image' => $imagePath,
             'target_role' => $request->target_role,
         ]);
 
-        return back()->with('success', 'Announcement updated successfully.');
+        return redirect()->route('announcements.index')->with('success', 'Announcement updated successfully.');
     }
 
     public function destroy(Announcement $announcement)
@@ -155,11 +210,15 @@ class AnnouncementController extends Controller
             }
         }
 
+        if ($announcement->image && Storage::disk('public')->exists($announcement->image)) {
+            Storage::disk('public')->delete($announcement->image);
+        }
+
         // Delete associated notifications
         Notification::where('announcement_id', $announcement->id)->delete();
 
         $announcement->delete();
 
-        return back()->with('success', 'Announcement deleted successfully.');
+        return redirect()->route('announcements.index')->with('success', 'Announcement deleted successfully.');
     }
 }

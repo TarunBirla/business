@@ -20,7 +20,7 @@
             <a href="{{ route('groups.index') }}" class="px-8 py-4 text-base font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-lg hover:shadow-sky-500/20 transition transform hover:-translate-y-0.5">
                 Explore Communities
             </a>
-            <a href="{{ route('register') }}" class="px-8 py-4 text-base font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition">
+            <a href="{{ route('groups.index') }}" class="px-8 py-4 text-base font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition">
                 Join Now
             </a>
         </div>

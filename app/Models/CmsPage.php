@@ -10,7 +10,9 @@ class CmsPage extends Model
     use HasFactory;
 
     protected $fillable = [
+        'group_id',
         'slug',
+        'page_type',
         'title',
         'content',
         'meta_title',
@@ -21,4 +23,9 @@ class CmsPage extends Model
     protected $casts = [
         'is_published' => 'boolean',
     ];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }

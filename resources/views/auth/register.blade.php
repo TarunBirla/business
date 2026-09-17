@@ -95,10 +95,15 @@
                 @error('captcha') <span class="text-xs text-rose-600 mt-1 block font-bold">{{ $message }}</span> @enderror
             </div>
 
+            @php
+                $regGroupId = isset($group) ? $group->id : request('group_id');
+                $termsUrl = $regGroupId ? route('cms.show', ['slug' => 'terms', 'group_id' => $regGroupId]) : route('cms.show', 'terms');
+                $privacyUrl = $regGroupId ? route('cms.show', ['slug' => 'privacy', 'group_id' => $regGroupId]) : route('cms.show', 'privacy');
+            @endphp
             <div class="space-y-3 pt-2">
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" name="terms" required class="mt-1 rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                    <span class="text-xs text-black">I accept the <a href="{{ route('cms.show', 'terms') }}" target="_blank" class="text-sky-600 font-bold underline">Terms & Conditions</a> and <a href="{{ route('cms.show', 'privacy') }}" target="_blank" class="text-sky-600 font-bold underline">Privacy Policy</a>.</span>
+                    <span class="text-xs text-black">I accept the <a href="{{ $termsUrl }}" target="_blank" class="text-sky-600 font-bold underline">Terms & Conditions</a> and <a href="{{ $privacyUrl }}" target="_blank" class="text-sky-600 font-bold underline">Privacy Policy</a>.</span>
                 </label>
             </div>
 

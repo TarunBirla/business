@@ -244,10 +244,20 @@
                         <span style="{{ $active ? 'color: #ffffff;' : '' }}">Communities</span>
                     </a>
 
-                    @php $active = request()->routeIs('super_admin.groups.pending_members*'); @endphp
-                    <a href="{{ route('super_admin.groups.pending_members') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
-                        <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
-                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
+                    @php
+                        $active = request()->routeIs('super_admin.groups.pending_members*');
+                        $superPendingCount = \DB::table('group_user')->where('status', 'pending')->count();
+                    @endphp
+                    <a href="{{ route('super_admin.groups.pending_members') }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
+                        </div>
+                        @if($superPendingCount > 0)
+                            <span class="px-2 py-0.5 bg-amber-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
+                                {{ $superPendingCount }}
+                            </span>
+                        @endif
                     </a>
 
                     @php $active = request()->routeIs('super_admin.group_admins*'); @endphp
@@ -370,10 +380,20 @@
                     </a>
 
                     @if($currentAdminGroup)
-                        @php $active = request()->routeIs('group_admin.members.pending*'); @endphp
-                        <a href="{{ route('group_admin.members.pending', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
-                            <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
-                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
+                        @php
+                            $active = request()->routeIs('group_admin.members.pending*');
+                            $pendingCount = $currentAdminGroup ? $currentAdminGroup->pendingMembers()->count() : 0;
+                        @endphp
+                        <a href="{{ route('group_admin.members.pending', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-user-clock w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                                <span style="{{ $active ? 'color: #ffffff;' : '' }}">Pending Approvals</span>
+                            </div>
+                            @if($pendingCount > 0)
+                                <span class="px-2 py-0.5 bg-amber-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
+                                    {{ $pendingCount }}
+                                </span>
+                            @endif
                         </a>
 
                         @php $active = request()->routeIs('group_admin.members*') && !request()->routeIs('group_admin.members.pending*'); @endphp
@@ -425,6 +445,12 @@
                         <a href="{{ route('group_admin.themes.index', $currentAdminGroup->id) }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-palette w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Community Themes</span>
+                        </a>
+
+                        @php $active = request()->routeIs('group_admin.policies*'); @endphp
+                        <a href="{{ route('group_admin.policies.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-file-contract w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Terms & Policies</span>
                         </a>
 
                         <!-- @php $active = request()->routeIs('group_admin.services*'); @endphp
