@@ -77,6 +77,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($myServices as $service)
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between overflow-hidden">
+                        @if($service->image_url)
+                            <div class="w-full h-44 overflow-hidden bg-slate-100 border-b border-slate-100">
+                                <img src="{{ $service->image_url }}" alt="{{ $service->title }}" class="w-full h-full object-cover">
+                            </div>
+                        @endif
                         <div class="p-6 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-[11px] font-bold rounded-lg border border-sky-100">
@@ -89,6 +94,23 @@
 
                             <h3 class="text-base font-bold text-slate-900 leading-snug">{{ $service->title }}</h3>
                             <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{!! nl2br(e($service->description)) !!}</p>
+
+                            @if($service->website_url || $service->video_url)
+                                <div class="flex items-center gap-2 pt-1">
+                                    @if($service->website_url)
+                                        <a href="{{ $service->website_url }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg border border-slate-200 transition inline-flex items-center space-x-1">
+                                            <i class="fa-solid fa-globe text-sky-600"></i>
+                                            <span>Website</span>
+                                        </a>
+                                    @endif
+                                    @if($service->video_url)
+                                        <a href="{{ $service->video_url }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg border border-slate-200 transition inline-flex items-center space-x-1">
+                                            <i class="fa-solid fa-circle-play text-rose-600"></i>
+                                            <span>Video</span>
+                                        </a>
+                                    @endif
+                                </div>
+                            @endif
 
                             <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
                                 <span class="font-bold text-slate-900">
@@ -146,6 +168,11 @@
                         $userReq = $service->requests->first();
                     @endphp
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between overflow-hidden hover:shadow-md transition">
+                        @if($service->image_url)
+                            <div class="w-full h-44 overflow-hidden bg-slate-100 border-b border-slate-100">
+                                <img src="{{ $service->image_url }}" alt="{{ $service->title }}" class="w-full h-full object-cover">
+                            </div>
+                        @endif
                         <div class="p-6 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-2.5 py-1 bg-sky-50 text-sky-700 text-[11px] font-bold rounded-lg border border-sky-100">
@@ -158,6 +185,23 @@
 
                             <h3 class="text-base font-bold text-slate-900 leading-snug">{{ $service->title }}</h3>
                             <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{!! nl2br(e($service->description)) !!}</p>
+
+                            @if($service->website_url || $service->video_url)
+                                <div class="flex items-center gap-2 pt-1">
+                                    @if($service->website_url)
+                                        <a href="{{ $service->website_url }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg border border-slate-200 transition inline-flex items-center space-x-1">
+                                            <i class="fa-solid fa-globe text-sky-600"></i>
+                                            <span>Website</span>
+                                        </a>
+                                    @endif
+                                    @if($service->video_url)
+                                        <a href="{{ $service->video_url }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg border border-slate-200 transition inline-flex items-center space-x-1">
+                                            <i class="fa-solid fa-circle-play text-rose-600"></i>
+                                            <span>Video</span>
+                                        </a>
+                                    @endif
+                                </div>
+                            @endif
 
                             <!-- Service Provider Details -->
                             <div class="flex items-center space-x-3 pt-2 border-t border-slate-100">
@@ -351,7 +395,7 @@
             </button>
         </div>
 
-        <form action="{{ route('member.services.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('member.services.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Service Title *</label>
@@ -378,20 +422,41 @@
                 </div>
             </div>
 
+            <!-- Service Banner Image -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Service Banner Image (Optional)</label>
+                <input type="file" name="image" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-slate-200 rounded-xl p-1">
+            </div>
+
+            <!-- Website URL & Video Link -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Website URL (Optional)</label>
+                    <input type="url" name="website_url" placeholder="https://example.com" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Video Link (Optional)</label>
+                    <input type="url" name="video_url" placeholder="https://youtube.com/watch?v=..." class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Pricing Model *</label>
                     <select name="price_type" id="create_price_type" onchange="togglePriceInput(this, 'create_price_container')" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                        <option value="quote">Quote on Request</option>
                         <option value="fixed">Fixed Rate (£)</option>
                         <option value="hourly">Hourly Rate (£/hr)</option>
-                        <option value="quote">Quote on Request</option>
                         <option value="free">Free Community Service</option>
                     </select>
                 </div>
+                <!-- Price (£) Input Commented Out per request -->
+                <!--
                 <div id="create_price_container">
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price (£)</label>
                     <input type="number" step="0.01" name="price" placeholder="0.00" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
                 </div>
+                -->
             </div>
 
             <div>
@@ -461,7 +526,7 @@
             </button>
         </div>
 
-        <form id="editServiceForm" action="" method="POST" class="space-y-4">
+        <form id="editServiceForm" action="" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -488,20 +553,44 @@
                 </div>
             </div>
 
+            <!-- Service Banner Image & Preview -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Service Banner Image (Optional)</label>
+                <div id="edit_image_preview_container" class="hidden mb-2">
+                    <img id="edit_image_preview" src="" alt="Service Image" class="w-full h-32 object-cover rounded-xl border border-slate-200">
+                </div>
+                <input type="file" name="image" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-slate-200 rounded-xl p-1">
+            </div>
+
+            <!-- Website URL & Video Link -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Website URL (Optional)</label>
+                    <input type="url" name="website_url" id="edit_website_url" placeholder="https://example.com" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Video Link (Optional)</label>
+                    <input type="url" name="video_url" id="edit_video_url" placeholder="https://youtube.com/watch?v=..." class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Pricing Model *</label>
                     <select name="price_type" id="edit_price_type" onchange="togglePriceInput(this, 'edit_price_container')" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                        <option value="quote">Quote on Request</option>
                         <option value="fixed">Fixed Rate (£)</option>
                         <option value="hourly">Hourly Rate (£/hr)</option>
-                        <option value="quote">Quote on Request</option>
                         <option value="free">Free Community Service</option>
                     </select>
                 </div>
+                <!-- Price (£) Input Commented Out per request -->
+                <!--
                 <div id="edit_price_container">
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price (£)</label>
                     <input type="number" step="0.01" name="price" id="edit_price" placeholder="0.00" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
                 </div>
+                -->
             </div>
 
             <div>
@@ -555,9 +644,23 @@
         document.getElementById('edit_category').value = service.category;
         document.getElementById('edit_status').value = service.status;
         document.getElementById('edit_price_type').value = service.price_type;
-        document.getElementById('edit_price').value = service.price || '';
+        const priceInput = document.getElementById('edit_price');
+        if (priceInput) priceInput.value = service.price || '';
         document.getElementById('edit_group_id').value = service.group_id || '';
         document.getElementById('edit_description').value = service.description;
+        document.getElementById('edit_website_url').value = service.website_url || '';
+        document.getElementById('edit_video_url').value = service.video_url || '';
+
+        const previewContainer = document.getElementById('edit_image_preview_container');
+        const previewImg = document.getElementById('edit_image_preview');
+        const imageUrl = service.image_url || (service.image ? `/storage/${service.image}` : null);
+        if (imageUrl) {
+            previewImg.src = imageUrl;
+            previewContainer.classList.remove('hidden');
+        } else {
+            previewImg.src = '';
+            previewContainer.classList.add('hidden');
+        }
 
         togglePriceInput(document.getElementById('edit_price_type'), 'edit_price_container');
         document.getElementById('editServiceModal').classList.remove('hidden');

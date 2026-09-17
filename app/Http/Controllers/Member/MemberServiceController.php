@@ -106,10 +106,18 @@ class MemberServiceController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string|max:255',
-            'price_type' => 'required|in:fixed,hourly,free,quote',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'website_url' => 'nullable|url|max:255',
+            'video_url' => 'nullable|url|max:255',
+            'price_type' => 'nullable|in:fixed,hourly,free,quote',
             'price' => 'nullable|numeric|min:0',
             'group_id' => 'nullable|exists:groups,id',
         ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('services', 'public');
+        }
 
         CommunityService::create([
             'user_id' => $user->id,
@@ -117,8 +125,11 @@ class MemberServiceController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'price_type' => $request->price_type,
-            'price' => $request->price_type === 'free' ? 0 : $request->price,
+            'image' => $imagePath,
+            'website_url' => $request->website_url,
+            'video_url' => $request->video_url,
+            'price_type' => $request->price_type ?? 'quote',
+            'price' => $request->price ?? 0,
             'status' => 'active',
         ]);
 
@@ -138,19 +149,33 @@ class MemberServiceController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string|max:255',
-            'price_type' => 'required|in:fixed,hourly,free,quote',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'website_url' => 'nullable|url|max:255',
+            'video_url' => 'nullable|url|max:255',
+            'price_type' => 'nullable|in:fixed,hourly,free,quote',
             'price' => 'nullable|numeric|min:0',
             'group_id' => 'nullable|exists:groups,id',
             'status' => 'required|in:active,inactive',
         ]);
+
+        $imagePath = $service->image;
+        if ($request->hasFile('image')) {
+            if ($service->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($service->image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($service->image);
+            }
+            $imagePath = $request->file('image')->store('services', 'public');
+        }
 
         $service->update([
             'group_id' => $request->group_id ?: null,
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'price_type' => $request->price_type,
-            'price' => $request->price_type === 'free' ? 0 : $request->price,
+            'image' => $imagePath,
+            'website_url' => $request->website_url,
+            'video_url' => $request->video_url,
+            'price_type' => $request->price_type ?? $service->price_type,
+            'price' => $request->price ?? $service->price,
             'status' => $request->status,
         ]);
 
@@ -163,6 +188,10 @@ class MemberServiceController extends Controller
 
         if ($service->user_id !== $user->id && !$user->isSuperAdmin() && !$user->isGroupAdmin($service->group_id)) {
             abort(403, 'Unauthorized.');
+        }
+
+        if ($service->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($service->image)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($service->image);
         }
 
         $service->delete();

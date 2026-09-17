@@ -15,10 +15,21 @@ class CommunityService extends Model
         'title',
         'description',
         'category',
+        'image',
+        'website_url',
+        'video_url',
         'price_type',
         'price',
         'status',
     ];
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+        return null;
+    }
 
     public function user()
     {
