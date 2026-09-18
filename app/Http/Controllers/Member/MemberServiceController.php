@@ -242,10 +242,14 @@ class MemberServiceController extends Controller
 
         $isProvider = (int)$serviceRequest->provider_id === (int)$user->id;
         $isServiceOwner = $serviceRequest->service && (int)$serviceRequest->service->user_id === (int)$user->id;
+        $isRequester = (int)$serviceRequest->requester_id === (int)$user->id;
         $isGroupAdmin = $user->isGroupAdmin() && ($serviceRequest->service && $serviceRequest->service->group_id ? $user->isGroupAdmin($serviceRequest->service->group_id) : true);
         $isSuperAdmin = $user->isSuperAdmin();
 
-        if (!$isProvider && !$isServiceOwner && !$isGroupAdmin && !$isSuperAdmin) {
+        if (!$isProvider && !$isServiceOwner && !$isRequester && !$isGroupAdmin && !$isSuperAdmin) {
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
             abort(403, 'Unauthorized.');
         }
 
@@ -276,10 +280,11 @@ class MemberServiceController extends Controller
 
         $isProvider = (int)$serviceRequest->provider_id === (int)$user->id;
         $isServiceOwner = $serviceRequest->service && (int)$serviceRequest->service->user_id === (int)$user->id;
+        $isRequester = (int)$serviceRequest->requester_id === (int)$user->id;
         $isGroupAdmin = $user->isGroupAdmin() && ($serviceRequest->service && $serviceRequest->service->group_id ? $user->isGroupAdmin($serviceRequest->service->group_id) : true);
         $isSuperAdmin = $user->isSuperAdmin();
 
-        if (!$isProvider && !$isServiceOwner && !$isGroupAdmin && !$isSuperAdmin) {
+        if (!$isProvider && !$isServiceOwner && !$isRequester && !$isGroupAdmin && !$isSuperAdmin) {
             if (request()->wantsJson() || request()->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
             }

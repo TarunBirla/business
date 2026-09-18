@@ -423,20 +423,14 @@
                                                                 {{ $req->provider_id === auth()->id() ? 'From: ' . ($req->requester->name ?? 'Member') : 'To: ' . ($req->provider->name ?? 'Member') }}
                                                             </div>
                                                         </div>
-                                                        @if($req->provider_id === auth()->id())
-                                                            <div class="flex items-center space-x-1.5 shrink-0">
-                                                                <button type="button" onclick="respondServiceRequest({{ $req->id }}, 'approve', this)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] rounded-lg shadow-2xs transition">
-                                                                    Accept
-                                                                </button>
-                                                                <button type="button" onclick="respondServiceRequest({{ $req->id }}, 'reject', this)" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-[10px] rounded-lg transition">
-                                                                    Reject
-                                                                </button>
-                                                            </div>
-                                                        @else
-                                                            <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-amber-100 text-amber-800 shrink-0">
-                                                                Pending
-                                                            </span>
-                                                        @endif
+                                                        <div class="flex items-center space-x-1.5 shrink-0">
+                                                            <button type="button" onclick="respondServiceRequest({{ $req->id }}, 'approve', this)" class="px-2.5 py-1 text-white font-bold text-[10px] rounded-lg shadow-2xs transition hover:opacity-90" style="background-color: var(--btn-primary-bg, #0A4744);">
+                                                                Accept
+                                                            </button>
+                                                            <button type="button" onclick="respondServiceRequest({{ $req->id }}, 'reject', this)" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-[10px] rounded-lg transition">
+                                                                Reject
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 @endforeach
                                             </div>
