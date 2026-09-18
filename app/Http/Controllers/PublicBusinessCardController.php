@@ -59,7 +59,7 @@ class PublicBusinessCardController extends Controller
             })->latest()->take(5)->get();
 
             // Fetch service requests
-            $userServicesRequests = \App\Models\CommunityServiceRequest::where('provider_id', $currentUserId)
+            $userServicesRequests = \App\Models\ServiceRequest::where('provider_id', $currentUserId)
                 ->orWhere('requester_id', $currentUserId)
                 ->with(['service', 'requester', 'provider'])
                 ->latest()
