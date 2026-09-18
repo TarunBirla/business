@@ -333,7 +333,136 @@
                         </div>
                     @endif
 
-                    
+                    <!-- Member Activity Portal Section (Announcements, Service Requests & Connection Requests) -->
+                    <div class="space-y-4 pt-4 border-t border-slate-200/60">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">
+                                <i class="fa-solid fa-bullhorn text-sky-600 mr-1.5"></i>Community Activity & Requests
+                            </h3>
+                            @if(auth()->check())
+                                <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <i class="fa-solid fa-circle-check text-[9px] mr-1"></i>Logged In
+                                </span>
+                            @endif
+                        </div>
+
+                        @guest
+                            <!-- Login Prompt for Non-Logged In Users -->
+                            <div class="p-6 rounded-2xl border text-center space-y-3 shadow-2xs transition" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                                <div class="w-11 h-11 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center text-lg mx-auto shadow-2xs">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h4 class="font-extrabold text-sm" style="color: var(--text-heading, #0f172a);">Member Activity Locked</h4>
+                                    <p class="text-xs max-w-md mx-auto" style="color: var(--text-secondary, #64748b);">Log in to view Announcements, Service Requests, and Connection Requests associated with this card.</p>
+                                </div>
+                                <div class="pt-1">
+                                    <a href="{{ route('login') }}" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-xs transition inline-flex items-center space-x-2">
+                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                        <span>Log In to View Activity</span>
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <!-- Logged-in User Activity Tabs / Blocks -->
+                            <div class="space-y-4">
+                                <!-- Announcements -->
+                                <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                                    <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                                        <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
+                                            <i class="fa-solid fa-bullhorn text-sky-600"></i>
+                                            <span>Community Announcements</span>
+                                        </span>
+                                        <span class="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded-full border border-slate-200">
+                                            {{ $userAnnouncements->count() }} Total
+                                        </span>
+                                    </div>
+                                    @if($userAnnouncements->isEmpty())
+                                        <p class="text-xs text-slate-500 italic py-2">No active announcements found for your joined communities.</p>
+                                    @else
+                                        <div class="divide-y divide-slate-100">
+                                            @foreach($userAnnouncements as $ann)
+                                                <div class="py-2.5 space-y-1 text-left">
+                                                    <div class="flex items-center justify-between">
+                                                        <h5 class="font-bold text-xs" style="color: var(--text-heading, #0f172a);">{{ $ann->title }}</h5>
+                                                        <span class="text-[10px] text-slate-400">{{ $ann->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                    <p class="text-[11px] line-clamp-2" style="color: var(--text-secondary, #64748b);">{{ Str::limit(strip_tags($ann->content), 120) }}</p>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Service Requests -->
+                                <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                                    <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                                        <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
+                                            <i class="fa-solid fa-handshake text-emerald-600"></i>
+                                            <span>Service Requests</span>
+                                        </span>
+                                        <a href="{{ route('member.services.index', ['tab' => 'requests']) }}" class="text-[10px] font-bold text-sky-600 hover:underline">
+                                            View All <i class="fa-solid fa-arrow-right text-[8px]"></i>
+                                        </a>
+                                    </div>
+                                    @if($userServicesRequests->isEmpty())
+                                        <p class="text-xs text-slate-500 italic py-2">No service requests found.</p>
+                                    @else
+                                        <div class="divide-y divide-slate-100">
+                                            @foreach($userServicesRequests as $req)
+                                                <div class="py-2.5 flex items-center justify-between gap-2 text-left">
+                                                    <div class="min-w-0">
+                                                        <div class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $req->service->title ?? 'Service Request' }}</div>
+                                                        <div class="text-[10px] text-slate-500 truncate">
+                                                            {{ $req->provider_id === auth()->id() ? 'From: ' . ($req->requester->name ?? 'Member') : 'To: ' . ($req->provider->name ?? 'Member') }}
+                                                        </div>
+                                                    </div>
+                                                    <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full shrink-0 {{ $req->status === 'accepted' ? 'bg-emerald-100 text-emerald-800' : ($req->status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600') }}">
+                                                        {{ ucfirst($req->status) }}
+                                                    </span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Connection Requests -->
+                                <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                                    <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                                        <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
+                                            <i class="fa-solid fa-user-plus text-purple-600"></i>
+                                            <span>Pending Connection Requests</span>
+                                        </span>
+                                        <a href="{{ route('member.connections') }}" class="text-[10px] font-bold text-sky-600 hover:underline">
+                                            Manage <i class="fa-solid fa-arrow-right text-[8px]"></i>
+                                        </a>
+                                    </div>
+                                    @if($userConnectionRequests->isEmpty())
+                                        <p class="text-xs text-slate-500 italic py-2">No pending connection requests.</p>
+                                    @else
+                                        <div class="divide-y divide-slate-100">
+                                            @foreach($userConnectionRequests as $conn)
+                                                <div class="py-2.5 flex items-center justify-between gap-2 text-left">
+                                                    <div class="flex items-center space-x-2 min-w-0">
+                                                        <div class="w-7 h-7 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0">
+                                                            {{ strtoupper(substr($conn->sender->first_name ?? 'U', 0, 1)) }}
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <div class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $conn->sender->name ?? 'Member' }}</div>
+                                                            <div class="text-[10px] text-slate-400">{{ $conn->created_at->diffForHumans() }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <a href="{{ route('member.connections') }}" class="px-2.5 py-1 bg-sky-600 text-white font-bold text-[10px] rounded-lg shadow-2xs hover:bg-sky-700 transition">
+                                                        Review
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endguest
+                    </div>
 
                 </div>
 

@@ -175,7 +175,7 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::get('/group/{group}/members/create', [GroupAdminMemberController::class, 'create'])->name('members.create');
     Route::post('/group/{group}/members', [GroupAdminMemberController::class, 'store'])->name('members.store');
     Route::post('/group/{group}/members/{user}/status', [GroupAdminMemberController::class, 'updateStatus'])->name('members.update_status');
-    Route::get('/group/{group}/members/export-csv', [GroupAdminMemberController::class, 'exportCsv'])->name('members.export_csv');
+    Route::match(['get', 'post'], '/group/{group}/members/export-csv', [GroupAdminMemberController::class, 'exportCsv'])->name('members.export_csv');
 
     // Community Settings & Audit Trail
     Route::get('/group/{group}/settings', [GroupAdminDashboardController::class, 'settings'])->name('settings');

@@ -41,16 +41,51 @@ class PublicBusinessCardController extends Controller
         $cardUrl = route('bizcard.show', $userModel->id);
         $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' . urlencode($cardUrl);
 
-        // Fetch all admin-created upcoming community events across the platform
-        $upcomingEvents = Event::with('group')
-            ->where(function ($q) {
-                $q->where('start_at', '>=', now())->orWhereNull('start_at');
-            })
-            ->orderBy('start_at', 'asc')
-            ->limit(5)
-            ->get();
+        $userAnnouncements = collect();
+        $userServicesRequests = collect();
+        $userConnectionRequests = collect();
 
-        return view('business_card.show', compact('userModel', 'showEmail', 'showPhone', 'cardUrl', 'qrCodeUrl', 'upcomingEvents'));
+        if (auth()->check()) {
+            $currentUserId = auth()->id();
+            $groupIds = $userModel->groups->pluck('id')->toArray();
+
+            // Fetch announcements for joined communities or global announcements
+            $userAnnouncements = \App\Models\Announcement::where(function($q) use ($groupIds) {
+                if (!empty($groupIds)) {
+                    $q->whereIn('group_id', $groupIds)->orWhereNull('group_id');
+                } else {
+                    $q->whereNull('group_id');
+                }
+            })->latest()->take(5)->get();
+
+            // Fetch service requests
+            $userServicesRequests = \App\Models\CommunityServiceRequest::where('provider_id', $currentUserId)
+                ->orWhere('requester_id', $currentUserId)
+                ->with(['service', 'requester', 'provider'])
+                ->latest()
+                ->take(5)
+                ->get();
+
+            // Fetch pending connection requests
+            $userConnectionRequests = \App\Models\Connection::where('receiver_id', $currentUserId)
+                ->where('status', 'pending')
+                ->with('sender')
+                ->latest()
+                ->take(5)
+                ->get();
+        }
+
+        return view('business_card.show', compact(
+            'userModel',
+            'showEmail',
+            'showPhone',
+            'cardUrl',
+            'qrCodeUrl',
+            'upcomingEvents',
+            'userAnnouncements',
+            'userServicesRequests',
+            'userConnectionRequests'
+        ));
     }
 
     public function manifest($user)

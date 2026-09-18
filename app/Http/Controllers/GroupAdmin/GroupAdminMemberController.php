@@ -180,13 +180,25 @@ class GroupAdminMemberController extends Controller
         return back()->with('success', "Member {$user->name}'s status updated to " . strtoupper($status) . ".");
     }
 
-    public function exportCsv(Group $group)
+    public function exportCsv(Request $request, Group $group)
     {
         $this->authorizeAdmin($group);
-        $members = $group->members()->wherePivot('status', 'active')->where('users.id', '!=', auth()->id())->get();
+
+        $selectedIds = $request->input('selected_ids');
+        if (is_string($selectedIds)) {
+            $selectedIds = array_filter(explode(',', $selectedIds));
+        }
+
+        $query = $group->members()->wherePivotIn('group_user.status', ['active', 'inactive', 'suspended'])->where('users.id', '!=', auth()->id());
+
+        if (!empty($selectedIds) && is_array($selectedIds)) {
+            $query->whereIn('users.id', $selectedIds);
+        }
+
+        $members = $query->get();
 
         $headers = [
-            "Content-type" => "text/csv",
+            "Content-type" => "text/csv; charset=UTF-8",
             "Content-Disposition" => "attachment; filename=members_{$group->slug}.csv",
             "Pragma" => "no-cache",
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
@@ -195,17 +207,20 @@ class GroupAdminMemberController extends Controller
 
         $callback = function() use ($members) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Profession', 'City', 'Joined At']);
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            fputcsv($file, ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Profession', 'City', 'Role', 'Status', 'Joined At']);
             foreach ($members as $member) {
                 fputcsv($file, [
                     $member->id,
                     $member->first_name,
                     $member->last_name,
                     $member->email,
-                    $member->phone,
-                    $member->profession,
-                    $member->city,
-                    $member->pivot->joined_at,
+                    $member->phone ?? '',
+                    $member->profession ?? '',
+                    $member->city ?? '',
+                    str_replace('_', ' ', $member->pivot->membership_role ?? 'member'),
+                    $member->pivot->status ?? 'active',
+                    $member->pivot->joined_at ? \Carbon\Carbon::parse($member->pivot->joined_at)->format('Y-m-d H:i') : '',
                 ]);
             }
             fclose($file);

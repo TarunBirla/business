@@ -14,10 +14,14 @@
                 <i class="fa-solid fa-user-clock text-amber-600"></i>
                 <span>Pending Requests ({{ $pendingCount ?? 0 }})</span>
             </a>
-            <a href="{{ route('group_admin.members.export_csv', $group->id) }}" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition inline-flex items-center space-x-1.5">
-                <i class="fa-solid fa-file-csv text-slate-500"></i>
-                <span>Export CSV</span>
-            </a>
+            <form id="exportCsvForm" action="{{ route('group_admin.members.export_csv', $group->id) }}" method="POST" class="inline">
+                @csrf
+                <input type="hidden" name="selected_ids" id="selectedIdsInput" value="">
+                <button type="submit" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition inline-flex items-center space-x-1.5 border border-slate-200 shadow-2xs">
+                    <i class="fa-solid fa-file-csv text-slate-500"></i>
+                    <span id="exportCsvBtnText">Export CSV (All)</span>
+                </button>
+            </form>
             <a href="{{ route('group_admin.members.create', $group->id) }}" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition inline-flex items-center space-x-1.5" style="background-color: var(--btn-primary-bg, #0A4744);">
                 <i class="fa-solid fa-user-plus"></i>
                 <span>Add / Invite Member</span>
@@ -49,6 +53,9 @@
             <table class="w-full text-left border-collapse min-w-[768px]">
                 <thead>
                     <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        <th class="p-4 w-10 text-center">
+                            <input type="checkbox" id="selectAllMembers" onchange="toggleSelectAll(this)" class="w-4 h-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer" title="Select All Members">
+                        </th>
                         <th class="p-4">Member Name</th>
                         <th class="p-4">Contact Info</th>
                         <th class="p-4">Profession</th>
@@ -61,6 +68,9 @@
                 <tbody class="divide-y divide-slate-100 text-xs sm:text-sm">
                     @forelse($members as $m)
                         <tr class="hover:bg-slate-50/80 transition">
+                            <td class="p-3.5 sm:p-4 text-center">
+                                <input type="checkbox" value="{{ $m->id }}" class="member-checkbox w-4 h-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 cursor-pointer" onchange="updateSelectedCount()">
+                            </td>
                             <td class="p-3.5 sm:p-4">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-2xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
@@ -107,7 +117,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="p-10 text-center text-slate-500 font-semibold">
+                            <td colspan="8" class="p-10 text-center text-slate-500 font-semibold">
                                 No registered members found in this group.
                             </td>
                         </tr>
@@ -120,4 +130,31 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleSelectAll(selectAllCheckbox) {
+        const checkboxes = document.querySelectorAll('.member-checkbox');
+        checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+        updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+        const selected = document.querySelectorAll('.member-checkbox:checked');
+        const selectedIds = Array.from(selected).map(cb => cb.value);
+        document.getElementById('selectedIdsInput').value = selectedIds.join(',');
+
+        const btnText = document.getElementById('exportCsvBtnText');
+        if (selectedIds.length > 0) {
+            btnText.innerText = `Export CSV (${selectedIds.length} Selected)`;
+        } else {
+            btnText.innerText = 'Export CSV (All)';
+        }
+
+        const selectAll = document.getElementById('selectAllMembers');
+        const allCheckboxes = document.querySelectorAll('.member-checkbox');
+        if (allCheckboxes.length > 0) {
+            selectAll.checked = (selected.length === allCheckboxes.length);
+        }
+    }
+</script>
 @endsection
