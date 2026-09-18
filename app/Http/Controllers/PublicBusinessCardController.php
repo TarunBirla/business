@@ -54,7 +54,7 @@ class PublicBusinessCardController extends Controller
         $userServicesRequests = collect();
         $userConnectionRequests = collect();
 
-        if (auth()->check()) {
+        if (auth()->check() && (int)auth()->id() === (int)$userModel->id) {
             $currentUserId = auth()->id();
             $groupIds = $userModel->groups->pluck('id')->toArray();
 

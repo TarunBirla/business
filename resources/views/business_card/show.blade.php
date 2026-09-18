@@ -334,36 +334,17 @@
                     @endif
 
                     <!-- Member Activity Portal Section (Announcements, Service Requests & Connection Requests) -->
-                    <div class="space-y-4 pt-4 border-t border-slate-200/60">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">
-                                <i class="fa-solid fa-bullhorn text-sky-600 mr-1.5"></i>Community Activity & Requests
-                            </h3>
-                            @if(auth()->check())
+                    @if(auth()->check() && (int)auth()->id() === (int)$userModel->id)
+                        <div class="space-y-4 pt-4 border-t border-slate-200/60">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">
+                                    <i class="fa-solid fa-bullhorn text-sky-600 mr-1.5"></i>Community Activity & Requests
+                                </h3>
                                 <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                                     <i class="fa-solid fa-circle-check text-[9px] mr-1"></i>Logged In
                                 </span>
-                            @endif
-                        </div>
-
-                        @guest
-                            <!-- Login Prompt for Non-Logged In Users -->
-                            <div class="p-6 rounded-2xl border text-center space-y-3 shadow-2xs transition" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
-                                <div class="w-11 h-11 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center text-lg mx-auto shadow-2xs">
-                                    <i class="fa-solid fa-lock"></i>
-                                </div>
-                                <div class="space-y-1">
-                                    <h4 class="font-extrabold text-sm" style="color: var(--text-heading, #0f172a);">Member Activity Locked</h4>
-                                    <p class="text-xs max-w-md mx-auto" style="color: var(--text-secondary, #64748b);">Log in to view Announcements, Service Requests, and Connection Requests associated with this card.</p>
-                                </div>
-                                <div class="pt-1">
-                                    <button type="button" onclick="openBizcardLoginModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-xs transition inline-flex items-center space-x-2">
-                                        <i class="fa-solid fa-right-to-bracket"></i>
-                                        <span>Log In to View Activity</span>
-                                    </button>
-                                </div>
                             </div>
-                        @else
+
                             <!-- Logged-in User Activity Tabs / Blocks -->
                             <div class="space-y-4">
                                 <!-- Announcements (Unread Only) -->
@@ -477,8 +458,33 @@
                                     </div>
                                 </div>
                             </div>
-                        @endguest
-                    </div>
+                        </div>
+                    @elseif(!auth()->check())
+                        <div class="space-y-4 pt-4 border-t border-slate-200/60">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary, #94a3b8);">
+                                    <i class="fa-solid fa-bullhorn text-sky-600 mr-1.5"></i>Community Activity & Requests
+                                </h3>
+                            </div>
+
+                            <!-- Login Prompt for Non-Logged In Users -->
+                            <div class="p-6 rounded-2xl border text-center space-y-3 shadow-2xs transition" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
+                                <div class="w-11 h-11 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center text-lg mx-auto shadow-2xs">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h4 class="font-extrabold text-sm" style="color: var(--text-heading, #0f172a);">Member Activity Locked</h4>
+                                    <p class="text-xs max-w-md mx-auto" style="color: var(--text-secondary, #64748b);">Log in to view Announcements, Service Requests, and Connection Requests associated with your card.</p>
+                                </div>
+                                <div class="pt-1">
+                                    <button type="button" onclick="openBizcardLoginModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-xs transition inline-flex items-center space-x-2">
+                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                        <span>Log In to View Activity</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
                 </div>
 
