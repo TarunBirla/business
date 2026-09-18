@@ -41,6 +41,15 @@ class PublicBusinessCardController extends Controller
         $cardUrl = route('bizcard.show', $userModel->id);
         $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' . urlencode($cardUrl);
 
+        // Fetch all admin-created upcoming community events across the platform
+        $upcomingEvents = Event::with('group')
+            ->where(function ($q) {
+                $q->where('start_at', '>=', now())->orWhereNull('start_at');
+            })
+            ->orderBy('start_at', 'asc')
+            ->limit(5)
+            ->get();
+
         $userAnnouncements = collect();
         $userServicesRequests = collect();
         $userConnectionRequests = collect();
