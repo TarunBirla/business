@@ -444,11 +444,11 @@
                                     </div>
                                 </div>
 
-                                <!-- Pending Connection Requests -->
+                                 <!-- Pending Connection Requests -->
                                 <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
                                     <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
                                         <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
-                                            <i class="fa-solid fa-user-plus text-purple-600"></i>
+                                            <i class="fa-solid fa-user-plus" style="color: var(--btn-primary-bg, #0A4744);"></i>
                                             <span>Pending Connection Requests</span>
                                         </span>
                                     </div>
@@ -460,7 +460,7 @@
                                                 @foreach($userConnectionRequests as $conn)
                                                     <div id="conn_req_row_{{ $conn->id }}" class="py-2.5 flex items-center justify-between gap-2 text-left transition-all">
                                                         <div class="flex items-center space-x-2 min-w-0">
-                                                            <div class="w-7 h-7 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0">
+                                                            <div class="w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-[10px] shrink-0 shadow-2xs" style="background-color: var(--btn-primary-bg, #0A4744);">
                                                                 {{ strtoupper(substr($conn->sender->first_name ?? 'U', 0, 1)) }}
                                                             </div>
                                                             <div class="min-w-0">
@@ -469,7 +469,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex items-center space-x-1.5 shrink-0">
-                                                            <button type="button" onclick="respondConnectionRequest({{ $conn->id }}, 'accept', this)" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] rounded-lg shadow-2xs transition">
+                                                            <button type="button" onclick="respondConnectionRequest({{ $conn->id }}, 'accept', this)" class="px-2.5 py-1 text-white font-bold text-[10px] rounded-lg shadow-2xs transition hover:opacity-90" style="background-color: var(--btn-primary-bg, #0A4744);">
                                                                 Accept
                                                             </button>
                                                             <button type="button" onclick="respondConnectionRequest({{ $conn->id }}, 'reject', this)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-lg transition">
