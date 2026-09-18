@@ -58,24 +58,36 @@ class PublicBusinessCardController extends Controller
             $currentUserId = auth()->id();
             $groupIds = $userModel->groups->pluck('id')->toArray();
 
-            // Fetch announcements for joined communities or global announcements
-            $userAnnouncements = \App\Models\Announcement::where(function($q) use ($groupIds) {
-                if (!empty($groupIds)) {
-                    $q->whereIn('group_id', $groupIds)->orWhereNull('group_id');
-                } else {
-                    $q->whereNull('group_id');
-                }
-            })->latest()->take(5)->get();
+            // Fetch IDs of announcements marked as read by the user
+            $readAnnouncementIds = \App\Models\Notification::where('user_id', $currentUserId)
+                ->where('type', 'announcement')
+                ->where('is_read', true)
+                ->pluck('announcement_id')
+                ->filter()
+                ->toArray();
 
-            // Fetch service requests
-            $userServicesRequests = \App\Models\ServiceRequest::where('provider_id', $currentUserId)
-                ->orWhere('requester_id', $currentUserId)
+            // Fetch ONLY UNREAD announcements for joined communities or global announcements
+            $userAnnouncements = \App\Models\Announcement::whereNotIn('id', $readAnnouncementIds)
+                ->where(function($q) use ($groupIds) {
+                    if (!empty($groupIds)) {
+                        $q->whereIn('group_id', $groupIds)->orWhereNull('group_id');
+                    } else {
+                        $q->whereNull('group_id');
+                    }
+                })->latest()->take(5)->get();
+
+            // Fetch ONLY pending service requests
+            $userServicesRequests = \App\Models\ServiceRequest::where('status', 'pending')
+                ->where(function($q) use ($currentUserId) {
+                    $q->where('provider_id', $currentUserId)
+                      ->orWhere('requester_id', $currentUserId);
+                })
                 ->with(['service', 'requester', 'provider'])
                 ->latest()
                 ->take(5)
                 ->get();
 
-            // Fetch pending connection requests
+            // Fetch ONLY pending connection requests where user is receiver
             $userConnectionRequests = \App\Models\Connection::where('receiver_id', $currentUserId)
                 ->where('status', 'pending')
                 ->with('sender')
@@ -95,6 +107,38 @@ class PublicBusinessCardController extends Controller
             'userServicesRequests',
             'userConnectionRequests'
         ));
+    }
+
+    public function markAnnouncementRead(Request $request, \App\Models\Announcement $announcement)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        $notification = \App\Models\Notification::where('user_id', $userId)
+            ->where('announcement_id', $announcement->id)
+            ->first();
+
+        if ($notification) {
+            $notification->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+        } else {
+            \App\Models\Notification::create([
+                'user_id' => $userId,
+                'announcement_id' => $announcement->id,
+                'type' => 'announcement',
+                'title' => $announcement->title,
+                'message' => \Illuminate\Support\Str::limit($announcement->content, 120),
+                'link' => route('notifications.index'),
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Announcement marked as read.']);
     }
 
     public function manifest($user)

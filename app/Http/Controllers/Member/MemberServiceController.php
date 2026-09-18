@@ -263,6 +263,10 @@ class MemberServiceController extends Controller
             ]),
         ]);
 
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Request accepted! You can now start chatting.']);
+        }
+
         return back()->with('success', 'Request accepted! You can now start chatting.');
     }
 
@@ -276,10 +280,17 @@ class MemberServiceController extends Controller
         $isSuperAdmin = $user->isSuperAdmin();
 
         if (!$isProvider && !$isServiceOwner && !$isGroupAdmin && !$isSuperAdmin) {
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
             abort(403, 'Unauthorized.');
         }
 
         $serviceRequest->update(['status' => 'rejected']);
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Request rejected.']);
+        }
 
         return back()->with('success', 'Request rejected.');
     }

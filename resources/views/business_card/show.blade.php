@@ -366,99 +366,121 @@
                         @else
                             <!-- Logged-in User Activity Tabs / Blocks -->
                             <div class="space-y-4">
-                                <!-- Announcements -->
+                                <!-- Announcements (Unread Only) -->
                                 <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
                                     <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
                                         <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
                                             <i class="fa-solid fa-bullhorn text-sky-600"></i>
-                                            <span>Community Announcements</span>
+                                            <span>Unread Announcements</span>
                                         </span>
-                                        <span class="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded-full border border-slate-200">
-                                            {{ $userAnnouncements->count() }} Total
+                                        <span id="announcement_count_badge" class="text-[10px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">
+                                            {{ $userAnnouncements->count() }} Unread
                                         </span>
                                     </div>
-                                    @if($userAnnouncements->isEmpty())
-                                        <p class="text-xs text-slate-500 italic py-2">No active announcements found for your joined communities.</p>
-                                    @else
-                                        <div class="divide-y divide-slate-100">
-                                            @foreach($userAnnouncements as $ann)
-                                                <div class="py-2.5 space-y-1 text-left">
-                                                    <div class="flex items-center justify-between">
-                                                        <h5 class="font-bold text-xs" style="color: var(--text-heading, #0f172a);">{{ $ann->title }}</h5>
-                                                        <span class="text-[10px] text-slate-400">{{ $ann->created_at->diffForHumans() }}</span>
+                                    <div id="announcements_container">
+                                        @if($userAnnouncements->isEmpty())
+                                            <p class="text-xs text-slate-500 italic py-2">No unread announcements found.</p>
+                                        @else
+                                            <div class="divide-y divide-slate-100">
+                                                @foreach($userAnnouncements as $ann)
+                                                    <div id="announcement_row_{{ $ann->id }}" class="py-2.5 space-y-1.5 text-left transition-all">
+                                                        <div class="flex items-start justify-between gap-2">
+                                                            <div>
+                                                                <h5 class="font-bold text-xs" style="color: var(--text-heading, #0f172a);">{{ $ann->title }}</h5>
+                                                                <span class="text-[10px] text-slate-400">{{ $ann->created_at->diffForHumans() }}</span>
+                                                            </div>
+                                                            <button type="button" onclick="markAnnouncementAsRead({{ $ann->id }}, this)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-[10px] rounded-lg shadow-2xs transition inline-flex items-center space-x-1 shrink-0">
+                                                                <i class="fa-solid fa-check text-emerald-600"></i>
+                                                                <span>Mark as Read</span>
+                                                            </button>
+                                                        </div>
+                                                        <p class="text-[11px] line-clamp-2" style="color: var(--text-secondary, #64748b);">{{ Str::limit(strip_tags($ann->content), 120) }}</p>
                                                     </div>
-                                                    <p class="text-[11px] line-clamp-2" style="color: var(--text-secondary, #64748b);">{{ Str::limit(strip_tags($ann->content), 120) }}</p>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <!-- Service Requests -->
+                                <!-- Service Requests (Pending Only) -->
                                 <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
                                     <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
                                         <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
                                             <i class="fa-solid fa-handshake text-emerald-600"></i>
-                                            <span>Service Requests</span>
+                                            <span>Pending Service Requests</span>
                                         </span>
-                                        <a href="{{ route('member.services.index', ['tab' => 'requests']) }}" class="text-[10px] font-bold text-sky-600 hover:underline">
-                                            View All <i class="fa-solid fa-arrow-right text-[8px]"></i>
-                                        </a>
                                     </div>
-                                    @if($userServicesRequests->isEmpty())
-                                        <p class="text-xs text-slate-500 italic py-2">No service requests found.</p>
-                                    @else
-                                        <div class="divide-y divide-slate-100">
-                                            @foreach($userServicesRequests as $req)
-                                                <div class="py-2.5 flex items-center justify-between gap-2 text-left">
-                                                    <div class="min-w-0">
-                                                        <div class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $req->service->title ?? 'Service Request' }}</div>
-                                                        <div class="text-[10px] text-slate-500 truncate">
-                                                            {{ $req->provider_id === auth()->id() ? 'From: ' . ($req->requester->name ?? 'Member') : 'To: ' . ($req->provider->name ?? 'Member') }}
+                                    <div id="service_requests_container">
+                                        @if($userServicesRequests->isEmpty())
+                                            <p class="text-xs text-slate-500 italic py-2">No pending service requests.</p>
+                                        @else
+                                            <div class="divide-y divide-slate-100">
+                                                @foreach($userServicesRequests as $req)
+                                                    <div id="service_req_row_{{ $req->id }}" class="py-2.5 flex items-center justify-between gap-2 text-left transition-all">
+                                                        <div class="min-w-0">
+                                                            <div class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $req->service->title ?? 'Service Request' }}</div>
+                                                            <div class="text-[10px] text-slate-500 truncate">
+                                                                {{ $req->provider_id === auth()->id() ? 'From: ' . ($req->requester->name ?? 'Member') : 'To: ' . ($req->provider->name ?? 'Member') }}
+                                                            </div>
                                                         </div>
+                                                        @if($req->provider_id === auth()->id())
+                                                            <div class="flex items-center space-x-1.5 shrink-0">
+                                                                <button type="button" onclick="respondServiceRequest({{ $req->id }}, 'approve', this)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] rounded-lg shadow-2xs transition">
+                                                                    Accept
+                                                                </button>
+                                                                <button type="button" onclick="respondServiceRequest({{ $req->id }}, 'reject', this)" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-[10px] rounded-lg transition">
+                                                                    Reject
+                                                                </button>
+                                                            </div>
+                                                        @else
+                                                            <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-amber-100 text-amber-800 shrink-0">
+                                                                Pending
+                                                            </span>
+                                                        @endif
                                                     </div>
-                                                    <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full shrink-0 {{ $req->status === 'accepted' ? 'bg-emerald-100 text-emerald-800' : ($req->status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600') }}">
-                                                        {{ ucfirst($req->status) }}
-                                                    </span>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <!-- Connection Requests -->
+                                <!-- Pending Connection Requests -->
                                 <div class="p-4 rounded-2xl border space-y-2" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
                                     <div class="flex items-center justify-between border-b border-slate-200/60 pb-2">
                                         <span class="text-xs font-bold flex items-center space-x-1.5" style="color: var(--text-heading, #0f172a);">
                                             <i class="fa-solid fa-user-plus text-purple-600"></i>
                                             <span>Pending Connection Requests</span>
                                         </span>
-                                        <a href="{{ route('member.connections') }}" class="text-[10px] font-bold text-sky-600 hover:underline">
-                                            Manage <i class="fa-solid fa-arrow-right text-[8px]"></i>
-                                        </a>
                                     </div>
-                                    @if($userConnectionRequests->isEmpty())
-                                        <p class="text-xs text-slate-500 italic py-2">No pending connection requests.</p>
-                                    @else
-                                        <div class="divide-y divide-slate-100">
-                                            @foreach($userConnectionRequests as $conn)
-                                                <div class="py-2.5 flex items-center justify-between gap-2 text-left">
-                                                    <div class="flex items-center space-x-2 min-w-0">
-                                                        <div class="w-7 h-7 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0">
-                                                            {{ strtoupper(substr($conn->sender->first_name ?? 'U', 0, 1)) }}
+                                    <div id="connection_requests_container">
+                                        @if($userConnectionRequests->isEmpty())
+                                            <p class="text-xs text-slate-500 italic py-2">No pending connection requests.</p>
+                                        @else
+                                            <div class="divide-y divide-slate-100">
+                                                @foreach($userConnectionRequests as $conn)
+                                                    <div id="conn_req_row_{{ $conn->id }}" class="py-2.5 flex items-center justify-between gap-2 text-left transition-all">
+                                                        <div class="flex items-center space-x-2 min-w-0">
+                                                            <div class="w-7 h-7 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0">
+                                                                {{ strtoupper(substr($conn->sender->first_name ?? 'U', 0, 1)) }}
+                                                            </div>
+                                                            <div class="min-w-0">
+                                                                <div class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $conn->sender->name ?? 'Member' }}</div>
+                                                                <div class="text-[10px] text-slate-400">{{ $conn->created_at->diffForHumans() }}</div>
+                                                            </div>
                                                         </div>
-                                                        <div class="min-w-0">
-                                                            <div class="font-bold text-xs truncate" style="color: var(--text-heading, #0f172a);">{{ $conn->sender->name ?? 'Member' }}</div>
-                                                            <div class="text-[10px] text-slate-400">{{ $conn->created_at->diffForHumans() }}</div>
+                                                        <div class="flex items-center space-x-1.5 shrink-0">
+                                                            <button type="button" onclick="respondConnectionRequest({{ $conn->id }}, 'accept', this)" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] rounded-lg shadow-2xs transition">
+                                                                Accept
+                                                            </button>
+                                                            <button type="button" onclick="respondConnectionRequest({{ $conn->id }}, 'reject', this)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-lg transition">
+                                                                Reject
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ route('member.connections') }}" class="px-2.5 py-1 bg-sky-600 text-white font-bold text-[10px] rounded-lg shadow-2xs hover:bg-sky-700 transition">
-                                                        Review
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endguest
@@ -786,6 +808,110 @@
             copyBtn.innerText = 'Copy';
             copyBtn.style.backgroundColor = 'var(--btn-primary-bg, #0A4744)';
         }, 2000);
+    }
+
+    async function markAnnouncementAsRead(id, btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-emerald-600"></i>`;
+        try {
+            const url = "{{ url('/bizcard/announcements') }}/" + id + "/read";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                const row = document.getElementById('announcement_row_' + id);
+                if (row) row.remove();
+                const container = document.getElementById('announcements_container');
+                const remaining = container.querySelectorAll('[id^="announcement_row_"]');
+                const badge = document.getElementById('announcement_count_badge');
+                if (badge) badge.innerText = remaining.length + ' Unread';
+                if (remaining.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 italic py-2">No unread announcements found.</p>`;
+                }
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i><span>Mark as Read</span>`;
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i><span>Mark as Read</span>`;
+        }
+    }
+
+    async function respondServiceRequest(id, action, btn) {
+        btn.disabled = true;
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i>`;
+        try {
+            const url = action === 'approve' 
+                ? "{{ url('/member/services/requests') }}/" + id + "/approve"
+                : "{{ url('/member/services/requests') }}/" + id + "/reject";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                const row = document.getElementById('service_req_row_' + id);
+                if (row) row.remove();
+                const container = document.getElementById('service_requests_container');
+                const remaining = container.querySelectorAll('[id^="service_req_row_"]');
+                if (remaining.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 italic py-2">No pending service requests.</p>`;
+                }
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    }
+
+    async function respondConnectionRequest(id, action, btn) {
+        btn.disabled = true;
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i>`;
+        try {
+            const url = action === 'accept'
+                ? "{{ url('/member/connections') }}/" + id + "/accept"
+                : "{{ url('/member/connections') }}/" + id + "/reject";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                const row = document.getElementById('conn_req_row_' + id);
+                if (row) row.remove();
+                const container = document.getElementById('connection_requests_container');
+                const remaining = container.querySelectorAll('[id^="conn_req_row_"]');
+                if (remaining.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 italic py-2">No pending connection requests.</p>`;
+                }
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
     }
 </script>
 @endsection

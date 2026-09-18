@@ -83,16 +83,25 @@ class ConnectionController extends Controller
     {
         $user = auth()->user();
         if (!$user) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthenticated.'], 401);
+            }
             return redirect()->route('login');
         }
 
         $connection = Connection::find($id);
 
         if (!$connection) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Connection request not found.'], 404);
+            }
             return redirect()->route('member.connections')->with('error', 'Connection request not found.');
         }
 
         if ((int)$connection->receiver_id !== (int)$user->id && (int)$connection->sender_id !== (int)$user->id && !$user->isSuperAdmin()) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
             return redirect()->route('member.connections')->with('error', 'You are not authorized to accept this connection request.');
         }
 
@@ -101,23 +110,36 @@ class ConnectionController extends Controller
             'accepted_at' => now(),
         ]);
 
-        return redirect()->route('member.connections')->with('success', 'Connection request accepted successfully!');
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Connection request accepted successfully!']);
+        }
+
+        return back()->with('success', 'Connection request accepted successfully!');
     }
 
     public function rejectRequest(Request $request, $id)
     {
         $user = auth()->user();
         if (!$user) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthenticated.'], 401);
+            }
             return redirect()->route('login');
         }
 
         $connection = Connection::find($id);
 
         if (!$connection) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Connection request not found.'], 404);
+            }
             return redirect()->route('member.connections')->with('error', 'Connection request not found.');
         }
 
         if ((int)$connection->receiver_id !== (int)$user->id && (int)$connection->sender_id !== (int)$user->id && !$user->isSuperAdmin()) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
             return redirect()->route('member.connections')->with('error', 'You are not authorized to decline this connection request.');
         }
 
@@ -125,7 +147,11 @@ class ConnectionController extends Controller
             'status' => 'rejected',
         ]);
 
-        return redirect()->route('member.connections')->with('success', 'Connection request declined.');
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Connection request declined.']);
+        }
+
+        return back()->with('success', 'Connection request declined.');
     }
 
     public function requestContactDetails(Request $request)
