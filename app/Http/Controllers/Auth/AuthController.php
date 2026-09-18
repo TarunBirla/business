@@ -69,6 +69,20 @@ class AuthController extends Controller
             }
 
             $request->session()->regenerate();
+
+            if ($request->wantsJson() || $request->ajax()) {
+                $targetUrl = $request->input('redirect_to');
+                if (!$targetUrl) {
+                    if ($user->isSuperAdmin()) $targetUrl = route('super_admin.dashboard');
+                    elseif ($user->isGroupAdmin()) $targetUrl = route('group_admin.dashboard');
+                    else $targetUrl = route('member.dashboard');
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Logged in successfully!',
+                    'redirect' => $targetUrl,
+                ]);
+            }
             
             if ($user->isSuperAdmin()) {
                 return redirect()->intended(route('super_admin.dashboard'));
@@ -99,7 +113,18 @@ class AuthController extends Controller
                 }
             }
 
+            if ($request->filled('redirect_to')) {
+                return redirect($request->input('redirect_to'))->with('success', 'Logged in successfully!');
+            }
+
             return redirect()->intended(route('member.dashboard'));
+        }
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The provided credentials do not match our records or account is not active.',
+            ], 422);
         }
 
         return back()->withErrors([

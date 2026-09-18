@@ -357,10 +357,10 @@
                                     <p class="text-xs max-w-md mx-auto" style="color: var(--text-secondary, #64748b);">Log in to view Announcements, Service Requests, and Connection Requests associated with this card.</p>
                                 </div>
                                 <div class="pt-1">
-                                    <a href="{{ route('login') }}" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-xs transition inline-flex items-center space-x-2">
+                                    <button type="button" onclick="openBizcardLoginModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-xs transition inline-flex items-center space-x-2">
                                         <i class="fa-solid fa-right-to-bracket"></i>
                                         <span>Log In to View Activity</span>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         @else
@@ -590,6 +590,61 @@
     </div>
 </div>
 
+<!-- In-Page Login Modal for Business Card Page -->
+<div id="bizcardLoginModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-[28px] max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-100 transform transition-all">
+        <button type="button" onclick="closeBizcardLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+
+        <div class="text-center space-y-2">
+            <div class="w-14 h-14 rounded-2xl bg-sky-50 border border-sky-200 text-sky-600 flex items-center justify-center mx-auto shadow-2xs text-2xl">
+                <i class="fa-solid fa-right-to-bracket"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900">Member Account Login</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Enter your credentials to unlock your announcements and activity portal.</p>
+        </div>
+
+        <div id="bizcard_login_error" class="hidden p-3 bg-rose-50 text-rose-800 border border-rose-200 rounded-xl text-xs font-bold text-center"></div>
+
+        <form id="bizcardLoginForm" onsubmit="handleBizcardLogin(event)" class="space-y-4">
+            @csrf
+            <input type="hidden" name="redirect_to" value="{{ url()->current() }}">
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address *</label>
+                <div class="relative">
+                    <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                    <input type="email" name="email" id="bizcard_login_email" required placeholder="you@example.com" class="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-sky-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password *</label>
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                    <input type="password" name="password" id="bizcard_login_password" required placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-sky-500">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500">
+                    <span class="font-bold text-slate-600">Remember Me</span>
+                </label>
+                <a href="{{ route('password.request') }}" target="_blank" class="font-bold text-sky-600 hover:underline">Forgot Password?</a>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" id="bizcard_login_submit_btn" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Log In Now</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     let deferredPrompt = null;
 
@@ -597,6 +652,61 @@
         e.preventDefault();
         deferredPrompt = e;
     });
+
+    function openBizcardLoginModal() {
+        const modal = document.getElementById('bizcardLoginModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeBizcardLoginModal() {
+        const modal = document.getElementById('bizcardLoginModal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        const err = document.getElementById('bizcard_login_error');
+        if (err) err.classList.add('hidden');
+    }
+
+    async function handleBizcardLogin(e) {
+        e.preventDefault();
+        const errorDiv = document.getElementById('bizcard_login_error');
+        const submitBtn = document.getElementById('bizcard_login_submit_btn');
+
+        errorDiv.classList.add('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Logging in...</span>`;
+
+        const form = document.getElementById('bizcardLoginForm');
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch("{{ route('login') }}", {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                window.location.reload();
+            } else {
+                errorDiv.innerText = data.message || 'The provided credentials do not match our records.';
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>Log In Now</span>`;
+            }
+        } catch (err) {
+            errorDiv.innerText = 'Login failed. Please check your credentials or internet connection.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>Log In Now</span>`;
+        }
+    }
 
     function openShareModal() {
         const modal = document.getElementById('shareModal');
