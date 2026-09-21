@@ -41,7 +41,19 @@ class SuperAdminGroupController extends Controller
             'country' => 'nullable|string|max:100',
             'price' => 'nullable|numeric|min:0',
             'admin_id' => 'nullable|exists:users,id',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
+
+        $galleryImages = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('groups/gallery', 'public');
+                $galleryImages[] = $path;
+            }
+        }
+
+        $thumbnail = !empty($galleryImages) ? $galleryImages[0] : null;
 
         $slug = Str::slug($request->name);
 
@@ -57,6 +69,8 @@ class SuperAdminGroupController extends Controller
             'city' => $request->city ?? 'London',
             'country' => $request->country ?? 'United Kingdom',
             'status' => 'active',
+            'gallery_images' => $galleryImages,
+            'thumbnail_image' => $thumbnail,
         ]);
 
         if ($request->community_type === 'paid' && $request->filled('price')) {
@@ -191,7 +205,41 @@ class SuperAdminGroupController extends Controller
             'community_type' => 'required|in:free,paid',
             'status' => 'required|in:draft,active,suspended,archived',
             'price' => 'nullable|numeric|min:0',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'thumbnail_image' => 'nullable|string',
+            'delete_images' => 'nullable|array',
         ]);
+
+        $currentGallery = $group->gallery_images ?? [];
+
+        // Handle deletions
+        if ($request->filled('delete_images')) {
+            $deleteList = $request->delete_images;
+            $currentGallery = array_values(array_filter($currentGallery, function ($img) use ($deleteList) {
+                return !in_array($img, $deleteList);
+            }));
+        }
+
+        // Handle new file uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('groups/gallery', 'public');
+                $currentGallery[] = $path;
+            }
+        }
+
+        // Handle thumbnail setting
+        $selectedThumbnail = $group->thumbnail_image;
+        if ($request->filled('thumbnail_image')) {
+            $selectedThumbnail = $request->thumbnail_image;
+        } elseif (!empty($currentGallery) && !in_array($selectedThumbnail, $currentGallery)) {
+            $selectedThumbnail = $currentGallery[0];
+        }
+
+        if (empty($currentGallery)) {
+            $selectedThumbnail = null;
+        }
 
         $group->update([
             'name' => $request->name,
@@ -201,6 +249,8 @@ class SuperAdminGroupController extends Controller
             'community_type' => $request->community_type,
             'city' => $request->city,
             'status' => $request->status,
+            'gallery_images' => $currentGallery,
+            'thumbnail_image' => $selectedThumbnail,
         ]);
 
         if ($request->community_type === 'paid' && $request->filled('price')) {

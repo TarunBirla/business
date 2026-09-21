@@ -40,13 +40,20 @@
         @forelse($groups as $group)
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
                 <div>
-                    <div class="h-40 relative p-4 flex items-end" style="background-color: var(--btn-primary-bg);">
-                        <div class="w-16 h-16 rounded-xl bg-white p-1 shadow-md absolute -bottom-6 left-6 border-2 border-white">
+                    @php
+                        $thumbUrl = $group->thumbnail_image_url;
+                    @endphp
+                    <div class="h-44 relative p-4 flex items-end overflow-hidden" style="background-color: var(--btn-primary-bg);">
+                        @if($thumbUrl)
+                            <img src="{{ $thumbUrl }}" alt="{{ $group->name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent"></div>
+                        @endif
+                        <div class="w-16 h-16 rounded-xl bg-white p-1 shadow-md absolute -bottom-6 left-6 border-2 border-white z-10">
                             <div class="w-full h-full rounded-lg flex items-center justify-center font-bold text-sky-700 text-xl uppercase" style="background-color: var(--bg-page);">
                                 {{ substr($group->name, 0, 2) }}
                             </div>
                         </div>
-                        <span class="ml-auto bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-black">
+                        <span class="ml-auto bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-black z-10 shadow-sm">
                             {{ ucfirst($group->community_type) }}
                         </span>
                     </div>

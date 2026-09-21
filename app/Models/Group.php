@@ -14,6 +14,8 @@ class Group extends Model
         'slug',
         'logo',
         'cover_image',
+        'gallery_images',
+        'thumbnail_image',
         'description',
         'promotional_message',
         'purpose',
@@ -37,7 +39,51 @@ class Group extends Model
     protected $casts = [
         'who_can_join' => 'array',
         'benefits' => 'array',
+        'gallery_images' => 'array',
     ];
+
+    public function formatImageUrl(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        if (str_starts_with($path, 'public/')) {
+            $path = substr($path, 7);
+        }
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+        return asset('storage/' . $path);
+    }
+
+    public function getThumbnailImageUrlAttribute(): ?string
+    {
+        if ($this->thumbnail_image) {
+            return $this->formatImageUrl($this->thumbnail_image);
+        }
+        if (!empty($this->gallery_images) && is_array($this->gallery_images) && count($this->gallery_images) > 0) {
+            return $this->formatImageUrl($this->gallery_images[0]);
+        }
+        return $this->formatImageUrl($this->cover_image);
+    }
+
+    public function getGalleryImageUrlsAttribute(): array
+    {
+        if (empty($this->gallery_images) || !is_array($this->gallery_images)) {
+            return [];
+        }
+        $urls = [];
+        foreach ($this->gallery_images as $path) {
+            $url = $this->formatImageUrl($path);
+            if ($url) {
+                $urls[] = $url;
+            }
+        }
+        return $urls;
+    }
 
     public function members()
     {

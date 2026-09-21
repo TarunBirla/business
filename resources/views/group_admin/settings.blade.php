@@ -33,7 +33,7 @@
         <!-- Community Details Form -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
             <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Edit Details</h3>
-            <form action="{{ route('group_admin.settings.update', $group->id) }}" method="POST" class="space-y-4">
+            <form action="{{ route('group_admin.settings.update', $group->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Community Name</label>
@@ -48,6 +48,47 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Description</label>
                     <textarea name="description" rows="4" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">{{ old('description', $group->description) }}</textarea>
+                </div>
+
+                <!-- Community Photos & Thumbnail Selection -->
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">
+                        <i class="fa-solid fa-images text-sky-600 mr-1"></i> Community Photos & Thumbnail Selection
+                    </label>
+
+                    @if(!empty($group->gallery_images) && count($group->gallery_images) > 0)
+                        <div class="grid grid-cols-2 gap-3 my-2">
+                            @foreach($group->gallery_images as $index => $imgPath)
+                                @php
+                                    $imgUrl = $group->formatImageUrl($imgPath);
+                                    $isThumb = ($group->thumbnail_image === $imgPath) || (empty($group->thumbnail_image) && $index === 0);
+                                @endphp
+                                <div class="relative bg-white p-2 rounded-xl border {{ $isThumb ? 'border-sky-500 ring-2 ring-sky-200' : 'border-slate-200' }} flex flex-col items-center">
+                                    @if($isThumb)
+                                        <span class="absolute top-1 left-1 px-1.5 py-0.5 bg-sky-600 text-white text-[9px] font-extrabold rounded-md shadow-xs z-10">
+                                            <i class="fa-solid fa-star text-[8px]"></i> Thumbnail
+                                        </span>
+                                    @endif
+                                    <img src="{{ $imgUrl }}" class="w-full h-20 object-cover rounded-lg">
+                                    
+                                    <div class="w-full mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                        <label class="flex items-center space-x-1 font-bold text-sky-700 cursor-pointer">
+                                            <input type="radio" name="thumbnail_image" value="{{ $imgPath }}" {{ $isThumb ? 'checked' : '' }} class="text-sky-600">
+                                            <span>Set Main</span>
+                                        </label>
+
+                                        <label class="flex items-center space-x-1 font-bold text-rose-600 cursor-pointer">
+                                            <input type="checkbox" name="delete_images[]" value="{{ $imgPath }}" class="text-rose-600 rounded">
+                                            <span>Delete</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <label class="block text-[11px] font-semibold text-slate-600">Upload Additional Photos (Optional)</label>
+                    <input type="file" name="images[]" multiple accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-slate-200 rounded-xl bg-white">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">

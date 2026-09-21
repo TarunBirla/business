@@ -9,7 +9,7 @@
         <p class="text-sm text-black mt-1">Configure community metadata, membership pricing, and assign Group Admin.</p>
     </div>
 
-    <form method="POST" action="{{ route('super_admin.groups.store') }}" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+    <form method="POST" action="{{ route('super_admin.groups.store') }}" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
         @csrf
 
         <div>
@@ -20,6 +20,15 @@
         <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">About / Description *</label>
             <textarea name="description" rows="4" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500" placeholder="Explain the community background and purpose..."></textarea>
+        </div>
+
+        <!-- Community Gallery Images (Multiple, Optional) -->
+        <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <i class="fa-solid fa-images text-sky-600 mr-1"></i> Community Photos (Multiple - Optional / Nullable)
+            </label>
+            <input type="file" name="images[]" multiple accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-slate-200 rounded-xl">
+            <p class="text-[11px] text-slate-400 mt-1">First photo will automatically be set as the main thumbnail.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-4">

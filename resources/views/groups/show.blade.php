@@ -5,15 +5,27 @@
 @section('og_description', $group->description)
 
 @section('content')
+@php
+    $bannerThumb = $group->thumbnail_image_url;
+    $galleryUrls = $group->gallery_image_urls;
+@endphp
 <!-- Community Header Banner -->
-<div class="text-white relative py-16 shadow-md" style="background-color: var(--btn-primary-bg);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-white relative py-16 shadow-md overflow-hidden" style="background-color: var(--btn-primary-bg);">
+    @if($bannerThumb)
+        <img src="{{ $bannerThumb }}" alt="{{ $group->name }}" class="absolute inset-0 w-full h-full object-cover opacity-25">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-slate-950/30"></div>
+    @endif
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
             <div class="flex flex-col md:flex-row items-center md:items-end space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
-                <div class="w-24 h-24 rounded-2xl bg-white p-2 shadow-xl border-4 border-white shrink-0">
-                    <div class="w-full h-full rounded-xl flex items-center justify-center font-bold text-sky-800 text-3xl uppercase" style="background-color: var(--bg-page);">
-                        {{ substr($group->name, 0, 2) }}
-                    </div>
+                <div class="w-24 h-24 rounded-2xl bg-white p-2 shadow-xl border-4 border-white shrink-0 overflow-hidden">
+                    @if($bannerThumb)
+                        <img src="{{ $bannerThumb }}" alt="{{ $group->name }}" class="w-full h-full object-cover rounded-xl">
+                    @else
+                        <div class="w-full h-full rounded-xl flex items-center justify-center font-bold text-sky-800 text-3xl uppercase" style="background-color: var(--bg-page);">
+                            {{ substr($group->name, 0, 2) }}
+                        </div>
+                    @endif
                 </div>
                 <div>
                     <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-2">
@@ -102,6 +114,28 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Community Photos & Gallery Section -->
+            @if(!empty($galleryUrls) && count($galleryUrls) > 0)
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="text-2xl font-bold text-black mb-2 flex items-center space-x-2">
+                        <span><i class="fa-solid fa-images text-sky-600 mr-2"></i>Community Photo Gallery</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mb-6 font-medium">Explore photos and highlights shared by {{ $group->name }}.</p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        @foreach($galleryUrls as $index => $imgUrl)
+                            <div class="relative group rounded-xl overflow-hidden border border-slate-200 bg-slate-100 aspect-video shadow-xs cursor-pointer" onclick="openPhotoModal('{{ $imgUrl }}')">
+                                <img src="{{ $imgUrl }}" alt="{{ $group->name }} Photo {{ $index + 1 }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 backdrop-blur-[2px]">
+                                    <i class="fa-solid fa-expand"></i>
+                                    <span>View Photo</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <!-- Why Join Section -->
             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
@@ -310,5 +344,22 @@
         </div>
     </div>
 </div>
+
+<!-- Photo Lightbox Modal -->
+<div id="photoModal" class="hidden fixed inset-0 z-[110] bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center">
+        <button type="button" onclick="document.getElementById('photoModal').classList.add('hidden')" class="absolute -top-10 right-0 text-white hover:text-slate-300 font-bold text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-md cursor-pointer transition">
+            <i class="fa-solid fa-xmark mr-1"></i> Close
+        </button>
+        <img id="modalImage" src="" class="max-w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-white/10">
+    </div>
+</div>
+
+<script>
+    function openPhotoModal(url) {
+        document.getElementById('modalImage').src = url;
+        document.getElementById('photoModal').classList.remove('hidden');
+    }
+</script>
 
 @endsection

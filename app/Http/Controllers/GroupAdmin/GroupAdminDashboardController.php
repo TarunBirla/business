@@ -102,24 +102,64 @@ class GroupAdminDashboardController extends Controller
             'city' => 'nullable|string|max:100',
             'region' => 'nullable|string|max:100',
             'theme_id' => 'nullable|exists:themes,id',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'thumbnail_image' => 'nullable|string',
+            'delete_images' => 'nullable|array',
         ]);
 
-        foreach ($validated as $field => $newValue) {
-            $oldValue = $group->$field;
-            if ($oldValue != $newValue) {
-                CommunityAuditLog::create([
-                    'group_id' => $group->id,
-                    'user_id' => auth()->id(),
-                    'field_name' => $field,
-                    'old_value' => (string) $oldValue,
-                    'new_value' => (string) $newValue,
-                ]);
+        $currentGallery = $group->gallery_images ?? [];
+
+        // Handle image deletions
+        if ($request->filled('delete_images')) {
+            $deleteList = $request->delete_images;
+            $currentGallery = array_values(array_filter($currentGallery, function ($img) use ($deleteList) {
+                return !in_array($img, $deleteList);
+            }));
+        }
+
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('groups/gallery', 'public');
+                $currentGallery[] = $path;
+            }
+        }
+
+        // Handle thumbnail selection
+        $selectedThumbnail = $group->thumbnail_image;
+        if ($request->filled('thumbnail_image')) {
+            $selectedThumbnail = $request->thumbnail_image;
+        } elseif (!empty($currentGallery) && !in_array($selectedThumbnail, $currentGallery)) {
+            $selectedThumbnail = $currentGallery[0];
+        }
+
+        if (empty($currentGallery)) {
+            $selectedThumbnail = null;
+        }
+
+        $validated['gallery_images'] = $currentGallery;
+        $validated['thumbnail_image'] = $selectedThumbnail;
+
+        foreach (['name', 'tagline', 'description', 'city', 'region', 'theme_id', 'thumbnail_image'] as $field) {
+            if (array_key_exists($field, $validated)) {
+                $newValue = $validated[$field];
+                $oldValue = $group->$field;
+                if ($oldValue != $newValue) {
+                    CommunityAuditLog::create([
+                        'group_id' => $group->id,
+                        'user_id' => auth()->id(),
+                        'field_name' => $field,
+                        'old_value' => (string) $oldValue,
+                        'new_value' => (string) $newValue,
+                    ]);
+                }
             }
         }
 
         $group->update($validated);
 
-        return back()->with('success', 'Community details & theme updated successfully. Audit log entry recorded.');
+        return back()->with('success', 'Community details, images & theme updated successfully. Audit log entry recorded.');
     }
 
     private function authorizeAdmin(Group $group)
