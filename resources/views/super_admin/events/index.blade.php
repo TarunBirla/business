@@ -55,6 +55,9 @@
                         <td class="p-4 text-slate-600 text-xs">{{ \Carbon\Carbon::parse($event->start_at)->format('M d, Y H:i') }}</td>
                         <td class="p-4 font-bold text-slate-900">{{ $event->registrations_count }}/{{ $event->capacity }}</td>
                         <td class="p-4 text-right space-x-2">
+                            <a href="{{ route('events.show', $event->slug) }}" target="_blank" class="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold text-xs rounded-lg transition border border-sky-200">
+                                View
+                            </a>
                             <a href="{{ route('super_admin.events.edit', $event->id) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition">
                                 Edit
                             </a>

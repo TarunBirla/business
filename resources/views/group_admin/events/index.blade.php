@@ -48,9 +48,12 @@
                     <p class="text-xs text-black mt-0.5"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $event->venue ?? 'Online' }}, {{ $event->city }}</p>
                 </div>
 
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 mt-4">
                     <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-ticket text-sky-600 mr-1"></i>{{ $event->registrations_count }} Registered</span>
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2 flex-wrap gap-y-2">
+                        <a href="{{ route('events.show', $event->slug) }}" target="_blank" class="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold text-xs rounded-lg transition border border-sky-200">
+                            <i class="fa-solid fa-eye mr-1"></i> View
+                        </a>
                         <a href="{{ route('group_admin.events.edit', [$group->id, $event->id]) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition">
                             <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
                         </a>

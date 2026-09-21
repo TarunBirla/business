@@ -9,9 +9,14 @@
             <h1 class="text-2xl font-bold text-slate-900">Edit Community Event</h1>
             <p class="text-xs text-slate-500 mt-1">Update event details for <strong>{{ $event->title }}</strong> in {{ $group->name }}.</p>
         </div>
-        <a href="{{ route('group_admin.events.index', $group->id) }}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
-            <i class="fa-solid fa-arrow-left mr-1.5"></i> Back
-        </a>
+        <div class="flex items-center space-x-2">
+            <a href="{{ route('events.show', $event->slug) }}" target="_blank" class="px-4 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold text-xs rounded-xl border border-sky-200 transition">
+                <i class="fa-solid fa-eye mr-1.5"></i> View Event Page
+            </a>
+            <a href="{{ route('group_admin.events.index', $group->id) }}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                <i class="fa-solid fa-arrow-left mr-1.5"></i> Back
+            </a>
+        </div>
     </div>
 
     <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xs">
