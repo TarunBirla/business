@@ -12,7 +12,7 @@
 <!-- Community Header Banner -->
 <div class="text-white relative py-16 shadow-md overflow-hidden" style="background-color: var(--btn-primary-bg);">
     @if($bannerThumb)
-        <img src="{{ $bannerThumb }}" alt="{{ $group->name }}" class="absolute inset-0 w-full h-full object-cover opacity-25">
+        <img src="{{ $bannerThumb }}" alt="{{ $group->name }}" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-slate-950/30"></div>
     @endif
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
