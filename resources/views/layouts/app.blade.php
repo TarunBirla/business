@@ -212,8 +212,8 @@
                             
                             <a href="{{ route('member.dashboard') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0A4744);">My Dashboard</a>
                         @else
-                            <a href="{{ route('login') }}" class="px-4 py-2 text-xs font-bold hover:opacity-80 transition" style="color: var(--text-primary, #0f172a);">Login</a>
-                            <!-- <a href="{{ route('groups.index') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0A4744);">Join Now</a> -->
+                            <!-- <a href="{{ route('login') }}" class="px-4 py-2 text-xs font-bold hover:opacity-80 transition" style="color: var(--text-primary, #0f172a);">Login</a> -->
+                            <a href="{{ route('login') }}" class="px-5 py-2.5 text-xs font-bold text-white rounded-xl shadow-md transition" style="background-color: var(--btn-primary-bg, #0A4744);">Login</a>
                         @endauth
                     </div>
 
@@ -243,8 +243,8 @@
                     </a>
                 @else
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="{{ route('login') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold rounded-xl border" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #0f172a);">Login</a>
-                        <!-- <a href="{{ route('groups.index') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold text-white rounded-xl shadow-sm" style="background-color: var(--btn-primary-bg, #0A4744);">Join Now</a> -->
+                        <!-- <a href="{{ route('login') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold rounded-xl border" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0); color: var(--text-primary, #0f172a);">Login</a> -->
+                        <a href="{{ route('login') }}" onclick="closePublicMobileNav()" class="block text-center py-2.5 text-xs font-bold text-white rounded-xl shadow-sm" style="background-color: var(--btn-primary-bg, #0A4744);">Login</a>
                     </div>
                 @endauth
             </div>
