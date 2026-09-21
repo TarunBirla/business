@@ -29,7 +29,7 @@
         </div>
     @endif
 
-    <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Community Details Form -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
             <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Edit Details</h3>
@@ -126,7 +126,7 @@
         </div>
 
         <!-- Audit History Table -->
-        <!-- <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class=" bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between">
                 <div>
                     <h3 class="text-base font-bold text-slate-900">Audit Trail / Update History</h3>
@@ -164,7 +164,7 @@
             <div class="p-4 border-t border-slate-100">
                 {{ $auditLogs->links() }}
             </div>
-        </div> -->
+        </div>
     </div>
 </div>
 @endsection
