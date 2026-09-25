@@ -57,6 +57,7 @@ Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
 
 // Public Digital Business Card & vCard Export & PWA Manifest
 Route::get('/bizcard/{user}', [PublicBusinessCardController::class, 'show'])->name('bizcard.show');
+// Route::get('/bizcard/{user}/vcard', [PublicBusinessCardController::class, 'downloadVcard'])->name('bizcard.vcard');
 Route::get('/bizcard/{user}/vcard', [PublicBusinessCardController::class, 'downloadVcard'])->name('bizcard.vcard');
 Route::get('/bizcard/{user}/manifest.json', [PublicBusinessCardController::class, 'manifest'])->name('bizcard.manifest');
 
