@@ -235,20 +235,20 @@ class PublicBusinessCardController extends Controller
 
         // ---------- 1) PHOTO (embedded as base64) ----------
         if ($userModel->profile_photo_url) {
-            $photoLine = $this->buildPhotoLine($userModel->profile_photo_url);
-            if ($photoLine) {
-                foreach ($this->foldVcardLine($photoLine) as $line) {
-                    $vcardLines[] = $line;
-                }
-            }
-        }
+    $photoLine = $this->buildPhotoLine($userModel->profile_photo_url);
+    if ($photoLine) {
+        // PHOTO ko fold NAHI karna — Android/Samsung ke parsers folded
+        // continuation lines ko sahi se unfold nahi karte aur unhe
+        // pichle field (ADR) ke garbage text ki tarah dikha dete hain.
+        // Ek single unfolded line most mobile apps ke saath reliably chalti hai.
+        $vcardLines[] = $photoLine;
+    }
+}
 
         // ---------- 2) Richer NOTE (bio + custom notes + card link) ----------
         $noteParts = [];
 
-        if ($userModel->description) {
-            $noteParts[] = $this->escapeVcard($userModel->description);
-        }
+        
 
         if ($userModel->notes) {
             $noteParts[] = $this->escapeVcard($userModel->notes);
@@ -282,39 +282,39 @@ class PublicBusinessCardController extends Controller
      * type (fails silently so the vCard still generates without a photo
      * rather than throwing or producing a corrupt PHOTO block).
      */
-    private function buildPhotoLine($photoUrl)
-    {
-        try {
-            $imageData = @file_get_contents($photoUrl);
-            if ($imageData === false || empty($imageData)) {
-                return null;
-            }
-
-            // Detect mime type from the binary data itself (more reliable than the URL extension)
-            $finfo = new \finfo(FILEINFO_MIME_TYPE);
-            $mime = $finfo->buffer($imageData);
-
-            // FIXED: no more lying about webp being JPEG. Only pass through
-            // formats that are actually encoded the way we say they are.
-            // (Optional upgrade: convert webp -> jpeg with GD before this
-            // match if you want webp photos to still show up.)
-            $type = match ($mime) {
-                'image/jpeg' => 'JPEG',
-                'image/png' => 'PNG',
-                default => null, // webp / unsupported -> skip photo, vCard stays valid
-            };
-
-            if (!$type) {
-                return null;
-            }
-
-            $base64 = base64_encode($imageData);
-
-            return 'PHOTO;ENCODING=b;TYPE=' . $type . ':' . $base64;
-        } catch (\Throwable $e) {
+   private function buildPhotoLine($photoUrl)
+{
+    try {
+        $imageData = @file_get_contents($photoUrl);
+        if ($imageData === false || empty($imageData)) {
             return null;
         }
+
+        // Bahut badi image skip karo — single-line base64 bloat se kuch
+        // apps timeout/reject kar sakte hain.
+        if (strlen($imageData) > 150 * 1024) {
+            return null;
+        }
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->buffer($imageData);
+
+        $type = match ($mime) {
+            'image/jpeg' => 'JPEG',
+            'image/png' => 'PNG',
+            default => null,
+        };
+
+        if (!$type) {
+            return null;
+        }
+
+        $base64 = base64_encode($imageData);
+        return 'PHOTO;ENCODING=b;TYPE=' . $type . ':' . $base64;
+    } catch (\Throwable $e) {
+        return null;
     }
+}
 
     /**
      * Folds a single vCard property line per RFC 2426 §2.6:
