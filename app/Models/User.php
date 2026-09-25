@@ -26,6 +26,7 @@ class User extends Authenticatable
         'state',
         'city',
         'description',
+        'notes',
         'website',
         'linkedin',
         'privacy_settings',

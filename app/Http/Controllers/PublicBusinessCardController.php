@@ -12,9 +12,14 @@ class PublicBusinessCardController extends Controller
     public function show($user)
     {
         $userModel = User::where('id', $user)->firstOrFail();
-        $userModel->load(['servicesOffered', 'servicesNeeded', 'groups', 'projects' => function ($q) {
-            $q->where('status', 'active')->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
-        }]);
+        $userModel->load([
+            'servicesOffered',
+            'servicesNeeded',
+            'groups',
+            'projects' => function ($q) {
+                $q->where('status', 'active')->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+            }
+        ]);
 
         // $showEmail = false;
         // $showPhone = false;
@@ -56,7 +61,7 @@ class PublicBusinessCardController extends Controller
         $userServicesRequests = collect();
         $userConnectionRequests = collect();
 
-        if (auth()->check() && (int)auth()->id() === (int)$userModel->id) {
+        if (auth()->check() && (int) auth()->id() === (int) $userModel->id) {
             $currentUserId = auth()->id();
             $groupIds = $userModel->groups->pluck('id')->toArray();
 
@@ -70,7 +75,7 @@ class PublicBusinessCardController extends Controller
 
             // Fetch ONLY UNREAD announcements for joined communities or global announcements
             $userAnnouncements = \App\Models\Announcement::whereNotIn('id', $readAnnouncementIds)
-                ->where(function($q) use ($groupIds) {
+                ->where(function ($q) use ($groupIds) {
                     if (!empty($groupIds)) {
                         $q->whereIn('group_id', $groupIds)->orWhereNull('group_id');
                     } else {
@@ -80,9 +85,9 @@ class PublicBusinessCardController extends Controller
 
             // Fetch ONLY pending service requests
             $userServicesRequests = \App\Models\ServiceRequest::where('status', 'pending')
-                ->where(function($q) use ($currentUserId) {
+                ->where(function ($q) use ($currentUserId) {
                     $q->where('provider_id', $currentUserId)
-                      ->orWhere('requester_id', $currentUserId);
+                        ->orWhere('requester_id', $currentUserId);
                 })
                 ->with(['service', 'requester', 'provider'])
                 ->latest()
@@ -179,6 +184,10 @@ class PublicBusinessCardController extends Controller
         return response()->json($manifest)->header('Content-Type', 'application/manifest+json');
     }
 
+
+
+
+
     public function downloadVcard($user)
     {
         $userModel = User::where('id', $user)->firstOrFail();
@@ -225,7 +234,39 @@ class PublicBusinessCardController extends Controller
             $vcardLines[] = 'ADR;TYPE=WORK:;;;' . $this->escapeVcard($userModel->city) . ';;' . $this->escapeVcard($userModel->country ?? 'UK') . ';';
         }
 
-        $vcardLines[] = 'NOTE:Member of Community UK Professional Network. Card: ' . route('bizcard.show', $userModel->id);
+        // ---------- 1) PHOTO (embedded as base64) ----------
+        // $userModel->profile_photo_url must resolve to a public URL/path (as used elsewhere in the blade)
+        if ($userModel->profile_photo_url) {
+            $photoLine = $this->buildPhotoLine($userModel->profile_photo_url);
+            if ($photoLine) {
+                // foldVcardLine returns an array of properly wrapped lines
+                foreach ($this->foldVcardLine($photoLine) as $line) {
+                    $vcardLines[] = $line;
+                }
+            }
+        }
+
+        // ---------- 2) Richer NOTE (bio + card link) ----------
+        // ---------- 2) Richer NOTE (bio + custom notes + card link) ----------
+        $noteParts = [];
+
+        if ($userModel->description) {
+            $noteParts[] = $this->escapeVcard($userModel->description);
+        }
+
+
+        if ($userModel->notes) {
+            $noteParts[] = $this->escapeVcard($userModel->notes);
+        }
+
+        $noteParts[] = 'Member of Community UK Professional Network. Card: ' . route('bizcard.show', $userModel->id);
+
+        $noteLine = 'NOTE:' . implode('\n', $noteParts);
+
+        foreach ($this->foldVcardLine($noteLine) as $line) {
+            $vcardLines[] = $line;
+        }
+
         $vcardLines[] = 'END:VCARD';
 
         $vcardContent = implode("\r\n", $vcardLines);
@@ -235,6 +276,70 @@ class PublicBusinessCardController extends Controller
             'Content-Type' => 'text/vcard; charset=utf-8',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
+    }
+
+    /**
+     * Fetches the image, base64-encodes it, and returns the unfolded
+     * PHOTO;ENCODING=b;TYPE=...:<base64data> line.
+     * Returns null if the image can't be fetched (fails silently so the
+     * vCard still generates without a photo rather than throwing).
+     */
+    private function buildPhotoLine($photoUrl)
+    {
+        try {
+            $imageData = @file_get_contents($photoUrl);
+            if ($imageData === false || empty($imageData)) {
+                return null;
+            }
+
+            // Detect mime type from the binary data itself (more reliable than the URL extension)
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->buffer($imageData);
+
+            $type = match ($mime) {
+                'image/jpeg' => 'JPEG',
+                'image/png' => 'PNG',
+                'image/webp' => 'JPEG', // fallback label; most contact apps expect JPEG/PNG
+                default => null,
+            };
+
+            if (!$type) {
+                return null;
+            }
+
+            $base64 = base64_encode($imageData);
+
+            return 'PHOTO;ENCODING=b;TYPE=' . $type . ':' . $base64;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Folds a single vCard property line per RFC 2426 §2.6:
+     * - Max 75 octets per line
+     * - Continuation lines start with a single space
+     * Returns an array of lines (first line is the property line itself,
+     * subsequent lines are the folded continuations).
+     */
+    private function foldVcardLine(string $line): array
+    {
+        $maxLen = 75;
+        $lines = [];
+        $remaining = $line;
+
+        // First line: up to 75 chars, no leading space
+        $lines[] = mb_substr($remaining, 0, $maxLen);
+        $remaining = mb_substr($remaining, $maxLen);
+
+        // Continuation lines: up to 74 chars (75 - 1 for the leading space)
+        while (mb_strlen($remaining) > 0) {
+            $chunk = mb_substr($remaining, 0, $maxLen - 1);
+            $lines[] = ' ' . $chunk;
+            $remaining = mb_substr($remaining, $maxLen - 1);
+        }
+
+        return $lines;
     }
 
     private function escapeVcard($string)
