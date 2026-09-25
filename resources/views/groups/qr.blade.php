@@ -16,9 +16,19 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex items-center justify-center p-6">
     <div class="bg-white p-12 rounded-3xl border-2 border-sky-100 shadow-2xl max-w-md w-full text-center space-y-6">
-        <div class="w-16 h-16 bg-sky-600 text-white rounded-2xl font-bold text-2xl flex items-center justify-center mx-auto shadow-md">
-            {{ substr($group->name, 0, 2) }}
-        </div>
+        @php
+            $thumbUrl = $group->thumbnail_image_url ?? ($group->logo ? $group->formatImageUrl($group->logo) : null);
+        @endphp
+
+        @if($thumbUrl)
+            <div class="w-20 h-20 rounded-2xl overflow-hidden mx-auto shadow-md border-2 border-slate-100 bg-slate-50">
+                <img src="{{ $thumbUrl }}" alt="{{ $group->name }}" class="w-full h-full object-cover">
+            </div>
+        @else
+            <div class="w-16 h-16 bg-[#0284c7] text-white rounded-2xl font-bold text-2xl flex items-center justify-center mx-auto shadow-md">
+                {{ substr($group->name, 0, 2) }}
+            </div>
+        @endif
 
         <div>
             <h1 class="text-3xl font-bold text-black">{{ $group->name }}</h1>
