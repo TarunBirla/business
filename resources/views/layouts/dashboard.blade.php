@@ -457,13 +457,13 @@
                         <a href="{{ route('group_admin.services.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-handshake w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}"> Manage Services</span>
-                        </a>
+                        </a> -->
 
                         @php $active = request()->routeIs('group_admin.projects*'); @endphp
                         <a href="{{ route('group_admin.projects.index') }}" onclick="closeMobileSidebar()" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}" style="{{ $active ? $navActiveStyle : '' }}">
                             <i class="fa-solid fa-briefcase w-5" style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Member Projects</span>
-                        </a> -->
+                        </a>
 
                         
 
