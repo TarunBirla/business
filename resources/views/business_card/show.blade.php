@@ -132,10 +132,10 @@
                             <span>Download / Install Card App</span>
                         </button>
 
-                        <!-- <a href="{{ route('bizcard.vcard', $userModel->id) }}" class="w-full py-3.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2 transform active:scale-95">
+                        <a href="{{ route('bizcard.vcard', $userModel->id) }}" class="w-full py-3.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2 transform active:scale-95">
                             <i class="fa-solid fa-address-card text-sm"></i>
                             <span>Save Contact</span>
-                        </a> -->
+                        </a>
                     </div>
 
                     <!-- Prominent QR Code Card (On Page) -->
