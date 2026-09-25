@@ -184,10 +184,6 @@ class PublicBusinessCardController extends Controller
         return response()->json($manifest)->header('Content-Type', 'application/manifest+json');
     }
 
-
-
-
-
     public function downloadVcard($user)
     {
         $userModel = User::where('id', $user)->firstOrFail();
@@ -230,28 +226,29 @@ class PublicBusinessCardController extends Controller
             $vcardLines[] = 'URL:' . $userModel->website;
         }
 
+        // FIXED: correct ADR field order -> POBox;Extended;Street;Locality;Region;PostalCode;Country
         if ($userModel->city) {
-            $vcardLines[] = 'ADR;TYPE=WORK:;;;' . $this->escapeVcard($userModel->city) . ';;;' . $this->escapeVcard($userModel->country ?? 'UK');
+            $vcardLines[] = 'ADR;TYPE=WORK:;;;'
+                . $this->escapeVcard($userModel->city) . ';;;'
+                . $this->escapeVcard($userModel->country ?? 'UK');
         }
 
         // ---------- 1) PHOTO (embedded as base64) ----------
-        // $userModel->profile_photo_url must resolve to a public URL/path (as used elsewhere in the blade)
         if ($userModel->profile_photo_url) {
             $photoLine = $this->buildPhotoLine($userModel->profile_photo_url);
             if ($photoLine) {
-                // foldVcardLine returns an array of properly wrapped lines
                 foreach ($this->foldVcardLine($photoLine) as $line) {
                     $vcardLines[] = $line;
                 }
             }
         }
 
-        // ---------- 2) Richer NOTE (bio + card link) ----------
         // ---------- 2) Richer NOTE (bio + custom notes + card link) ----------
         $noteParts = [];
 
-       
-
+        if ($userModel->description) {
+            $noteParts[] = $this->escapeVcard($userModel->description);
+        }
 
         if ($userModel->notes) {
             $noteParts[] = $this->escapeVcard($userModel->notes);
@@ -259,6 +256,8 @@ class PublicBusinessCardController extends Controller
 
         $noteParts[] = 'Member of Community UK Professional Network. Card: ' . route('bizcard.show', $userModel->id);
 
+        // NOTE: parts are already escaped above, so join with the literal
+        // vCard newline token directly (do NOT re-escape here).
         $noteLine = 'NOTE:' . implode('\n', $noteParts);
 
         foreach ($this->foldVcardLine($noteLine) as $line) {
@@ -267,7 +266,7 @@ class PublicBusinessCardController extends Controller
 
         $vcardLines[] = 'END:VCARD';
 
-        $vcardContent = implode("\r\n", $vcardLines);
+        $vcardContent = implode("\r\n", $vcardLines) . "\r\n";
         $filename = preg_replace('/[^A-Za-z0-9_]/', '_', $userModel->name) . '_BusinessCard.vcf';
 
         return response($vcardContent, 200, [
@@ -279,8 +278,9 @@ class PublicBusinessCardController extends Controller
     /**
      * Fetches the image, base64-encodes it, and returns the unfolded
      * PHOTO;ENCODING=b;TYPE=...:<base64data> line.
-     * Returns null if the image can't be fetched (fails silently so the
-     * vCard still generates without a photo rather than throwing).
+     * Returns null if the image can't be fetched or isn't a supported
+     * type (fails silently so the vCard still generates without a photo
+     * rather than throwing or producing a corrupt PHOTO block).
      */
     private function buildPhotoLine($photoUrl)
     {
@@ -294,11 +294,14 @@ class PublicBusinessCardController extends Controller
             $finfo = new \finfo(FILEINFO_MIME_TYPE);
             $mime = $finfo->buffer($imageData);
 
+            // FIXED: no more lying about webp being JPEG. Only pass through
+            // formats that are actually encoded the way we say they are.
+            // (Optional upgrade: convert webp -> jpeg with GD before this
+            // match if you want webp photos to still show up.)
             $type = match ($mime) {
                 'image/jpeg' => 'JPEG',
                 'image/png' => 'PNG',
-                'image/webp' => 'JPEG', // fallback label; most contact apps expect JPEG/PNG
-                default => null,
+                default => null, // webp / unsupported -> skip photo, vCard stays valid
             };
 
             if (!$type) {
@@ -317,44 +320,44 @@ class PublicBusinessCardController extends Controller
      * Folds a single vCard property line per RFC 2426 §2.6:
      * - Max 75 octets per line
      * - Continuation lines start with a single space
+     * Byte-safe (won't split a multibyte UTF-8 character across lines)
+     * and O(n) — safe even for large base64 PHOTO lines.
      * Returns an array of lines (first line is the property line itself,
      * subsequent lines are the folded continuations).
      */
-   private function foldVcardLine(string $line): array
-{
-    $maxLen = 75;
-    $bytes = $line;
-    $lines = [];
-    $isFirst = true;
-
-    while (strlen($bytes) > 0) {
-        $limit = $isFirst ? $maxLen : $maxLen - 1;
+    private function foldVcardLine(string $line): array
+    {
+        $maxLen = 75;
+        $chars = mb_str_split($line, 1, 'UTF-8');
+        $lines = [];
         $chunk = '';
-        $tmp = $bytes;
-        // byte-safe cut without breaking multibyte UTF-8 char
-        while (strlen($chunk) < $limit && mb_strlen($tmp) > 0) {
-            $char = mb_substr($tmp, 0, 1);
-            if (strlen($chunk . $char) > $limit) break;
+        $isFirst = true;
+        $limit = $maxLen;
+
+        foreach ($chars as $char) {
+            $charBytes = strlen($char);
+            if (strlen($chunk) + $charBytes > $limit) {
+                $lines[] = $isFirst ? $chunk : ' ' . $chunk;
+                $isFirst = false;
+                $chunk = '';
+                $limit = $maxLen - 1; // continuation lines: 1 byte less (leading space)
+            }
             $chunk .= $char;
-            $tmp = mb_substr($tmp, 1);
         }
-        $lines[] = $isFirst ? $chunk : ' ' . $chunk;
-        $bytes = $tmp;
-        $isFirst = false;
+
+        if ($chunk !== '' || empty($lines)) {
+            $lines[] = $isFirst ? $chunk : ' ' . $chunk;
+        }
+
+        return $lines;
     }
 
-    return $lines;
-}
-
- private function escapeVcard($string)
-{
-    $string = $string ?? '';
-    // pehle backslash escape karo
-    $string = str_replace('\\', '\\\\', $string);
-    // phir baaki special chars
-    $string = str_replace([';', ','], ['\;', '\,'], $string);
-    // sabse aakhir me newlines (taaki upar wale steps inhe touch na karein)
-    $string = str_replace(["\r\n", "\r", "\n"], '\n', $string);
-    return $string;
-}
+    private function escapeVcard($string)
+    {
+        $string = $string ?? '';
+        $string = str_replace('\\', '\\\\', $string);
+        $string = str_replace([';', ','], ['\;', '\,'], $string);
+        $string = str_replace(["\r\n", "\r", "\n"], '\n', $string);
+        return $string;
+    }
 }
