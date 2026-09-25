@@ -231,7 +231,7 @@ class PublicBusinessCardController extends Controller
         }
 
         if ($userModel->city) {
-            $vcardLines[] = 'ADR;TYPE=WORK:;;;' . $this->escapeVcard($userModel->city) . ';;' . $this->escapeVcard($userModel->country ?? 'UK') . ';';
+            $vcardLines[] = 'ADR;TYPE=WORK:;;;' . $this->escapeVcard($userModel->city) . ';;;' . $this->escapeVcard($userModel->country ?? 'UK');
         }
 
         // ---------- 1) PHOTO (embedded as base64) ----------
@@ -250,9 +250,7 @@ class PublicBusinessCardController extends Controller
         // ---------- 2) Richer NOTE (bio + custom notes + card link) ----------
         $noteParts = [];
 
-        if ($userModel->description) {
-            $noteParts[] = $this->escapeVcard($userModel->description);
-        }
+       
 
 
         if ($userModel->notes) {
@@ -322,28 +320,41 @@ class PublicBusinessCardController extends Controller
      * Returns an array of lines (first line is the property line itself,
      * subsequent lines are the folded continuations).
      */
-    private function foldVcardLine(string $line): array
-    {
-        $maxLen = 75;
-        $lines = [];
-        $remaining = $line;
+   private function foldVcardLine(string $line): array
+{
+    $maxLen = 75;
+    $bytes = $line;
+    $lines = [];
+    $isFirst = true;
 
-        // First line: up to 75 chars, no leading space
-        $lines[] = mb_substr($remaining, 0, $maxLen);
-        $remaining = mb_substr($remaining, $maxLen);
-
-        // Continuation lines: up to 74 chars (75 - 1 for the leading space)
-        while (mb_strlen($remaining) > 0) {
-            $chunk = mb_substr($remaining, 0, $maxLen - 1);
-            $lines[] = ' ' . $chunk;
-            $remaining = mb_substr($remaining, $maxLen - 1);
+    while (strlen($bytes) > 0) {
+        $limit = $isFirst ? $maxLen : $maxLen - 1;
+        $chunk = '';
+        $tmp = $bytes;
+        // byte-safe cut without breaking multibyte UTF-8 char
+        while (strlen($chunk) < $limit && mb_strlen($tmp) > 0) {
+            $char = mb_substr($tmp, 0, 1);
+            if (strlen($chunk . $char) > $limit) break;
+            $chunk .= $char;
+            $tmp = mb_substr($tmp, 1);
         }
-
-        return $lines;
+        $lines[] = $isFirst ? $chunk : ' ' . $chunk;
+        $bytes = $tmp;
+        $isFirst = false;
     }
 
-    private function escapeVcard($string)
-    {
-        return str_replace(['\\', ';', ','], ['\\\\', '\;', '\,'], $string ?? '');
-    }
+    return $lines;
+}
+
+ private function escapeVcard($string)
+{
+    $string = $string ?? '';
+    // pehle backslash escape karo
+    $string = str_replace('\\', '\\\\', $string);
+    // phir baaki special chars
+    $string = str_replace([';', ','], ['\;', '\,'], $string);
+    // sabse aakhir me newlines (taaki upar wale steps inhe touch na karein)
+    $string = str_replace(["\r\n", "\r", "\n"], '\n', $string);
+    return $string;
+}
 }
