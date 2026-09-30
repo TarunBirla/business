@@ -190,8 +190,7 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-10 w-auto rounded-xl object-contain shadow-2xs">
-                        <span class="font-extrabold text-lg tracking-tight hidden sm:inline-block" style="color: var(--text-heading, #0f172a);">Bizconn</span>
+                        <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-10  w-auto rounded-xl object-contain shadow-2xs">
                     </a>
                 </div>
 
