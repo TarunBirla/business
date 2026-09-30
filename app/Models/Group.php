@@ -25,6 +25,7 @@ class Group extends Model
         'rules',
         'expert_categories',
         'community_type',
+        'visibility_type',
         'country',
         'state',
         'city',

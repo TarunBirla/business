@@ -64,12 +64,19 @@
             <input type="file" name="images[]" multiple accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-slate-200 rounded-xl bg-white">
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Community Type *</label>
-                <select name="community_type" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
-                    <option value="free" {{ $group->community_type === 'free' ? 'selected' : '' }}>Free Community</option>
-                    <option value="paid" {{ $group->community_type === 'paid' ? 'selected' : '' }}>Paid Subscription Community</option>
+                <select name="community_type" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                    <option value="free" {{ old('community_type', $group->community_type) === 'free' ? 'selected' : '' }}>Free Community</option>
+                    <option value="paid" {{ old('community_type', $group->community_type) === 'paid' ? 'selected' : '' }}>Paid Subscription Community</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Visibility Type *</label>
+                <select name="visibility_type" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                    <option value="public" {{ old('visibility_type', $group->visibility_type ?? 'public') === 'public' ? 'selected' : '' }}>Public (Directory & Home)</option>
+                    <option value="private" {{ old('visibility_type', $group->visibility_type) === 'private' ? 'selected' : '' }}>Private (Hidden from Public)</option>
                 </select>
             </div>
             <div>

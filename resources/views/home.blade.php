@@ -27,6 +27,68 @@
     </div>
 </section>
 
+<!-- Why Bizconn Section -->
+<section class="py-16 md:py-20 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+            <span class="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-sky-100 text-sky-900 text-xs font-extrabold uppercase tracking-wider border border-sky-300 shadow-2xs">
+                <i class="fa-solid fa-star text-sky-600"></i>
+                <span>Enterprise Business Ecosystem</span>
+            </span>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Why Choose Bizconn?</h2>
+            <p class="text-slate-600 text-base leading-relaxed">
+                Engineered by <strong>Nexteck Company</strong>, Bizconn provides a trusted, high-performance platform designed to help business owners, trade experts, and regional networks connect, collaborate, and scale.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Feature 1: Powered by Nexteck -->
+            <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition space-y-3 group">
+                <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold border border-sky-100 group-hover:bg-sky-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-building-shield"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-sky-600 transition">Powered by Nexteck</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Built on enterprise-grade software architecture by Nexteck Company, ensuring high security, data reliability, and continuous digital innovation.
+                </p>
+            </div>
+
+            <!-- Feature 2: Verified Directory -->
+            <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition space-y-3 group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition">Verified Directory</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Connect directly with verified community members, trade specialists, legal advisors, accountants, and IT leaders in a trusted ecosystem.
+                </p>
+            </div>
+
+            <!-- Feature 3: Services Exchange -->
+            <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition space-y-3 group">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-handshake font-bold"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition">Services Exchange</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Easily list professional services you offer or submit service requests. Match with local expertise within your community network seamlessly.
+                </p>
+            </div>
+
+            <!-- Feature 4: Events & Summits -->
+            <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition space-y-3 group">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold border border-amber-100 group-hover:bg-amber-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-amber-600 transition">Events & Summits</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Participate in exclusive community networking breakfasts, webinars, and annual summits with QR-code entry and instant attendee connections.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Discover Communities Section -->
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -10,7 +10,13 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $featuredGroups = Group::where('status', 'active')->withCount(['members', 'events'])->take(6)->get();
+        $featuredGroups = Group::where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('visibility_type')->orWhere('visibility_type', 'public');
+            })
+            ->withCount(['members', 'events'])
+            ->take(6)
+            ->get();
         $upcomingEvents = Event::where('status', 'published')
             ->where('start_at', '>=', now())
             ->with(['group'])

@@ -11,7 +11,11 @@ class PublicGroupController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Group::where('status', 'active')->withCount(['members', 'events']);
+        $query = Group::where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('visibility_type')->orWhere('visibility_type', 'public');
+            })
+            ->withCount(['members', 'events']);
 
         if ($request->filled('search')) {
             $query->where(function($q) use ($request) {
