@@ -14,7 +14,7 @@
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="@yield('og_title', 'Bizconn Business Networking Ecosystem')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses on Bizconn.')">
-    <meta property="og:image" content="@yield('og_image', asset('bizconn_logo.jpg'))">
+    <meta property="og:image" content="@yield('og_image', asset('image.png'))">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
 
@@ -190,7 +190,7 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-10  w-auto rounded-xl object-contain shadow-2xs">
+                        <img src="{{ asset('image.png') }}" alt="Bizconn Logo" class="h-16  w-auto rounded-xl object-contain shadow-2xs">
                     </a>
                 </div>
 
@@ -283,8 +283,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-9 w-auto rounded-lg object-contain bg-white p-0.5 shadow-2xs">
-                        <span class="font-extrabold text-lg text-white">Bizconn</span>
+                        <img src="{{ asset('image.png') }}" alt="Bizconn Logo" class="h-16 w-auto rounded-lg object-contain bg-white p-0.5 shadow-2xs">
+                        
                     </div>
                     <p class="text-xs leading-relaxed opacity-90">
                         A modern professional business networking ecosystem bringing entrepreneurs, professionals, and companies together across the UK.
