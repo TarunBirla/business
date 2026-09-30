@@ -153,6 +153,15 @@ class MessageController extends Controller
         $groupId = (int)$request->group_id;
         $receiverId = (int)$request->receiver_id;
 
+        $abusive = \App\Services\ProfanityFilter::findAbusiveWord($request->message);
+        if ($abusive) {
+            $msgErr = "Your message contains inappropriate language (\"{$abusive}\"). Please remove abusive words to send.";
+            if ($request->wantsJson() || $request->ajax() || $request->expectsJson()) {
+                return response()->json(['error' => $msgErr, 'success' => false], 422);
+            }
+            return back()->with('error', $msgErr);
+        }
+
         if (!$sender->isMemberOf($groupId)) {
             if ($request->wantsJson() || $request->ajax()) {
                 return response()->json(['error' => 'You are not a member of this community.'], 403);

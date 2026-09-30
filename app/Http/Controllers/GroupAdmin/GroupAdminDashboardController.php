@@ -38,8 +38,8 @@ class GroupAdminDashboardController extends Controller
         $eventsCount = $activeGroup->events()->count();
         $noticesCount = $activeGroup->notices()->count();
 
-        $recentMembers = $activeGroup->members()->where('users.id', '!=', auth()->id())->latest()->take(5)->get();
-        $upcomingEvents = $activeGroup->upcomingEvents()->take(5)->get();
+        $recentMembers = $activeGroup->members()->where('users.id', '!=', auth()->id())->latest()->take(10)->get();
+        $upcomingEvents = $activeGroup->upcomingEvents()->take(10)->get();
 
         return view('group_admin.dashboard', compact(
             'assignedGroups',
@@ -107,7 +107,13 @@ class GroupAdminDashboardController extends Controller
             'thumbnail_image' => 'nullable|string',
             'delete_images' => 'nullable|array',
             'expert_categories' => 'nullable',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         ]);
+
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('groups/logos', 'public');
+            $validated['logo'] = $logoPath;
+        }
 
         if ($request->has('expert_categories')) {
             if (is_array($request->expert_categories)) {

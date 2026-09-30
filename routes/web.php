@@ -308,3 +308,40 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     Route::post('/themes/{theme}/duplicate', [ThemeController::class, 'duplicate'])->name('themes.duplicate');
     Route::delete('/themes/{theme}', [ThemeController::class, 'destroy'])->name('themes.destroy');
 });
+
+// Helper Route for Live cPanel Migration & Abusive Words System Setup
+Route::get('/fix-abusing-words-migration', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+
+        $initialWords = [
+            'abuse', 'abusive', 'asshole', 'bastard', 'bitch', 'bullshit',
+            'crap', 'cunt', 'dick', 'fuck', 'fucking', 'motherfucker',
+            'nigger', 'pussy', 'shit', 'slut', 'whore', 'idiot', 'stupid',
+            'madarchod', 'behenchod', 'bhenchod', 'gaand', 'chutiya', 'harami',
+            'kamina', 'saala', 'kutta', 'kamine', 'bhosdike'
+        ];
+
+        foreach ($initialWords as $w) {
+            \App\Models\AbusingWord::firstOrCreate(
+                ['word' => strtolower($w)],
+                ['is_active' => true]
+            );
+        }
+
+        \App\Services\ProfanityFilter::clearCache();
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'abusing_words migration executed and initial words seeded successfully!',
+            'artisan_output' => \Illuminate\Support\Facades\Artisan::output(),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+});
+

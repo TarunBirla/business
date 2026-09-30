@@ -80,6 +80,11 @@ class Group extends Model
         return asset('storage/' . $path);
     }
 
+    public function getLogoUrlAttribute(): ?string
+    {
+        return $this->formatImageUrl($this->logo);
+    }
+
     public function getThumbnailImageUrlAttribute(): ?string
     {
         if ($this->thumbnail_image) {

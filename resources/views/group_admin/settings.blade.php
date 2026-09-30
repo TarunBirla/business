@@ -48,6 +48,22 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Description</label>
                     <textarea name="description" rows="4" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">{{ old('description', $group->description) }}</textarea>
+                <!-- Community Logo Upload -->
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">
+                        <i class="fa-solid fa-shield-halved text-sky-600 mr-1"></i> Community Brand Logo (Displays in Sidebar)
+                    </label>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs">
+                            @if($group->logo_url)
+                                <img src="{{ $group->logo_url }}" alt="Logo" class="w-full h-full object-contain">
+                            @else
+                                <span class="font-bold text-sky-700 text-sm uppercase">{{ substr($group->name, 0, 2) }}</span>
+                            @endif
+                        </div>
+                        <input type="file" name="logo" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-slate-200 rounded-xl bg-white">
+                    </div>
+                    <p class="text-[11px] text-slate-400">Upload custom logo for {{ $group->name }}. Displays in the sidebar logo header when managing this community.</p>
                 </div>
 
                 <!-- Community Photos & Thumbnail Selection -->

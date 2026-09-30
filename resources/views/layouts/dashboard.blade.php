@@ -198,9 +198,16 @@
                 </button>
             </div>
 
+            @php
+                $sidebarLogo = asset('logo.jpeg');
+                $targetGroupForLogo = $group ?? $currentAdminGroup ?? null;
+                if ($targetGroupForLogo && $targetGroupForLogo->logo_url) {
+                    $sidebarLogo = $targetGroupForLogo->logo_url;
+                }
+            @endphp
             <!-- Desktop Logo -->
             <a href="{{ url('/') }}" class="hidden md:flex items-center space-x-3 mb-6">
-                <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-10 w-auto rounded-xl object-contain shadow-2xs">
+                <img src="{{ $sidebarLogo }}" alt="Community Logo" class="h-10 w-auto max-w-[180px] max-h-12 rounded-xl object-contain shadow-2xs">
             </a>
 
             <!-- Navigation Links -->
@@ -638,6 +645,16 @@
         @endif
 
         @yield('content')
+
+        <!-- Dashboard Short Footer -->
+        <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 font-medium space-y-1">
+            <p>Development by <strong>nexteck 2026©</strong></p>
+            <p class="space-x-3 text-[11px] text-slate-400">
+                <span><i class="fa-solid fa-envelope mr-1 text-sky-600"></i><a href="mailto:mohammednasar.uk@gmail.com" class="hover:underline text-slate-600">mohammednasar.uk@gmail.com</a></span>
+                <span>&bull;</span>
+                <span><i class="fa-solid fa-phone mr-1 text-emerald-600"></i><a href="tel:+447879175585" class="hover:underline text-slate-600">+44 7879175585</a></span>
+            </p>
+        </footer>
     </main>
 
     <script>
