@@ -190,11 +190,8 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-12 w-auto rounded-xl object-contain shadow-2xs">
-                        <div class="flex flex-col">
-                            <span class="font-extrabold text-xl tracking-tight leading-none" style="color: var(--text-heading, #0f172a);">Bizconn</span>
-                            <span class="text-[10px] font-bold text-sky-600 uppercase tracking-wider mt-0.5">A Nexteck Product</span>
-                        </div>
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-18 w-auto rounded-xl object-contain shadow-2xs">
+                        
                     </a>
                 </div>
 
@@ -287,11 +284,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-12 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
-                        <div class="flex flex-col">
-                            <span class="font-extrabold text-xl text-white tracking-tight leading-none">Bizconn</span>
-                            <span class="text-[10px] font-bold text-sky-400 uppercase tracking-wider mt-0.5">Nexteck Enterprise</span>
-                        </div>
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-18 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
+                        
                     </div>
                     <p class="text-xs leading-relaxed opacity-90">
                         <strong>Bizconn</strong> is a flagship professional business networking platform by <strong>Nexteck</strong>, bringing entrepreneurs, professionals, and enterprise networks together.
