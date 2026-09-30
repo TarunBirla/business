@@ -23,6 +23,7 @@ class Group extends Model
         'who_can_join',
         'benefits',
         'rules',
+        'expert_categories',
         'community_type',
         'country',
         'state',
@@ -40,7 +41,27 @@ class Group extends Model
         'who_can_join' => 'array',
         'benefits' => 'array',
         'gallery_images' => 'array',
+        'expert_categories' => 'array',
     ];
+
+    public function getAvailableExpertCategoriesAttribute(): array
+    {
+        if (!empty($this->expert_categories) && is_array($this->expert_categories) && count($this->expert_categories) > 0) {
+            return array_values(array_filter(array_map('trim', $this->expert_categories)));
+        }
+        return [
+            'Accounting & Tax Advice',
+            'Digital Marketing & SEO',
+            'IT & Web Development',
+            'Legal & Solicitor Services',
+            'Mortgage & Insurance Broking',
+            'Property & Estate Agents',
+            'Healthcare & Wellness',
+            'Education & Tutoring',
+            'Business Consulting',
+            'Trade & Crafts',
+        ];
+    }
 
     public function formatImageUrl(?string $path): ?string
     {

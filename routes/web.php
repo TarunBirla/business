@@ -72,6 +72,17 @@ Route::get('/fix-storage-link', function () {
     }
 });
 
+// cPanel Live Deployment Migration Helper Route (1-Click Safe Migration for Expert Categories)
+Route::get('/fix-expert-categories-migration', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        return '<h1 style="color:green;font-family:sans-serif;text-align:center;margin-top:50px;">SUCCESS: Expert Categories Migration Applied & View Cache Cleared Successfully!</h1>';
+    } catch (\Exception $e) {
+        return '<h1 style="color:red;font-family:sans-serif;text-align:center;margin-top:50px;">STATUS: ' . $e->getMessage() . '</h1>';
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Authentication Routes

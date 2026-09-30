@@ -11,12 +11,16 @@ class MemberProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        $allServices = Service::where('status', 'active')->orderBy('name')->get();
-        $userServicesOffered = $user->servicesOffered->pluck('id')->toArray();
-        $userServicesNeeded = $user->servicesNeeded->pluck('id')->toArray();
+        $userGroups = $user->groups()->wherePivot('status', 'active')->get();
+        if ($userGroups->isEmpty()) {
+            $userGroups = $user->groups()->get();
+        }
+
+        $userServicesOffered = $user->servicesOffered->pluck('name')->toArray();
+        $userServicesNeeded = $user->servicesNeeded->pluck('name')->toArray();
         $themes = \App\Models\Theme::where('is_active', true)->orderBy('is_default', 'desc')->get();
 
-        return view('member.profile.edit', compact('user', 'allServices', 'userServicesOffered', 'userServicesNeeded', 'themes'));
+        return view('member.profile.edit', compact('user', 'userGroups', 'userServicesOffered', 'userServicesNeeded', 'themes'));
     }
 
     public function update(Request $request)
@@ -77,18 +81,26 @@ class MemberProfileController extends Controller
 
         $user->update($updateData);
 
-        // Sync services offered & needed
+        // Sync services offered & needed by Service Name
         $user->servicesOffered()->detach();
         if ($request->has('services_offered')) {
-            foreach ($request->services_offered as $serviceId) {
-                $user->servicesOffered()->attach($serviceId, ['type' => 'offer']);
+            foreach ($request->services_offered as $serviceItem) {
+                $serviceName = trim($serviceItem);
+                if ($serviceName) {
+                    $service = Service::firstOrCreate(['name' => $serviceName], ['status' => 'active']);
+                    $user->servicesOffered()->attach($service->id, ['type' => 'offer']);
+                }
             }
         }
 
         $user->servicesNeeded()->detach();
         if ($request->has('services_needed')) {
-            foreach ($request->services_needed as $serviceId) {
-                $user->servicesNeeded()->attach($serviceId, ['type' => 'need']);
+            foreach ($request->services_needed as $serviceItem) {
+                $serviceName = trim($serviceItem);
+                if ($serviceName) {
+                    $service = Service::firstOrCreate(['name' => $serviceName], ['status' => 'active']);
+                    $user->servicesNeeded()->attach($service->id, ['type' => 'need']);
+                }
             }
         }
 

@@ -38,8 +38,9 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         @forelse($groups as $group)
-        
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+        <a href="{{ route('groups.show', $group->slug) }}"
+   class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group cursor-pointer block"></a>
+            <!-- <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"> -->
                 <div>
                     @php
                         $thumbUrl = $group->thumbnail_image_url;
@@ -77,7 +78,7 @@
                         View Community
                     </a>
                 </div>
-            </div>
+</a>
         @empty
             <div class="col-span-3 text-center py-16 bg-white rounded-2xl border border-slate-200">
                 <p class="text-black font-semibold">No communities found matching your filter criteria.</p>

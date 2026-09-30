@@ -183,9 +183,9 @@
             <!-- Service Categories -->
             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                 <h2 class="text-2xl font-bold text-black mb-4">Available Expert in Community</h2>
-                <p class="text-sm text-black mb-6">Members within this community offer and request services in these fields:</p>
+                <p class="text-sm text-black mb-6">Members within {{ $group->name }} offer and request services in these fields:</p>
                 <div class="flex flex-wrap gap-2">
-                    @foreach(['Accounting', 'Legal & Legal Advice', 'Property & Estate Agents', 'Insurance', 'IT & Software', 'Marketing & Branding', 'Recruitment', 'Business Consulting', 'Education & Tutoring', 'Photography & Media'] as $category)
+                    @foreach($group->available_expert_categories as $category)
                         <span class="px-3.5 py-1.5 bg-sky-50 border border-sky-100 text-sky-800 text-xs font-semibold rounded-lg flex items-center">
                             <i class="fa-solid fa-check text-sky-600 mr-1.5 text-xs"></i> {{ $category }}
                         </span>

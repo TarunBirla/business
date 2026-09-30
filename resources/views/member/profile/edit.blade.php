@@ -119,56 +119,92 @@
             </div>
         </div>
 
-        <!-- Privacy & Contact Detail Controls -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="text-xl font-bold text-black border-b pb-4">Backend Privacy Controls (GDPR Compliant)</h3>
-            <p class="text-xs text-black">By default, your email address and phone number are kept hidden from public view until you approve a connection or contact request.</p>
-
-            <div class="space-y-3 pt-2">
-                <label class="flex items-center space-x-3 cursor-pointer">
-                    <input type="checkbox" name="show_email" value="1" {{ ($user->privacy_settings['show_email'] ?? false) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                    <span class="text-sm font-semibold text-slate-700">Display my Email Address to all community members</span>
-                </label>
-
-                <label class="flex items-center space-x-3 cursor-pointer">
-                    <input type="checkbox" name="show_phone" value="1" {{ ($user->privacy_settings['show_phone'] ?? false) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                    <span class="text-sm font-semibold text-slate-700">Display my Phone Number to all community members</span>
-                </label>
-
-                <label class="flex items-center space-x-3 cursor-pointer">
-                    <input type="checkbox" name="allow_connections" value="1" {{ ($user->privacy_settings['allow_connections'] ?? true) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                    <span class="text-sm font-semibold text-slate-700">Allow other community members to send me connection requests</span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Services I Offer & Services I Need -->
+        <!-- Services I Offer & Services I Need (Dynamic per Joined Community) -->
         <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <h3 class="text-xl font-bold text-black border-b pb-4">Professional Services Exchange</h3>
-
-            <div>
-                <label class="block text-xs font-bold text-sky-700 uppercase mb-3">Services I Offer (Select all that apply)</label>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    @foreach($allServices as $service)
-                        <label class="flex items-center space-x-2 p-2.5 rounded-lg border border-slate-200 hover:bg-sky-50/50 cursor-pointer">
-                            <input type="checkbox" name="services_offered[]" value="{{ $service->id }}" {{ in_array($service->id, $userServicesOffered) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                            <span class="text-xs font-semibold text-black">{{ $service->name }}</span>
-                        </label>
-                    @endforeach
-                </div>
+            <div class="border-b pb-4">
+                <h3 class="text-xl font-bold text-black">Professional Services Exchange</h3>
+                <p class="text-xs text-slate-500 mt-1">Select the expert services you offer or need based on your joined communities.</p>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-amber-700 uppercase mb-3">Services I Need (Select all that apply)</label>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    @foreach($allServices as $service)
-                        <label class="flex items-center space-x-2 p-2.5 rounded-lg border border-slate-200 hover:bg-amber-50/50 cursor-pointer">
-                            <input type="checkbox" name="services_needed[]" value="{{ $service->id }}" {{ in_array($service->id, $userServicesNeeded) ? 'checked' : '' }} class="rounded border-slate-300 text-amber-600 focus:ring-amber-500">
-                            <span class="text-xs font-semibold text-black">{{ $service->name }}</span>
-                        </label>
+            @if(isset($userGroups) && $userGroups->count() > 0)
+                <div class="space-y-6">
+                    @foreach($userGroups as $groupItem)
+                        @php
+                            $groupCategories = $groupItem->available_expert_categories;
+                        @endphp
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-5">
+                            <div class="flex items-center space-x-2 border-b border-slate-200/80 pb-3">
+                                <span class="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs shrink-0">
+                                    <i class="fa-solid fa-users"></i>
+                                </span>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">{{ $groupItem->name }}</h4>
+                                    <span class="text-[11px] text-slate-500">Group Admin Defined Expert Categories</span>
+                                </div>
+                            </div>
+
+                            <!-- Services Offered -->
+                            <div>
+                                <label class="block text-xs font-bold text-sky-700 uppercase mb-2">
+                                    <i class="fa-solid fa-briefcase mr-1"></i> Services I Offer in {{ $groupItem->name }}
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                                    @foreach($groupCategories as $catName)
+                                        <label class="flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-sky-50/50 cursor-pointer shadow-2xs transition">
+                                            <input type="checkbox" name="services_offered[]" value="{{ $catName }}" {{ in_array($catName, $userServicesOffered) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
+                                            <span class="text-xs font-semibold text-black leading-tight">{{ $catName }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Services Needed -->
+                            <div>
+                                <label class="block text-xs font-bold text-amber-700 uppercase mb-2">
+                                    <i class="fa-solid fa-hand-holding-hand mr-1"></i> Services I Need in {{ $groupItem->name }}
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                                    @foreach($groupCategories as $catName)
+                                        <label class="flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-amber-50/50 cursor-pointer shadow-2xs transition">
+                                            <input type="checkbox" name="services_needed[]" value="{{ $catName }}" {{ in_array($catName, $userServicesNeeded) ? 'checked' : '' }} class="rounded border-slate-300 text-amber-600 focus:ring-amber-500">
+                                            <span class="text-xs font-semibold text-black leading-tight">{{ $catName }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
-            </div>
+            @else
+                @php
+                    $defaultCats = ['Accounting & Tax Advice', 'Digital Marketing & SEO', 'IT & Web Development', 'Legal & Solicitor Services', 'Mortgage & Insurance Broking', 'Property & Estate Agents'];
+                @endphp
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-sky-700 uppercase mb-3">Services I Offer (Select all that apply)</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            @foreach($defaultCats as $catName)
+                                <label class="flex items-center space-x-2 p-2.5 rounded-lg border border-slate-200 hover:bg-sky-50/50 cursor-pointer">
+                                    <input type="checkbox" name="services_offered[]" value="{{ $catName }}" {{ in_array($catName, $userServicesOffered) ? 'checked' : '' }} class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
+                                    <span class="text-xs font-semibold text-black">{{ $catName }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-amber-700 uppercase mb-3">Services I Need (Select all that apply)</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            @foreach($defaultCats as $catName)
+                                <label class="flex items-center space-x-2 p-2.5 rounded-lg border border-slate-200 hover:bg-amber-50/50 cursor-pointer">
+                                    <input type="checkbox" name="services_needed[]" value="{{ $catName }}" {{ in_array($catName, $userServicesNeeded) ? 'checked' : '' }} class="rounded border-slate-300 text-amber-600 focus:ring-amber-500">
+                                    <span class="text-xs font-semibold text-black">{{ $catName }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Theme Preference Settings -->

@@ -119,6 +119,15 @@
                     <p class="text-[11px] text-slate-400 mt-1">Select a custom theme for members in {{ $group->name }}.</p>
                 </div>
 
+                <!-- Available Expert Categories / Services -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                        <i class="fa-solid fa-briefcase text-sky-600 mr-1"></i> Available Expert Categories in Community
+                    </label>
+                    <textarea name="expert_categories" rows="4" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium" placeholder="Enter service categories separated by commas or new lines (e.g. Accounting & Tax Advice, Digital Marketing & SEO, IT & Web Development, Legal & Solicitor Services)">{{ old('expert_categories', is_array($group->expert_categories) ? implode("\n", $group->expert_categories) : $group->expert_categories) }}</textarea>
+                    <p class="text-[11px] text-slate-400 mt-1">Enter categories separated by commas or new lines. These will display on the Public Community page and in Member Profile options.</p>
+                </div>
+
                 <button type="submit" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl transition shadow-sm">
                     Save Changes & Log Audit
                 </button>

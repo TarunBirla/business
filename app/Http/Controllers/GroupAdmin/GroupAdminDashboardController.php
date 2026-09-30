@@ -106,7 +106,19 @@ class GroupAdminDashboardController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'thumbnail_image' => 'nullable|string',
             'delete_images' => 'nullable|array',
+            'expert_categories' => 'nullable',
         ]);
+
+        if ($request->has('expert_categories')) {
+            if (is_array($request->expert_categories)) {
+                $categories = array_values(array_filter(array_map('trim', $request->expert_categories)));
+            } else {
+                $rawText = (string) $request->expert_categories;
+                $split = preg_split('/[\n\r,]+/', $rawText);
+                $categories = array_values(array_filter(array_map('trim', $split)));
+            }
+            $validated['expert_categories'] = $categories;
+        }
 
         $currentGallery = $group->gallery_images ?? [];
 
