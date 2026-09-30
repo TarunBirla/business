@@ -314,13 +314,7 @@ Route::get('/fix-abusing-words-migration', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
 
-        $initialWords = [
-            'abuse', 'abusive', 'asshole', 'bastard', 'bitch', 'bullshit',
-            'crap', 'cunt', 'dick', 'fuck', 'fucking', 'motherfucker',
-            'nigger', 'pussy', 'shit', 'slut', 'whore', 'idiot', 'stupid',
-            'madarchod', 'behenchod', 'bhenchod', 'gaand', 'chutiya', 'harami',
-            'kamina', 'saala', 'kutta', 'kamine', 'bhosdike'
-        ];
+        $initialWords = \App\Services\ProfanityFilter::getActiveWords();
 
         foreach ($initialWords as $w) {
             \App\Models\AbusingWord::firstOrCreate(
@@ -329,12 +323,14 @@ Route::get('/fix-abusing-words-migration', function () {
             );
         }
 
+        $totalInserted = \App\Models\AbusingWord::count();
+
         \App\Services\ProfanityFilter::clearCache();
         \Illuminate\Support\Facades\Artisan::call('view:clear');
 
         return response()->json([
             'success' => true,
-            'message' => 'abusing_words migration executed and initial words seeded successfully!',
+            'message' => "abusing_words migration executed successfully! Total active words in database: {$totalInserted}",
             'artisan_output' => \Illuminate\Support\Facades\Artisan::output(),
         ]);
     } catch (\Throwable $e) {

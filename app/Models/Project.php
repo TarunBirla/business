@@ -25,6 +25,8 @@ class Project extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
+        'sort_order' => 'integer',
         'completion_date' => 'date',
     ];
 

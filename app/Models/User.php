@@ -100,7 +100,11 @@ class User extends Authenticatable
 
     public function isGroupAdmin(int $groupId = null): bool
     {
-        if ($this->isSuperAdmin()) {
+        if ($this->isSuperAdmin() || $this->global_role === 'super_admin') {
+            return true;
+        }
+
+        if ($this->global_role === 'group_admin') {
             return true;
         }
 

@@ -137,19 +137,24 @@ class MemberProjectController extends Controller
 
     private function canManageProject(User $user, Project $project): bool
     {
-        if ($project->user_id === $user->id) {
+        if ((int)$project->user_id === (int)$user->id) {
             return true;
         }
 
-        if ($user->isSuperAdmin()) {
+        if ($user->isSuperAdmin() || $user->global_role === 'super_admin') {
             return true;
         }
 
-        if ($user->isGroupAdmin()) {
+        if ($user->isGroupAdmin() || $user->global_role === 'group_admin') {
             $adminGroupIds = $user->groups()
                 ->wherePivot('membership_role', 'group_admin')
                 ->pluck('groups.id')
                 ->toArray();
+
+            if ($user->global_role === 'group_admin') {
+                $userGroupIds = $user->groups()->pluck('groups.id')->toArray();
+                $adminGroupIds = array_unique(array_merge($adminGroupIds, $userGroupIds));
+            }
 
             if (!empty($adminGroupIds)) {
                 $isMemberInAdminGroup = User::where('id', $project->user_id)
