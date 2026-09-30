@@ -325,6 +325,48 @@ Route::get('/fix-abusing-words-migration', function () {
 
         $totalInserted = \App\Models\AbusingWord::count();
 
+        // Update About Us CMS content for Nexteck Parent Company
+        $aboutContent = '<div class="space-y-6">
+            <div class="p-6 bg-sky-50 border border-sky-200 rounded-2xl">
+                <span class="px-3 py-1 bg-sky-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">A Flagship Product of Nexteck</span>
+                <h2 class="text-2xl font-bold text-slate-900 mt-3">Welcome to Bizconn</h2>
+                <p class="text-sm text-slate-700 mt-2 leading-relaxed">
+                    <strong>Bizconn</strong> is a premier business networking and community ecosystem developed and powered by <strong>Nexteck Company</strong>, a leading UK technology solutions firm.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900">About Nexteck (Parent Company)</h3>
+                <p class="text-slate-600 leading-relaxed">
+                    <strong>Nexteck Company</strong> provides cutting-edge software development, enterprise digital solutions, cloud architecture, and business community platforms. Bizconn was engineered by Nexteck to empower regional business networks, trade associations, and professional communities to connect, collaborate, and exchange services in one digital ecosystem.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <h4 class="font-bold text-slate-900 text-sm mb-1"><i class="fa-solid fa-building text-sky-600 mr-2"></i>Parent Enterprise</h4>
+                    <p class="text-xs text-slate-600">Nexteck UK Technology Solutions</p>
+                </div>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <h4 class="font-bold text-slate-900 text-sm mb-1"><i class="fa-solid fa-diagram-project text-emerald-600 mr-2"></i>Flagship Platform</h4>
+                    <p class="text-xs text-slate-600">Bizconn Business Network</p>
+                </div>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <h4 class="font-bold text-slate-900 text-sm mb-1"><i class="fa-solid fa-headset text-indigo-600 mr-2"></i>Developer & Support</h4>
+                    <p class="text-xs text-slate-600">mohammednasar.uk@gmail.com | +44 7879175585</p>
+                </div>
+            </div>
+        </div>';
+
+        \App\Models\CmsPage::updateOrCreate(
+            ['slug' => 'about'],
+            [
+                'title' => 'About Bizconn & Nexteck',
+                'content' => $aboutContent,
+                'is_published' => true,
+            ]
+        );
+
         \App\Services\ProfanityFilter::clearCache();
         \Illuminate\Support\Facades\Artisan::call('view:clear');
 

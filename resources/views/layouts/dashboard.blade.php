@@ -251,7 +251,7 @@
     <header
         class="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
         <a href="{{ url('/') }}" class="flex items-center space-x-2.5">
-            <img src="{{ asset('newlogo.png') }}" alt="Bizconn Logo"
+            <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo"
                 class="h-9 w-auto rounded-lg object-contain shadow-2xs">
             <span class="font-extrabold text-sm text-slate-900 tracking-tight">Bizconn</span>
         </a>
@@ -286,7 +286,7 @@
             <!-- Header for Mobile Drawer (Close Button) -->
             <div class="flex items-center justify-between md:hidden pb-3 border-b border-slate-100">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ asset('newlogo.png') }}" alt="Bizconn Logo" class="h-8 w-auto rounded-lg">
+                    <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-8 w-auto rounded-lg">
                     <span class="font-bold text-sm text-slate-900">Navigation Menu</span>
                 </div>
                 <button onclick="closeMobileSidebar()"
@@ -296,7 +296,7 @@
             </div>
 
             @php
-                $sidebarLogo = asset('newlogo.png');
+                $sidebarLogo = asset('nlogo.png');
                 $targetGroupForLogo = $group ?? $currentAdminGroup ?? null;
                 if ($targetGroupForLogo && $targetGroupForLogo->logo_url) {
                     $sidebarLogo = $targetGroupForLogo->logo_url;
@@ -868,38 +868,14 @@
 
         <footer class="mt-12 pt-6 border-t border-slate-200 text-center">
 
-            <p class="text-xs text-slate-500 font-medium">
-                <span class="font-semibold text-slate-700">© 2026 The Nexteck</span>
-                <span class="mx-2 text-slate-300">•</span>
-                <span>All Rights Reserved</span>
+        <!-- Dashboard Short Footer -->
+        <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 font-medium space-y-1">
+            <p class="font-bold text-slate-700">Developed and Powered by <strong class="text-sky-600">Nexteck 2026©</strong></p>
+            <p class="space-x-3 text-[11px] text-slate-400 pt-0.5">
+                <span><i class="fa-solid fa-envelope mr-1 text-sky-600"></i><a href="mailto:mohammednasar.uk@gmail.com" class="hover:underline text-slate-600">mohammednasar.uk@gmail.com</a></span>
+                <span>&bull;</span>
+                <span><i class="fa-solid fa-phone mr-1 text-emerald-600"></i><a href="tel:+447879175585" class="hover:underline text-slate-600">+44 7879175585</a></span>
             </p>
-
-            <p class="mt-2 text-[11px] text-slate-400">
-
-                <span class="inline-flex items-center">
-                    <i class="fa-solid fa-code mr-1.5 text-sky-600"></i>
-                    Developed by
-                    <strong class="ml-1 text-slate-600">TheNexteck</strong>
-                </span>
-
-                <span class="mx-2 text-slate-300">•</span>
-
-                <a href="mailto:mohammednasar.uk@gmail.com"
-                    class="inline-flex items-center text-slate-500 hover:text-sky-600 transition-colors">
-                    <i class="fa-solid fa-envelope mr-1.5 text-sky-600"></i>
-                    mohammednasar.uk@gmail.com
-                </a>
-
-                <span class="mx-2 text-slate-300">•</span>
-
-                <a href="tel:+447879175585"
-                    class="inline-flex items-center text-slate-500 hover:text-emerald-600 transition-colors">
-                    <i class="fa-solid fa-phone mr-1.5 text-emerald-600"></i>
-                    +44 7879175585
-                </a>
-
-            </p>
-
         </footer>
 
     </main>

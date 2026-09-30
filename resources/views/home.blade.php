@@ -7,21 +7,21 @@
 <!-- Hero Section -->
 <section class="relative py-16 lg:py-16 overflow-hidden border-b border-slate-200" style="background-color: var(--bg-page);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-sky-100/80 text-sky-800 font-semibold text-xs tracking-wide uppercase mb-6 border border-sky-200">
-            <span><i class="fa-solid fa-earth-europe text-sky-600 mr-1.5"></i> UK Community Networking Ecosystem</span>
+        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-sky-100/80 text-sky-900 font-bold text-xs tracking-wide uppercase mb-6 border border-sky-300 shadow-2xs">
+            <span><i class="fa-solid fa-building text-sky-600 mr-1.5"></i> A Nexteck Company Product | Bizconn Ecosystem</span>
         </div>
         <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 leading-tight max-w-4xl mx-auto">
-            Connect With Your Community. <br class="hidden sm:inline" /><span class="text-sky-600">Build Meaningful Relationships.</span>
+            Connect With Your Network. <br class="hidden sm:inline" /><span class="text-sky-600">Powered by Nexteck Innovation.</span>
         </h1>
         <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Discover people you already have something in common with, connect with professionals and businesses, exchange services, attend events and stay connected with your community.
+            Bizconn is a flagship digital business network created by <strong>Nexteck Company</strong> to bring entrepreneurs, professionals, trade experts, and business communities together in one seamless platform.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <a href="{{ route('groups.index') }}" class="px-8 py-4 text-base font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-lg hover:shadow-sky-500/20 transition transform hover:-translate-y-0.5">
                 Explore Communities
             </a>
-            <a href="{{ route('groups.index') }}" class="px-8 py-4 text-base font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition">
-                Join Now
+            <a href="{{ route('cms.show', 'about') }}" class="px-8 py-4 text-base font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition">
+                About Nexteck & Bizconn
             </a>
         </div>
     </div>

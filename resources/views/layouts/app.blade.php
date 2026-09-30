@@ -14,7 +14,7 @@
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="@yield('og_title', 'Bizconn Business Networking Ecosystem')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses on Bizconn.')">
-    <meta property="og:image" content="@yield('og_image', asset('newlogo.png'))">
+    <meta property="og:image" content="@yield('og_image', asset('nlogo.png'))">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
 
@@ -190,7 +190,11 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('newlogo.png') }}" alt="Bizconn Logo" class="h-16  w-auto rounded-xl object-contain shadow-2xs">
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-12 w-auto rounded-xl object-contain shadow-2xs">
+                        <div class="flex flex-col">
+                            <span class="font-extrabold text-xl tracking-tight leading-none" style="color: var(--text-heading, #0f172a);">Bizconn</span>
+                            <span class="text-[10px] font-bold text-sky-600 uppercase tracking-wider mt-0.5">A Nexteck Product</span>
+                        </div>
                     </a>
                 </div>
 
@@ -279,15 +283,18 @@
     @unless(View::hasSection('hide_header_footer'))
     <!-- Footer -->
     <footer class="border-t shadow-inner" style="background-color: var(--footer-bg, #0f172a); color: var(--footer-text, #f8fafc); border-color: var(--border-color, #1e293b);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('newlogo.png') }}" alt="Bizconn Logo" class="h-16 w-auto rounded-lg object-contain bg-white p-0.5 shadow-2xs">
-                        
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-12 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
+                        <div class="flex flex-col">
+                            <span class="font-extrabold text-xl text-white tracking-tight leading-none">Bizconn</span>
+                            <span class="text-[10px] font-bold text-sky-400 uppercase tracking-wider mt-0.5">Nexteck Enterprise</span>
+                        </div>
                     </div>
                     <p class="text-xs leading-relaxed opacity-90">
-                        A modern professional business networking ecosystem bringing entrepreneurs, professionals, and companies together across the UK.
+                        <strong>Bizconn</strong> is a flagship professional business networking platform by <strong>Nexteck</strong>, bringing entrepreneurs, professionals, and enterprise networks together.
                     </p>
                 </div>
 
@@ -297,24 +304,29 @@
                         <li><a href="{{ route('groups.index') }}" class="transition hover:opacity-100">Explore Communities</a></li>
                         <li><a href="{{ route('events.index') }}" class="transition hover:opacity-100">Upcoming Events</a></li>
                         <li><a href="{{ url('/#how-it-works') }}" class="transition hover:opacity-100">How It Works</a></li>
-                        <li><a href="{{ route('groups.index') }}" class="transition hover:opacity-100">Join Community</a></li>
+                        <li><a href="{{ route('cms.show', 'about') }}" class="transition hover:opacity-100 font-bold text-sky-400">About Nexteck & Bizconn</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold mb-4 text-sm opacity-100 uppercase tracking-wider">Legal & Privacy</h3>
+                    <h3 class="font-bold mb-4 text-sm opacity-100 uppercase tracking-wider">Legal & Support</h3>
                     <ul class="space-y-2.5 text-xs opacity-90">
                         <li><a href="{{ route('cms.show', 'privacy') }}" class="transition hover:opacity-100">Privacy Policy</a></li>
                         <li><a href="{{ route('cms.show', 'terms') }}" class="transition hover:opacity-100">Terms & Conditions</a></li>
-                        <li><a href="{{ route('cms.show', 'cookie') }}" class="transition hover:opacity-100">Cookie Policy</a></li>
-                        <li><a href="{{ route('cms.show', 'faq') }}" class="transition hover:opacity-100">FAQ</a></li>
+                        <li><a href="mailto:mohammednasar.uk@gmail.com" class="transition hover:opacity-100"><i class="fa-solid fa-envelope mr-1 text-sky-400"></i> mohammednasar.uk@gmail.com</a></li>
+                        <li><a href="tel:+447879175585" class="transition hover:opacity-100"><i class="fa-solid fa-phone mr-1 text-emerald-400"></i> +44 7879175585</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold mb-4 text-sm opacity-100 uppercase tracking-wider">Bizconn Ecosystem</h3>
-                    <p class="text-xs mb-3 opacity-80 leading-relaxed">Empowering regional and international business networks across the UK.</p>
-                    <div class="text-[11px] opacity-60">&copy; {{ date('Y') }} Bizconn Platform. All rights reserved.</div>
+                    <h3 class="font-bold mb-4 text-sm opacity-100 uppercase tracking-wider">Parent Enterprise</h3>
+                    <p class="text-xs mb-3 opacity-80 leading-relaxed">
+                        Bizconn is engineered and operated by <strong>Nexteck Company</strong>.
+                    </p>
+                    <div class="text-[11px] opacity-90 pt-3 border-t border-slate-800 space-y-1">
+                        <p class="font-bold text-sky-300">Developed and Powered by Nexteck 2026©</p>
+                        <p class="text-[10px] text-slate-400">Support: mohammednasar.uk@gmail.com | +44 7879175585</p>
+                    </div>
                 </div>
             </div>
         </div>
