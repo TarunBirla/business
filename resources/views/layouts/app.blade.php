@@ -190,7 +190,7 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-18 w-auto rounded-xl object-contain shadow-2xs">
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-20 w-auto rounded-xl object-contain shadow-2xs">
                         
                     </a>
                 </div>
@@ -284,7 +284,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-18 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-20 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
                         
                     </div>
                     <p class="text-xs leading-relaxed opacity-90">
