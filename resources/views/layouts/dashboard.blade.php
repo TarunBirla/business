@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'Dashboard') - Community UK</title>
+    <title>@yield('title', 'Dashboard') - Bizconn</title>
 
     <!-- Dynamic Active Theme Variables -->
     <style id="theme-css-variables">
@@ -251,9 +251,9 @@
     <header
         class="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
         <a href="{{ url('/') }}" class="flex items-center space-x-2.5">
-            <img src="{{ asset('logo.jpeg') }}" alt="Community Logo"
+            <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo"
                 class="h-9 w-auto rounded-lg object-contain shadow-2xs">
-            <span class="font-extrabold text-sm text-slate-900 tracking-tight">Community UK</span>
+            <span class="font-extrabold text-sm text-slate-900 tracking-tight">Bizconn</span>
         </a>
 
         <div class="flex items-center space-x-2">
@@ -286,7 +286,7 @@
             <!-- Header for Mobile Drawer (Close Button) -->
             <div class="flex items-center justify-between md:hidden pb-3 border-b border-slate-100">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-8 w-auto rounded-lg">
+                    <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-8 w-auto rounded-lg">
                     <span class="font-bold text-sm text-slate-900">Navigation Menu</span>
                 </div>
                 <button onclick="closeMobileSidebar()"
@@ -296,7 +296,7 @@
             </div>
 
             @php
-                $sidebarLogo = asset('logo.jpeg');
+                $sidebarLogo = asset('bizconn_logo.jpg');
                 $targetGroupForLogo = $group ?? $currentAdminGroup ?? null;
                 if ($targetGroupForLogo && $targetGroupForLogo->logo_url) {
                     $sidebarLogo = $targetGroupForLogo->logo_url;

@@ -6,15 +6,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'Community Networking Ecosystem') - Community UK</title>
-    <meta name="description" content="@yield('meta_description', 'Connect with your community, discover professionals and businesses, exchange services, attend events and build meaningful relationships across the UK.')">
+    <title>@yield('title', 'Business Networking Platform') - Bizconn</title>
+    <meta name="description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- OpenGraph Tags -->
-    <meta property="og:title" content="@yield('og_title', 'Community Networking Ecosystem UK')">
-    <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses from your community.')">
-    <meta property="og:image" content="@yield('og_image', asset('logo.jpeg'))">
+    <meta property="og:title" content="@yield('og_title', 'Bizconn Business Networking Ecosystem')">
+    <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses on Bizconn.')">
+    <meta property="og:image" content="@yield('og_image', asset('bizconn_logo.jpg'))">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
 
@@ -190,8 +190,8 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ url('/') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-10 w-auto rounded-xl object-contain shadow-2xs">
-                        <span class="font-extrabold text-lg tracking-tight hidden sm:inline-block" style="color: var(--text-heading, #0f172a);">Community UK</span>
+                        <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-10 w-auto rounded-xl object-contain shadow-2xs">
+                        <span class="font-extrabold text-lg tracking-tight hidden sm:inline-block" style="color: var(--text-heading, #0f172a);">Bizconn</span>
                     </a>
                 </div>
 
@@ -284,11 +284,11 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('logo.jpeg') }}" alt="Community UK Logo" class="h-9 w-auto rounded-lg object-contain bg-white p-0.5 shadow-2xs">
-                        <span class="font-extrabold text-lg text-white">Community UK</span>
+                        <img src="{{ asset('bizconn_logo.jpg') }}" alt="Bizconn Logo" class="h-9 w-auto rounded-lg object-contain bg-white p-0.5 shadow-2xs">
+                        <span class="font-extrabold text-lg text-white">Bizconn</span>
                     </div>
                     <p class="text-xs leading-relaxed opacity-90">
-                        A UK-wide professional community networking ecosystem bringing people together based on shared background, region, culture, and professional goals.
+                        A modern professional business networking ecosystem bringing entrepreneurs, professionals, and companies together across the UK.
                     </p>
                 </div>
 
@@ -313,9 +313,9 @@
                 </div>
 
                 <div>
-                    <h3 class="font-bold mb-4 text-sm opacity-100 uppercase tracking-wider">Community Ecosystem</h3>
-                    <p class="text-xs mb-3 opacity-80 leading-relaxed">Empowering Gujarati, Marathi, MP, Punjabi, and regional business networks across the UK.</p>
-                    <div class="text-[11px] opacity-60">&copy; {{ date('Y') }} Community UK Platform. All rights reserved.</div>
+                    <h3 class="font-bold mb-4 text-sm opacity-100 uppercase tracking-wider">Bizconn Ecosystem</h3>
+                    <p class="text-xs mb-3 opacity-80 leading-relaxed">Empowering regional and international business networks across the UK.</p>
+                    <div class="text-[11px] opacity-60">&copy; {{ date('Y') }} Bizconn Platform. All rights reserved.</div>
                 </div>
             </div>
         </div>
