@@ -499,7 +499,7 @@
         <!-- Footer Ecosystem Bar -->
         <div class="p-6 text-center border-t space-y-2 transition-colors" style="background-color: var(--input-bg, #f8fafc); border-color: var(--border-color, #e2e8f0);">
             <div class="flex items-center justify-center space-x-2">
-                <img src="{{ asset('logo.jpeg') }}" alt="Community Logo" class="h-6 w-auto rounded object-contain shadow-2xs">
+                <img src="{{ asset('newlogo.png') }}" alt="Community Logo" class="h-6 w-auto rounded object-contain shadow-2xs">
                 <span class="text-xs font-bold" style="color: var(--text-heading, #0f172a);">Community UK Platform</span>
             </div>
             <p class="text-[10px] font-medium" style="color: var(--text-secondary, #94a3b8);">Verified Member Ecosystem Card • Powered by NextEck</p>

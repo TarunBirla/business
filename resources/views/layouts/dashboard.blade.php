@@ -251,7 +251,7 @@
     <header
         class="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
         <a href="{{ url('/') }}" class="flex items-center space-x-2.5">
-            <img src="{{ asset('image.png') }}" alt="Bizconn Logo"
+            <img src="{{ asset('newlogo.png') }}" alt="Bizconn Logo"
                 class="h-9 w-auto rounded-lg object-contain shadow-2xs">
             <span class="font-extrabold text-sm text-slate-900 tracking-tight">Bizconn</span>
         </a>
@@ -286,7 +286,7 @@
             <!-- Header for Mobile Drawer (Close Button) -->
             <div class="flex items-center justify-between md:hidden pb-3 border-b border-slate-100">
                 <div class="flex items-center space-x-2">
-                    <img src="{{ asset('image.png') }}" alt="Bizconn Logo" class="h-8 w-auto rounded-lg">
+                    <img src="{{ asset('newlogo.png') }}" alt="Bizconn Logo" class="h-8 w-auto rounded-lg">
                     <span class="font-bold text-sm text-slate-900">Navigation Menu</span>
                 </div>
                 <button onclick="closeMobileSidebar()"
@@ -296,7 +296,7 @@
             </div>
 
             @php
-                $sidebarLogo = asset('image.png');
+                $sidebarLogo = asset('newlogo.png');
                 $targetGroupForLogo = $group ?? $currentAdminGroup ?? null;
                 if ($targetGroupForLogo && $targetGroupForLogo->logo_url) {
                     $sidebarLogo = $targetGroupForLogo->logo_url;
