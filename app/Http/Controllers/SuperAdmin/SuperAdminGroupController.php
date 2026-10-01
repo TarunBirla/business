@@ -271,13 +271,37 @@ class SuperAdminGroupController extends Controller
             );
         }
 
-        if ($request->has('group_admins')) {
-            foreach ($request->group_admins as $adminId) {
-                if (!$group->members()->where('user_id', $adminId)->exists()) {
-                    $group->members()->attach($adminId, ['membership_role' => 'group_admin', 'status' => 'active', 'joined_at' => now()]);
-                } else {
-                    $group->members()->updateExistingPivot($adminId, ['membership_role' => 'group_admin']);
-                }
+        // Handle Group Admin assignments for this community (supports checking & unchecking)
+        $selectedAdminIds = array_map('intval', (array) $request->input('group_admins', []));
+
+        // Get current group admin user IDs for this community
+        $currentAdminIds = $group->members()
+            ->wherePivot('membership_role', 'group_admin')
+            ->pluck('users.id')
+            ->map(fn($id) => (int)$id)
+            ->toArray();
+
+        // Demote unchecked group admins
+        $adminsToRemove = array_diff($currentAdminIds, $selectedAdminIds);
+        foreach ($adminsToRemove as $remId) {
+            $group->members()->updateExistingPivot($remId, [
+                'membership_role' => 'member',
+            ]);
+        }
+
+        // Attach or update checked group admins
+        foreach ($selectedAdminIds as $adminId) {
+            if (!$group->members()->where('users.id', $adminId)->exists()) {
+                $group->members()->attach($adminId, [
+                    'membership_role' => 'group_admin',
+                    'status' => 'active',
+                    'joined_at' => now(),
+                ]);
+            } else {
+                $group->members()->updateExistingPivot($adminId, [
+                    'membership_role' => 'group_admin',
+                    'status' => 'active',
+                ]);
             }
         }
 

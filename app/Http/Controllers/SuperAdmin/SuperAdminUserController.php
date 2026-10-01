@@ -138,14 +138,36 @@ class SuperAdminUserController extends Controller
             'status' => $request->status,
         ]);
 
-        // Sync group admin assignments
-        if ($request->has('group_ids')) {
-            $user->groups()->wherePivot('membership_role', 'group_admin')->detach();
-            foreach ($request->group_ids as $groupId) {
+        // Sync group admin community assignments (supports checking & unchecking)
+        $selectedGroupIds = array_map('intval', (array) $request->input('group_ids', []));
+
+        // Get current group IDs where user is a group_admin
+        $currentGroupIds = $user->groups()
+            ->wherePivot('membership_role', 'group_admin')
+            ->pluck('groups.id')
+            ->map(fn($id) => (int)$id)
+            ->toArray();
+
+        // Demote unchecked communities
+        $groupsToRemove = array_diff($currentGroupIds, $selectedGroupIds);
+        foreach ($groupsToRemove as $remGroupId) {
+            $user->groups()->updateExistingPivot($remGroupId, [
+                'membership_role' => 'member',
+            ]);
+        }
+
+        // Attach or update checked communities
+        foreach ($selectedGroupIds as $groupId) {
+            if (!$user->groups()->where('groups.id', $groupId)->exists()) {
                 $user->groups()->attach($groupId, [
                     'membership_role' => 'group_admin',
                     'status' => 'active',
                     'joined_at' => now(),
+                ]);
+            } else {
+                $user->groups()->updateExistingPivot($groupId, [
+                    'membership_role' => 'group_admin',
+                    'status' => 'active',
                 ]);
             }
         }
