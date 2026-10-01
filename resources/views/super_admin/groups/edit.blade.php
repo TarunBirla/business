@@ -9,6 +9,34 @@
         <p class="text-sm text-black mt-1">Update details, status, pricing, and assigned Group Admins.</p>
     </div>
 
+    @if(session('success'))
+        <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl font-semibold flex items-center space-x-2 shadow-2xs">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl font-semibold flex items-center space-x-2 shadow-2xs">
+            <i class="fa-solid fa-triangle-exclamation text-rose-600 text-base"></i>
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl space-y-1">
+            <div class="font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                <span>Please fix the following validation errors:</span>
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-0.5 pl-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('super_admin.groups.update', $group->id) }}" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
         @csrf
         @method('PUT')

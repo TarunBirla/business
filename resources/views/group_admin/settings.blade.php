@@ -34,6 +34,27 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl font-semibold flex items-center space-x-2 shadow-2xs">
+            <i class="fa-solid fa-triangle-exclamation text-rose-600 text-base"></i>
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl space-y-1">
+            <div class="font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                <span>Please fix the following validation errors:</span>
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-0.5 pl-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <!-- Community Details Form -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
