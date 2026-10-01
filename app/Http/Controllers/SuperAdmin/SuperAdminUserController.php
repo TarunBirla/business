@@ -130,49 +130,53 @@ class SuperAdminUserController extends Controller
             'status' => 'required|in:active,suspended,pending,rejected',
         ]);
 
-        $user->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'status' => $request->status,
-        ]);
-
-        // Sync group admin community assignments (supports checking & unchecking)
-        $selectedGroupIds = array_map('intval', (array) $request->input('group_ids', []));
-
-        // Get current group IDs where user is a group_admin
-        $currentGroupIds = $user->groups()
-            ->wherePivot('membership_role', 'group_admin')
-            ->pluck('groups.id')
-            ->map(fn($id) => (int)$id)
-            ->toArray();
-
-        // Demote unchecked communities
-        $groupsToRemove = array_diff($currentGroupIds, $selectedGroupIds);
-        foreach ($groupsToRemove as $remGroupId) {
-            $user->groups()->updateExistingPivot($remGroupId, [
-                'membership_role' => 'member',
+        try {
+            $user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'status' => $request->status,
             ]);
-        }
 
-        // Attach or update checked communities
-        foreach ($selectedGroupIds as $groupId) {
-            if (!$user->groups()->where('groups.id', $groupId)->exists()) {
-                $user->groups()->attach($groupId, [
-                    'membership_role' => 'group_admin',
-                    'status' => 'active',
-                    'joined_at' => now(),
-                ]);
-            } else {
-                $user->groups()->updateExistingPivot($groupId, [
-                    'membership_role' => 'group_admin',
-                    'status' => 'active',
+            // Sync group admin community assignments (supports checking & unchecking)
+            $selectedGroupIds = array_map('intval', (array) $request->input('group_ids', []));
+
+            // Get current group IDs where user is a group_admin
+            $currentGroupIds = $user->groups()
+                ->wherePivot('membership_role', 'group_admin')
+                ->pluck('groups.id')
+                ->map(fn($id) => (int)$id)
+                ->toArray();
+
+            // Demote unchecked communities
+            $groupsToRemove = array_diff($currentGroupIds, $selectedGroupIds);
+            foreach ($groupsToRemove as $remGroupId) {
+                $user->groups()->updateExistingPivot($remGroupId, [
+                    'membership_role' => 'member',
                 ]);
             }
-        }
 
-        return redirect()->route('super_admin.group_admins.index')->with('success', "Group Administrator '{$user->name}' updated successfully.");
+            // Attach or update checked communities
+            foreach ($selectedGroupIds as $groupId) {
+                if (!$user->groups()->where('groups.id', $groupId)->exists()) {
+                    $user->groups()->attach($groupId, [
+                        'membership_role' => 'group_admin',
+                        'status' => 'active',
+                        'joined_at' => now(),
+                    ]);
+                } else {
+                    $user->groups()->updateExistingPivot($groupId, [
+                        'membership_role' => 'group_admin',
+                        'status' => 'active',
+                    ]);
+                }
+            }
+
+            return redirect()->route('super_admin.group_admins.edit', $user->id)->with('success', "Group Administrator '{$user->name}' details & community assignments updated successfully.");
+        } catch (\Throwable $e) {
+            return back()->withInput()->with('error', 'Failed to update Group Administrator: ' . $e->getMessage());
+        }
     }
 
     public function create()

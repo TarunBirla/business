@@ -14,7 +14,7 @@
             Connect With Your Network. <br class="hidden sm:inline" /><span class="text-sky-600">Powered by Nexteck Innovation.</span>
         </h1>
         <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Bizconn is a flagship digital business network created by <strong>Nexteck Company</strong> to bring entrepreneurs, professionals, trade experts, and business communities together in one seamless platform.
+            BizConn is a complete Community Management & Member Directory platform designed to unite local networks, business groups, and organizations into a strong, collaborative ecosystem.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <a href="{{ route('groups.index') }}" class="px-8 py-4 text-base font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-lg hover:shadow-sky-500/20 transition transform hover:-translate-y-0.5">

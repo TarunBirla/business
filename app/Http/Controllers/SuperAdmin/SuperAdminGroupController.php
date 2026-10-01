@@ -247,6 +247,7 @@ class SuperAdminGroupController extends Controller
 
             $updateData = [
                 'name' => $request->name,
+                'slug' => Str::slug($request->name),
                 'description' => $request->description,
                 'community_type' => $request->community_type,
                 'status' => $request->status,
@@ -320,7 +321,7 @@ class SuperAdminGroupController extends Controller
                 }
             }
 
-            return redirect()->route('super_admin.groups.index')->with('success', "Community '{$group->name}' updated successfully.");
+            return redirect()->route('super_admin.groups.edit', $group->id)->with('success', "Community '{$group->name}' details & assigned admins updated successfully.");
         } catch (\Throwable $e) {
             return back()->withInput()->with('error', 'Failed to update community: ' . $e->getMessage());
         }

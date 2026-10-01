@@ -45,6 +45,17 @@ class Group extends Model
         'expert_categories' => 'array',
     ];
 
+    public function getTaglineAttribute(): ?string
+    {
+        return $this->promotional_message;
+    }
+
+    public function getRegionAttribute(): ?string
+    {
+        return $this->state;
+    }
+
+
     public function getAvailableExpertCategoriesAttribute(): array
     {
         if (!empty($this->expert_categories) && is_array($this->expert_categories) && count($this->expert_categories) > 0) {

@@ -98,9 +98,11 @@ class GroupAdminDashboardController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'tagline' => 'nullable|string|max:255',
+            'promotional_message' => 'nullable|string|max:255',
             'description' => 'required|string',
             'city' => 'nullable|string|max:100',
             'region' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
             'theme_id' => 'nullable|exists:themes,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
@@ -110,74 +112,100 @@ class GroupAdminDashboardController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         ]);
 
-        if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('groups/logos', 'public');
-            $validated['logo'] = $logoPath;
-        }
-
-        if ($request->has('expert_categories')) {
-            if (is_array($request->expert_categories)) {
-                $categories = array_values(array_filter(array_map('trim', $request->expert_categories)));
-            } else {
-                $rawText = (string) $request->expert_categories;
-                $split = preg_split('/[\n\r,]+/', $rawText);
-                $categories = array_values(array_filter(array_map('trim', $split)));
+        try {
+            if ($request->hasFile('logo')) {
+                $logoPath = $request->file('logo')->store('groups/logos', 'public');
+                $validated['logo'] = $logoPath;
             }
-            $validated['expert_categories'] = $categories;
-        }
 
-        $currentGallery = $group->gallery_images ?? [];
-
-        // Handle image deletions
-        if ($request->filled('delete_images')) {
-            $deleteList = $request->delete_images;
-            $currentGallery = array_values(array_filter($currentGallery, function ($img) use ($deleteList) {
-                return !in_array($img, $deleteList);
-            }));
-        }
-
-        // Handle new image uploads
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('groups/gallery', 'public');
-                $currentGallery[] = $path;
+            // Map tagline to promotional_message column
+            if (array_key_exists('tagline', $validated)) {
+                $validated['promotional_message'] = $validated['tagline'];
             }
-        }
 
-        // Handle thumbnail selection
-        $selectedThumbnail = $group->thumbnail_image;
-        if ($request->filled('thumbnail_image')) {
-            $selectedThumbnail = $request->thumbnail_image;
-        } elseif (!empty($currentGallery) && !in_array($selectedThumbnail, $currentGallery)) {
-            $selectedThumbnail = $currentGallery[0];
-        }
+            // Map region to state column
+            if (array_key_exists('region', $validated)) {
+                $validated['state'] = $validated['region'];
+            }
 
-        if (empty($currentGallery)) {
-            $selectedThumbnail = null;
-        }
+            if ($request->has('expert_categories')) {
+                if (is_array($request->expert_categories)) {
+                    $categories = array_values(array_filter(array_map('trim', $request->expert_categories)));
+                } else {
+                    $rawText = (string) $request->expert_categories;
+                    $split = preg_split('/[\n\r,]+/', $rawText);
+                    $categories = array_values(array_filter(array_map('trim', $split)));
+                }
+                $validated['expert_categories'] = $categories;
+            }
 
-        $validated['gallery_images'] = $currentGallery;
-        $validated['thumbnail_image'] = $selectedThumbnail;
+            $currentGallery = $group->gallery_images ?? [];
 
-        foreach (['name', 'tagline', 'description', 'city', 'region', 'theme_id', 'thumbnail_image'] as $field) {
-            if (array_key_exists($field, $validated)) {
-                $newValue = $validated[$field];
-                $oldValue = $group->$field;
-                if ($oldValue != $newValue) {
-                    CommunityAuditLog::create([
-                        'group_id' => $group->id,
-                        'user_id' => auth()->id(),
-                        'field_name' => $field,
-                        'old_value' => (string) $oldValue,
-                        'new_value' => (string) $newValue,
-                    ]);
+            // Handle image deletions
+            if ($request->filled('delete_images')) {
+                $deleteList = $request->delete_images;
+                $currentGallery = array_values(array_filter($currentGallery, function ($img) use ($deleteList) {
+                    return !in_array($img, $deleteList);
+                }));
+            }
+
+            // Handle new image uploads
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $path = $file->store('groups/gallery', 'public');
+                    $currentGallery[] = $path;
                 }
             }
+
+            // Handle thumbnail selection
+            $selectedThumbnail = $group->thumbnail_image;
+            if ($request->filled('thumbnail_image')) {
+                $selectedThumbnail = $request->thumbnail_image;
+            } elseif (!empty($currentGallery) && !in_array($selectedThumbnail, $currentGallery)) {
+                $selectedThumbnail = $currentGallery[0];
+            }
+
+            if (empty($currentGallery)) {
+                $selectedThumbnail = null;
+            }
+
+            $validated['gallery_images'] = $currentGallery;
+            $validated['thumbnail_image'] = $selectedThumbnail;
+
+            // Log audit trail for changed fields
+            $auditFieldMap = [
+                'name' => 'name',
+                'promotional_message' => 'tagline',
+                'description' => 'description',
+                'city' => 'city',
+                'state' => 'region/state',
+                'theme_id' => 'theme_id',
+                'thumbnail_image' => 'thumbnail_image',
+                'logo' => 'logo',
+            ];
+
+            foreach ($auditFieldMap as $dbCol => $label) {
+                if (array_key_exists($dbCol, $validated)) {
+                    $newValue = $validated[$dbCol];
+                    $oldValue = $group->$dbCol;
+                    if ($oldValue != $newValue) {
+                        CommunityAuditLog::create([
+                            'group_id' => $group->id,
+                            'user_id' => auth()->id(),
+                            'field_name' => $label,
+                            'old_value' => (string) $oldValue,
+                            'new_value' => (string) $newValue,
+                        ]);
+                    }
+                }
+            }
+
+            $group->update($validated);
+
+            return back()->with('success', 'Community details, images & theme updated successfully. Audit log entry recorded.');
+        } catch (\Throwable $e) {
+            return back()->withInput()->with('error', 'Failed to update community settings: ' . $e->getMessage());
         }
-
-        $group->update($validated);
-
-        return back()->with('success', 'Community details, images & theme updated successfully. Audit log entry recorded.');
     }
 
     private function authorizeAdmin(Group $group)

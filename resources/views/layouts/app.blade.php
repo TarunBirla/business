@@ -18,6 +18,13 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
 
+    <!-- Twitter / X Card Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Connect. Empowering Communities. Connecting Members. Unlocking Opportunities.">
+<meta name="twitter:description" content="Connect. Collaborate. Grow Your Business Network.">
+<meta name="twitter:image" content="{{ asset('nlogo.png') }}">
+<meta name="twitter:url" content="{{ url()->current() }}">
+
     <!-- Fonts: Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
