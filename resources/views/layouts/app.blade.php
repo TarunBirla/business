@@ -12,7 +12,7 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- OpenGraph Tags -->
-    <meta property="og:title" content="@yield('og_title', 'Bizconn Business Networking Ecosystem')">
+    <meta property="og:title" content="@yield('og_title', 'Empowering Communities. Connecting Members. Unlocking Opportunities.')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses on Bizconn.')">
     <meta property="og:image" content="@yield('og_image', asset('nlogo.png'))">
     <meta property="og:url" content="{{ url()->current() }}">
