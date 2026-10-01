@@ -205,7 +205,7 @@ class SuperAdminGroupController extends Controller
             'name' => 'required|string|max:255|unique:groups,name,' . $group->id,
             'description' => 'required|string',
             'community_type' => 'required|in:free,paid',
-            'visibility_type' => 'required|in:public,private',
+            'visibility_type' => 'nullable|in:public,private',
             'status' => 'required|in:draft,active,suspended,archived',
             'price' => 'nullable|numeric|min:0',
             'images' => 'nullable|array',
@@ -214,97 +214,115 @@ class SuperAdminGroupController extends Controller
             'delete_images' => 'nullable|array',
         ]);
 
-        $currentGallery = $group->gallery_images ?? [];
+        try {
+            $currentGallery = $group->gallery_images ?? [];
 
-        // Handle deletions
-        if ($request->filled('delete_images')) {
-            $deleteList = $request->delete_images;
-            $currentGallery = array_values(array_filter($currentGallery, function ($img) use ($deleteList) {
-                return !in_array($img, $deleteList);
-            }));
-        }
-
-        // Handle new file uploads
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('groups/gallery', 'public');
-                $currentGallery[] = $path;
+            // Handle deletions
+            if ($request->filled('delete_images')) {
+                $deleteList = $request->delete_images;
+                $currentGallery = array_values(array_filter($currentGallery, function ($img) use ($deleteList) {
+                    return !in_array($img, $deleteList);
+                }));
             }
-        }
 
-        // Handle thumbnail setting
-        $selectedThumbnail = $group->thumbnail_image;
-        if ($request->filled('thumbnail_image')) {
-            $selectedThumbnail = $request->thumbnail_image;
-        } elseif (!empty($currentGallery) && !in_array($selectedThumbnail, $currentGallery)) {
-            $selectedThumbnail = $currentGallery[0];
-        }
+            // Handle new file uploads
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $path = $file->store('groups/gallery', 'public');
+                    $currentGallery[] = $path;
+                }
+            }
 
-        if (empty($currentGallery)) {
-            $selectedThumbnail = null;
-        }
+            // Handle thumbnail setting
+            $selectedThumbnail = $group->thumbnail_image;
+            if ($request->filled('thumbnail_image')) {
+                $selectedThumbnail = $request->thumbnail_image;
+            } elseif (!empty($currentGallery) && !in_array($selectedThumbnail, $currentGallery)) {
+                $selectedThumbnail = $currentGallery[0];
+            }
 
-        $group->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'purpose' => $request->purpose,
-            'why_join' => $request->why_join,
-            'community_type' => $request->community_type,
-            'visibility_type' => $request->input('visibility_type', 'public'),
-            'city' => $request->city,
-            'status' => $request->status,
-            'gallery_images' => $currentGallery,
-            'thumbnail_image' => $selectedThumbnail,
-        ]);
+            if (empty($currentGallery)) {
+                $selectedThumbnail = null;
+            }
 
-        if ($request->community_type === 'paid' && $request->filled('price')) {
-            GroupSubscription::updateOrCreate(
-                ['group_id' => $group->id],
-                [
-                    'name' => 'Annual Membership',
-                    'price' => $request->price,
-                    'currency' => 'GBP',
-                    'duration' => 1,
-                    'duration_type' => 'yearly',
-                    'status' => 'active',
-                ]
-            );
-        }
+            $updateData = [
+                'name' => $request->name,
+                'description' => $request->description,
+                'community_type' => $request->community_type,
+                'status' => $request->status,
+                'gallery_images' => $currentGallery,
+                'thumbnail_image' => $selectedThumbnail,
+            ];
 
-        // Handle Group Admin assignments for this community (supports checking & unchecking)
-        $selectedAdminIds = array_map('intval', (array) $request->input('group_admins', []));
+            if ($request->has('city')) {
+                $updateData['city'] = $request->city;
+            }
+            if ($request->has('country')) {
+                $updateData['country'] = $request->country;
+            }
+            if ($request->has('purpose')) {
+                $updateData['purpose'] = $request->purpose;
+            }
+            if ($request->has('why_join')) {
+                $updateData['why_join'] = $request->why_join;
+            }
+            if ($request->filled('visibility_type') && \Illuminate\Support\Facades\Schema::hasColumn('groups', 'visibility_type')) {
+                $updateData['visibility_type'] = $request->visibility_type;
+            }
 
-        // Get current group admin user IDs for this community
-        $currentAdminIds = $group->members()
-            ->wherePivot('membership_role', 'group_admin')
-            ->pluck('users.id')
-            ->map(fn($id) => (int)$id)
-            ->toArray();
+            $group->update($updateData);
 
-        // Demote unchecked group admins
-        $adminsToRemove = array_diff($currentAdminIds, $selectedAdminIds);
-        foreach ($adminsToRemove as $remId) {
-            $group->members()->updateExistingPivot($remId, [
-                'membership_role' => 'member',
-            ]);
-        }
+            if ($request->community_type === 'paid' && $request->filled('price')) {
+                GroupSubscription::updateOrCreate(
+                    ['group_id' => $group->id],
+                    [
+                        'name' => 'Annual Membership',
+                        'price' => $request->price,
+                        'currency' => 'GBP',
+                        'duration' => 1,
+                        'duration_type' => 'yearly',
+                        'status' => 'active',
+                    ]
+                );
+            }
 
-        // Attach or update checked group admins
-        foreach ($selectedAdminIds as $adminId) {
-            if (!$group->members()->where('users.id', $adminId)->exists()) {
-                $group->members()->attach($adminId, [
-                    'membership_role' => 'group_admin',
-                    'status' => 'active',
-                    'joined_at' => now(),
-                ]);
-            } else {
-                $group->members()->updateExistingPivot($adminId, [
-                    'membership_role' => 'group_admin',
-                    'status' => 'active',
+            // Handle Group Admin assignments for this community (supports checking & unchecking)
+            $selectedAdminIds = array_map('intval', (array) $request->input('group_admins', []));
+
+            // Get current group admin user IDs for this community
+            $currentAdminIds = $group->members()
+                ->wherePivot('membership_role', 'group_admin')
+                ->pluck('users.id')
+                ->map(fn($id) => (int)$id)
+                ->toArray();
+
+            // Demote unchecked group admins
+            $adminsToRemove = array_diff($currentAdminIds, $selectedAdminIds);
+            foreach ($adminsToRemove as $remId) {
+                $group->members()->updateExistingPivot($remId, [
+                    'membership_role' => 'member',
                 ]);
             }
-        }
 
-        return redirect()->route('super_admin.groups.index')->with('success', 'Community updated successfully.');
+            // Attach or update checked group admins
+            foreach ($selectedAdminIds as $adminId) {
+                if (!$group->members()->where('users.id', $adminId)->exists()) {
+                    $group->members()->attach($adminId, [
+                        'membership_role' => 'group_admin',
+                        'status' => 'active',
+                        'joined_at' => now(),
+                    ]);
+                } else {
+                    $group->members()->updateExistingPivot($adminId, [
+                        'membership_role' => 'group_admin',
+                        'status' => 'active',
+                    ]);
+                }
+            }
+
+            return redirect()->route('super_admin.groups.index')->with('success', "Community '{$group->name}' updated successfully.");
+        } catch (\Throwable $e) {
+            return back()->withInput()->with('error', 'Failed to update community: ' . $e->getMessage());
+        }
     }
 }
