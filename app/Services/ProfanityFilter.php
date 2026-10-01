@@ -64,7 +64,7 @@ class ProfanityFilter
             foreach ($input as $key => $val) {
                 // Skip system/password/file/image upload fields
                 $keyLower = strtolower((string)$key);
-                if (in_array($keyLower, ['_token', '_method', 'password', 'password_confirmation', 'file', 'image', 'photo', 'logo', 'thumbnail', 'gallery', 'avatar', 'banner'])) {
+                if (in_array($keyLower, ['_token', '_method', 'password', 'password_confirmation', 'file', 'image', 'photo', 'logo', 'thumbnail', 'gallery', 'avatar', 'banner', 'delete_images', 'images'])) {
                     continue;
                 }
                 $found = self::findAbusiveWord($val);
@@ -90,9 +90,13 @@ class ProfanityFilter
             $wordLower = strtolower(trim($word));
             if ($wordLower === '' || strlen($wordLower) < 2) continue;
 
-            // Check word boundary or substring match
-            $pattern = '/\b' . preg_quote($wordLower, '/') . '\b/i';
-            if (preg_match($pattern, $cleanText) || str_contains($cleanText, $wordLower)) {
+            // Enforce strict word boundary matching to avoid false positives (e.g. document -> cum, title -> tit, class -> ass)
+            $escaped = preg_quote($wordLower, '/');
+            $prefix = preg_match('/^\w/u', $wordLower) ? '\b' : '';
+            $suffix = preg_match('/\w$/u', $wordLower) ? '\b' : '';
+            $pattern = '/' . $prefix . $escaped . $suffix . '/iu';
+
+            if (preg_match($pattern, $cleanText)) {
                 return $word;
             }
         }
