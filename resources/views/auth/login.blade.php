@@ -42,12 +42,38 @@
             </button>
         </form>
 
-        <div class="mt-6 pt-6 border-t border-slate-100 text-center space-y-3">
-            <p class="text-xs font-semibold text-slate-500">Don't have an account yet?</p>
-            <a href="{{ route('join_as_member') }}" onclick="alert('First select your Community');" class="inline-flex items-center justify-center w-full py-3.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl transition shadow-md space-x-2">
-                <i class="fa-solid fa-user-plus text-base"></i>
+        <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between gap-3 text-xs">
+            <span class="text-slate-600 font-medium">Don't have an account yet?</span>
+            <button type="button" onclick="openJoinModal()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition shadow-2xs flex items-center space-x-1.5 shrink-0">
+                <i class="fa-solid fa-user-plus text-xs"></i>
                 <span>Join as member</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Select Community Modal Box -->
+<div id="joinCommunityModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs transition-opacity duration-300">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100 transform transition-all animate-in fade-in zoom-in duration-200">
+        <div class="w-14 h-14 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-center mx-auto text-amber-600 shadow-2xs">
+            <i class="fa-solid fa-layer-group text-2xl"></i>
+        </div>
+        
+        <div>
+            <h3 class="text-lg font-bold text-slate-900">First Select Your Community</h3>
+            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                Please select your community first to proceed with member registration.
+            </p>
+        </div>
+
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+            <a href="{{ route('groups.index') }}" class="w-full py-2.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                <span>Explore Communities</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
             </a>
+            <button type="button" onclick="closeJoinModal()" class="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                Cancel
+            </button>
         </div>
     </div>
 </div>
@@ -66,6 +92,22 @@ function togglePasswordVisibility(inputId, btn) {
         input.type = 'password';
         icon.classList.remove('fa-eye-slash');
         icon.classList.add('fa-eye');
+    }
+}
+
+function openJoinModal() {
+    const modal = document.getElementById('joinCommunityModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+function closeJoinModal() {
+    const modal = document.getElementById('joinCommunityModal');
+    if (modal) {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
     }
 }
 </script>
