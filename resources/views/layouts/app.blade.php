@@ -314,7 +314,7 @@
                     <ul class="space-y-2.5 text-xs opacity-90">
                         <li><a href="{{ route('cms.show', 'privacy') }}" class="transition hover:opacity-100">Privacy Policy</a></li>
                         <li><a href="{{ route('cms.show', 'terms') }}" class="transition hover:opacity-100">Terms & Conditions</a></li>
-                        <li><a href="mailto:mohammednasar.uk@gmail.com" class="transition hover:opacity-100"><i class="fa-solid fa-envelope mr-1 text-sky-400"></i> mohammednasar.uk@gmail.com</a></li>
+                        <li><a href="mailto:nasar@thenexteck.com" class="transition hover:opacity-100"><i class="fa-solid fa-envelope mr-1 text-sky-400"></i> nasar@thenexteck.com</a></li>
                         <li><a href="tel:+447879175585" class="transition hover:opacity-100"><i class="fa-solid fa-phone mr-1 text-emerald-400"></i> +44 7879175585</a></li>
                     </ul>
                 </div>
@@ -326,7 +326,7 @@
                     </p>
                     <div class="text-[11px] opacity-90 pt-3 border-t border-slate-800 space-y-1">
                         <p class="font-bold text-sky-300">Developed and Powered by Nexteck 2026©</p>
-                        <p class="text-[10px] text-slate-400">Support: mohammednasar.uk@gmail.com | +44 7879175585</p>
+                        <p class="text-[10px] text-slate-400">Support: nasar@thenexteck.com | +44 7879175585</p>
                     </div>
                 </div>
             </div>

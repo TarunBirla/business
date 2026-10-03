@@ -353,7 +353,7 @@ Route::get('/fix-abusing-words-migration', function () {
                 </div>
                 <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
                     <h4 class="font-bold text-slate-900 text-sm mb-1"><i class="fa-solid fa-headset text-indigo-600 mr-2"></i>Developer & Support</h4>
-                    <p class="text-xs text-slate-600">mohammednasar.uk@gmail.com | +44 7879175585</p>
+                    <p class="text-xs text-slate-600">nasar@thenexteck.com | +44 7879175585</p>
                 </div>
             </div>
         </div>';

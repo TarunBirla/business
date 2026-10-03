@@ -872,7 +872,7 @@
         <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 font-medium space-y-1">
             <p class="font-bold text-slate-700">Developed and Powered by <strong class="text-sky-600">Nexteck 2026©</strong></p>
             <p class="space-x-3 text-[11px] text-slate-400 pt-0.5">
-                <span><i class="fa-solid fa-envelope mr-1 text-sky-600"></i><a href="mailto:mohammednasar.uk@gmail.com" class="hover:underline text-slate-600">mohammednasar.uk@gmail.com</a></span>
+                <span><i class="fa-solid fa-envelope mr-1 text-sky-600"></i><a href="mailto:nasar@thenexteck.com" class="hover:underline text-slate-600">nasar@thenexteck.com</a></span>
                 <span>&bull;</span>
                 <span><i class="fa-solid fa-phone mr-1 text-emerald-600"></i><a href="tel:+447879175585" class="hover:underline text-slate-600">+44 7879175585</a></span>
             </p>
