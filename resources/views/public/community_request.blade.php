@@ -130,7 +130,7 @@
         <div class="pt-4">
             <button type="submit" class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl transition shadow-md flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-paper-plane"></i>
-                <span>Submit Community Request to Super Admin</span>
+                <span>Submit Community Request</span>
             </button>
         </div>
     </form>
