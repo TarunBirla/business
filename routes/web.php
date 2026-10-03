@@ -58,6 +58,10 @@ Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('even
 
 Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
 
+// Public Community Request Routes
+Route::get('/request-community', [\App\Http\Controllers\PublicCommunityRequestController::class, 'create'])->name('public.community_request.create');
+Route::post('/request-community', [\App\Http\Controllers\PublicCommunityRequestController::class, 'store'])->name('public.community_request.store');
+
 // Public Digital Business Card & vCard Export & PWA Manifest
 Route::get('/bizcard/{user}', [PublicBusinessCardController::class, 'show'])->name('bizcard.show');
 // Route::get('/bizcard/{user}/vcard', [PublicBusinessCardController::class, 'downloadVcard'])->name('bizcard.vcard');
@@ -271,6 +275,12 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     Route::put('/groups/{group}', [SuperAdminGroupController::class, 'update'])->name('groups.update');
     Route::get('/groups/{group}/members', [SuperAdminGroupController::class, 'members'])->name('groups.members');
 
+    // Community Creation Requests Management
+    Route::get('/community-requests', [\App\Http\Controllers\SuperAdmin\SuperAdminCommunityRequestController::class, 'index'])->name('community_requests.index');
+    Route::get('/community-requests/{communityRequest}', [\App\Http\Controllers\SuperAdmin\SuperAdminCommunityRequestController::class, 'show'])->name('community_requests.show');
+    Route::post('/community-requests/{communityRequest}/approve', [\App\Http\Controllers\SuperAdmin\SuperAdminCommunityRequestController::class, 'approve'])->name('community_requests.approve');
+    Route::post('/community-requests/{communityRequest}/reject', [\App\Http\Controllers\SuperAdmin\SuperAdminCommunityRequestController::class, 'reject'])->name('community_requests.reject');
+
     // Group Admin Management
     Route::get('/group-admins', [SuperAdminUserController::class, 'groupAdmins'])->name('group_admins.index');
     Route::get('/group-admins/create', [SuperAdminUserController::class, 'createGroupAdmin'])->name('group_admins.create');
@@ -383,6 +393,17 @@ Route::get('/fix-abusing-words-migration', function () {
             'success' => false,
             'error' => $e->getMessage(),
         ], 500);
+    }
+});
+
+// Helper Route for Live cPanel Migration & Community Requests Setup
+Route::get('/fix-community-requests-migration', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        return '<h1 style="color:green;font-family:sans-serif;text-align:center;margin-top:50px;">SUCCESS: Community Requests Migration Applied & View Cache Cleared Successfully!</h1>';
+    } catch (\Throwable $e) {
+        return '<h1 style="color:red;font-family:sans-serif;text-align:center;margin-top:50px;">STATUS: ' . $e->getMessage() . '</h1>';
     }
 });
 

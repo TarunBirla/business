@@ -42,12 +42,22 @@
             </button>
         </form>
 
-        <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between gap-3 text-xs">
-            <span class="text-slate-600 font-medium">Don't have an account yet?</span>
-            <button type="button" onclick="openJoinModal()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition shadow-2xs flex items-center space-x-1.5 shrink-0">
-                <i class="fa-solid fa-user-plus text-xs"></i>
-                <span>Join as member</span>
-            </button>
+        <div class="mt-6 pt-5 border-t border-slate-100 space-y-3">
+            <div class="flex items-center justify-between gap-3 text-xs">
+                <span class="text-slate-600 font-medium">Don't have an account yet?</span>
+                <button type="button" onclick="openJoinModal()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition shadow-2xs flex items-center space-x-1.5 shrink-0">
+                    <i class="fa-solid fa-user-plus text-xs"></i>
+                    <span>Join as member</span>
+                </button>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-3 text-xs">
+                <span class="text-slate-600 font-medium">Want to lead a community?</span>
+                <a href="{{ route('public.community_request.create') }}" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition border border-slate-200 shadow-2xs flex items-center space-x-1.5 shrink-0">
+                    <i class="fa-solid fa-plus-circle text-sky-600 text-xs"></i>
+                    <span>Request New Community</span>
+                </a>
+            </div>
         </div>
     </div>
 </div>

@@ -357,6 +357,26 @@
                     </a>
 
                     @php
+                        $active = request()->routeIs('super_admin.community_requests*');
+                        $communityReqCount = \Illuminate\Support\Facades\Schema::hasTable('community_requests') ? \App\Models\CommunityRequest::where('status', 'pending')->count() : 0;
+                    @endphp
+                    <a href="{{ route('super_admin.community_requests.index') }}" onclick="closeMobileSidebar()"
+                        class="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}"
+                        style="{{ $active ? $navActiveStyle : '' }}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-paper-plane w-5"
+                                style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Community Requests</span>
+                        </div>
+                        @if($communityReqCount > 0)
+                            <span
+                                class="px-2 py-0.5 bg-amber-500 text-white text-[10px] font-extrabold rounded-full shadow-2xs">
+                                {{ $communityReqCount }}
+                            </span>
+                        @endif
+                    </a>
+
+                    @php
                         $active = request()->routeIs('super_admin.groups.pending_members*');
                         $superPendingCount = \DB::table('group_user')->where('status', 'pending')->count();
                     @endphp
