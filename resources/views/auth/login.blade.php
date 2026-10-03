@@ -42,8 +42,12 @@
             </button>
         </form>
 
-        <div class="mt-6 text-center text-sm text-slate-600">
-            Don't have an account? <a href="{{ route('groups.index') }}" class="font-bold text-sky-600 hover:underline">Join Now</a>
+        <div class="mt-6 pt-6 border-t border-slate-100 text-center space-y-3">
+            <p class="text-xs font-semibold text-slate-500">Don't have an account yet?</p>
+            <a href="{{ route('join_as_member') }}" onclick="alert('First select your Community');" class="inline-flex items-center justify-center w-full py-3.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl transition shadow-md space-x-2">
+                <i class="fa-solid fa-user-plus text-base"></i>
+                <span>Join as member</span>
+            </a>
         </div>
     </div>
 </div>

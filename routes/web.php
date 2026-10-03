@@ -45,6 +45,9 @@ use App\Http\Controllers\GroupAdmin\GroupAdminPolicyController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', fn() => redirect()->route('member.dashboard'));
 Route::get('/groups', [PublicGroupController::class, 'index'])->name('groups.index');
+Route::get('/join-as-member', function () {
+    return redirect()->route('groups.index')->with('info', 'First select your Community');
+})->name('join_as_member');
 Route::get('/groups/{slug}', [PublicGroupController::class, 'show'])->name('groups.show');
 Route::get('/join/{slug}', [PublicGroupController::class, 'show'])->name('groups.join');
 Route::get('/groups/{slug}/qr', [PublicGroupController::class, 'qr'])->name('groups.qr');
