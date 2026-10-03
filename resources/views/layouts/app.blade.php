@@ -10,7 +10,7 @@
     <meta name="description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
-
+    <link rel="icon" type="image/png" href="{{ asset('nlogo.png') }}">
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="@yield('og_title', 'Empowering Communities. Connecting Members. Unlocking Opportunities.')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses on Bizconn.')">

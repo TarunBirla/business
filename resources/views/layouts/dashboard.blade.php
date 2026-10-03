@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>@yield('title', 'Dashboard') - Bizconn</title>
-
+<link rel="icon" type="image/png" href="{{ asset('nlogo.png') }}">
     <!-- Dynamic Active Theme Variables -->
     <style id="theme-css-variables">
         :root,
