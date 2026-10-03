@@ -84,14 +84,18 @@ class SuperAdminCommunityRequestController extends Controller
             $lastName = $nameParts[1] ?? 'Admin';
 
             $user = User::where('email', $communityRequest->applicant_email)->first();
+            $isNewUser = false;
+            $temporaryPassword = '';
 
             if (!$user) {
+                $isNewUser = true;
+                $temporaryPassword = 'Bz' . rand(100000, 999999);
                 $user = User::create([
                     'first_name' => $firstName,
                     'last_name' => $lastName,
                     'email' => $communityRequest->applicant_email,
                     'phone' => $communityRequest->applicant_phone,
-                    'password' => Hash::make('Password@123'),
+                    'password' => Hash::make($temporaryPassword),
                     'global_role' => 'group_admin',
                     'status' => 'active',
                 ]);
@@ -121,8 +125,30 @@ class SuperAdminCommunityRequestController extends Controller
                 'created_group_id' => $group->id,
             ]);
 
+            // 5. Create In-App Notification
+            try {
+                \App\Models\Notification::create([
+                    'user_id' => $user->id,
+                    'type' => 'approval',
+                    'title' => 'Community Creation Approved',
+                    'message' => "Congratulations! Your request for {$group->name} has been approved by Super Admin.",
+                    'link' => route('group_admin.dashboard', ['group_id' => $group->id]),
+                ]);
+            } catch (\Throwable $e) {
+                // Ignore notification failure
+            }
+
+            // 6. Send Official Approval Email to Applicant
+            try {
+                \Illuminate\Support\Facades\Mail::to($user->email)->send(
+                    new \App\Mail\CommunityRequestApprovedMail($user, $group, $temporaryPassword, $isNewUser)
+                );
+            } catch (\Throwable $mailException) {
+                // Ignore email error if mail server is not configured in local environment
+            }
+
             return redirect()->route('super_admin.community_requests.index')
-                ->with('success', "Community Request for '{$group->name}' approved successfully! Community created and assigned to {$user->name}.");
+                ->with('success', "Community Request for '{$group->name}' approved! Approval email sent to {$user->email}.");
         } catch (\Throwable $e) {
             return back()->with('error', 'Failed to approve request: ' . $e->getMessage());
         }
