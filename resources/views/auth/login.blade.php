@@ -43,7 +43,7 @@
         </form>
 
         <div class="mt-6 text-center text-sm text-slate-600">
-            Don't have an account? <a href="{{ route('register') }}" class="font-bold text-sky-600 hover:underline">Join Now</a>
+            Don't have an account? <a href="{{ route('groups.index') }}" class="font-bold text-sky-600 hover:underline">Join Now</a>
         </div>
     </div>
 </div>
