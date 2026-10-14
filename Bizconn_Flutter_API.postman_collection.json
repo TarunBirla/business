@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "bizconn-flutter-api-collection-v1",
+		"name": "Bizconn Flutter & WebView Auth APIs",
+		"description": "Postman collection for testing Bizconn Flutter Mobile App APIs (Communities List, Member Registration with selected community, Native Login with WebView SSO Handshake).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://bizconn.co.uk",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Get Communities List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/communities",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"communities"
+					]
+				},
+				"description": "Fetch all active public communities for Flutter dropdown / list selection."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Register New Member",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"Rahul\",\n    \"last_name\": \"Sharma\",\n    \"email\": \"rahul.test@example.com\",\n    \"phone\": \"+44 7700 900000\",\n    \"profession\": \"Chartered Accountant\",\n    \"city\": \"London\",\n    \"country\": \"United Kingdom\",\n    \"group_id\": 2,\n    \"password\": \"Password@123\",\n    \"password_confirmation\": \"Password@123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				},
+				"description": "Register a new member with their chosen community group_id."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Member Native Login (SSO Handshake)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"if (jsonData.webview_url) {",
+							"    pm.environment.set(\"webview_url\", jsonData.webview_url);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"rahul.test@example.com\",\n    \"password\": \"Password@123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "Log in with email & password. Returns user object, api_token, and webview_url containing single-use SSO token for WebView."
+			},
+			"response": []
+		},
+		{
+			"name": "4. WebView SSO Handshake (Simulate WebView)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/auth/sso?token=REPLACE_WITH_TOKEN_FROM_LOGIN",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"sso"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "REPLACE_WITH_TOKEN_FROM_LOGIN"
+						}
+					]
+				},
+				"description": "Simulates WebView opening the handshake URL. Logs the user in and redirects directly to Member Dashboard."
+			},
+			"response": []
+		}
+	]
+}

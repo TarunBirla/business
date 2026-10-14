@@ -110,6 +110,10 @@ Route::middleware('guest')->group(function () {
 
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Flutter App WebView SSO Handshake Route
+Route::get('/auth/sso', [\App\Http\Controllers\Auth\SsoController::class, 'handle'])->name('auth.sso');
+
+
 /*
 |--------------------------------------------------------------------------
 | Member Protected Routes
