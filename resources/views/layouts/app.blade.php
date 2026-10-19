@@ -207,6 +207,7 @@
                     <a href="{{ url('/') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">Home</a>
                     <a href="{{ route('groups.index') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">Communities</a>
                     <a href="{{ route('events.index') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">Events</a>
+                    <a href="{{ route('blogs.index') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">Blogs</a>
                     <a href="{{ url('/#how-it-works') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">How It Works</a>
                     <a href="{{ route('cms.show', 'about') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">About</a>
                     <a href="{{ route('cms.show', 'contact') }}" class="transition hover:opacity-80" style="color: var(--text-primary, #0f172a);">Contact</a>
@@ -238,6 +239,7 @@
                 <a href="{{ url('/') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">Home</a>
                 <a href="{{ route('groups.index') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">Communities</a>
                 <a href="{{ route('events.index') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">Events</a>
+                <a href="{{ route('blogs.index') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">Blogs</a>
                 <a href="{{ url('/#how-it-works') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">How It Works</a>
                 <a href="{{ route('cms.show', 'about') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">About</a>
                 <a href="{{ route('cms.show', 'contact') }}" onclick="closePublicMobileNav()" class="block px-4 py-2.5 rounded-xl font-bold text-sm" style="color: var(--text-primary, #0f172a);">Contact</a>
@@ -311,6 +313,7 @@
                     <ul class="space-y-2.5 text-xs opacity-90">
                         <li><a href="{{ route('groups.index') }}" class="transition hover:opacity-100">Explore Communities</a></li>
                         <li><a href="{{ route('events.index') }}" class="transition hover:opacity-100">Upcoming Events</a></li>
+                        <li><a href="{{ route('blogs.index') }}" class="transition hover:opacity-100">Articles & Blogs</a></li>
                         <li><a href="{{ url('/#how-it-works') }}" class="transition hover:opacity-100">How It Works</a></li>
                         <li><a href="{{ route('cms.show', 'about') }}" class="transition hover:opacity-100 font-bold text-sky-400">About Nexteck & Bizconn</a></li>
                     </ul>

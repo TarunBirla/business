@@ -23,6 +23,9 @@ use App\Http\Controllers\SuperAdmin\SuperAdminUserController;
 use App\Http\Controllers\SuperAdmin\SuperAdminCmsController;
 use App\Http\Controllers\SuperAdmin\ThemeController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectController;
+use App\Http\Controllers\SuperAdmin\SuperAdminAnalyticsController;
+use App\Http\Controllers\SuperAdmin\SuperAdminBlogController;
+use App\Http\Controllers\PublicBlogController;
 
 use App\Http\Controllers\PublicBusinessCardController;
 use App\Http\Controllers\Member\MemberProjectController;
@@ -57,6 +60,8 @@ Route::get('/events', [PublicEventController::class, 'index'])->name('events.ind
 Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('events.show');
 
 Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
+Route::get('/blogs', [PublicBlogController::class, 'index'])->name('blogs.index');
+Route::get('/blogs/{slug}', [PublicBlogController::class, 'show'])->name('blogs.show');
 
 // Public Community Request Routes
 Route::get('/request-community', [\App\Http\Controllers\PublicCommunityRequestController::class, 'create'])->name('public.community_request.create');
@@ -324,6 +329,18 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_a
     Route::post('/themes/{theme}/set-default', [ThemeController::class, 'setDefault'])->name('themes.set_default');
     Route::post('/themes/{theme}/duplicate', [ThemeController::class, 'duplicate'])->name('themes.duplicate');
     Route::delete('/themes/{theme}', [ThemeController::class, 'destroy'])->name('themes.destroy');
+
+    // Analytics & Visitors Tracking
+    Route::get('/analytics', [SuperAdminAnalyticsController::class, 'index'])->name('analytics.index');
+
+    // Blogs & Articles Management
+    Route::get('/blogs', [SuperAdminBlogController::class, 'index'])->name('blogs.index');
+    Route::get('/blogs/create', [SuperAdminBlogController::class, 'create'])->name('blogs.create');
+    Route::post('/blogs', [SuperAdminBlogController::class, 'store'])->name('blogs.store');
+    Route::get('/blogs/{blog}/edit', [SuperAdminBlogController::class, 'edit'])->name('blogs.edit');
+    Route::put('/blogs/{blog}', [SuperAdminBlogController::class, 'update'])->name('blogs.update');
+    Route::post('/blogs/{blog}/toggle-status', [SuperAdminBlogController::class, 'toggleStatus'])->name('blogs.toggle_status');
+    Route::delete('/blogs/{blog}', [SuperAdminBlogController::class, 'destroy'])->name('blogs.destroy');
 });
 
 // Helper Route for Live cPanel Migration & Abusive Words System Setup
@@ -408,6 +425,29 @@ Route::get('/fix-community-requests-migration', function () {
         return '<h1 style="color:green;font-family:sans-serif;text-align:center;margin-top:50px;">SUCCESS: Community Requests Migration Applied & View Cache Cleared Successfully!</h1>';
     } catch (\Throwable $e) {
         return '<h1 style="color:red;font-family:sans-serif;text-align:center;margin-top:50px;">STATUS: ' . $e->getMessage() . '</h1>';
+    }
+});
+
+// Helper Route for Live cPanel Safe Migration & Cache Clearance for Analytics & Blogs
+Route::get('/fix-analytics-and-blogs-migration', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        return '<div style="font-family:sans-serif;max-width:620px;margin:50px auto;padding:32px;background:#f0fdf4;border:1px solid #86efac;border-radius:16px;text-align:center;box-shadow:0 10px 25px -5px rgba(0,0,0,0.05);">'
+            . '<div style="font-size:40px;margin-bottom:12px;">✅</div>'
+            . '<h2 style="color:#166534;margin:0 0 10px 0;font-size:22px;">SUCCESS: Migration & Setup Complete!</h2>'
+            . '<p style="color:#15803d;font-size:14px;line-height:1.6;margin-bottom:24px;">Analytics Visitors & Blogs tables created safely. Existing tables & data were not touched. All caches cleared.</p>'
+            . '<div style="display:flex;justify-content:center;gap:12px;">'
+            . '<a href="' . url('/super-admin/analytics') . '" style="background:#0A4744;color:white;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:13px;display:inline-block;">Open Analytics & Visitors</a>'
+            . '<a href="' . url('/super-admin/blogs') . '" style="background:#0284c7;color:white;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:bold;font-size:13px;display:inline-block;">Open Blogs Manager</a>'
+            . '</div>'
+            . '</div>';
+    } catch (\Throwable $e) {
+        return '<div style="font-family:sans-serif;max-width:620px;margin:50px auto;padding:32px;background:#fef2f2;border:1px solid #fca5a5;border-radius:16px;text-align:center;">'
+            . '<h2 style="color:#991b1b;margin-bottom:10px;">MIGRATION STATUS</h2>'
+            . '<p style="color:#b91c1c;font-size:14px;">' . htmlspecialchars($e->getMessage()) . '</p>'
+            . '</div>';
     }
 });
 

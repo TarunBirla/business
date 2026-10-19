@@ -477,6 +477,24 @@
                         <span style="{{ $active ? 'color: #ffffff;' : '' }}">Theme Manager</span>
                     </a>
 
+                    @php $active = request()->routeIs('super_admin.analytics*'); @endphp
+                    <a href="{{ route('super_admin.analytics.index') }}" onclick="closeMobileSidebar()"
+                        class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}"
+                        style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-chart-line w-5"
+                            style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Analytics & Visitors</span>
+                    </a>
+
+                    @php $active = request()->routeIs('super_admin.blogs*'); @endphp
+                    <a href="{{ route('super_admin.blogs.index') }}" onclick="closeMobileSidebar()"
+                        class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}"
+                        style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-newspaper w-5"
+                            style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Blogs & Articles</span>
+                    </a>
+
                 @elseif($sidebarMode === 'group_admin')
                     @php
                         $myAdminGroups = $authUser->isSuperAdmin()
