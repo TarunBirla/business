@@ -15,11 +15,14 @@
         <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Page Title *</label>
             <input type="text" name="title" value="{{ old('title', $page->title) }}" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+            @error('title') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Page Content *</label>
-            <textarea name="content" rows="12" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-sans text-sm leading-relaxed">{{ old('content', $page->content) }}</textarea>
+            {{-- NOTE: 'required' hata diya hai, kyunki TinyMCE textarea ko hide kar deta hai aur browser submit rok deta hai --}}
+            <textarea id="content-editor" name="content" rows="12">{{ old('content', $page->content) }}</textarea>
+            @error('content') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -38,4 +41,21 @@
         </button>
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7.3.0/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+tinymce.init({
+    selector: '#content-editor',
+    license_key: 'gpl',
+    height: 480,
+    menubar: false,
+    branding: false,
+    promotion: false,
+    plugins: 'lists link table code fullscreen autoresize wordcount',
+    toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table | removeformat | code fullscreen',
+    block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4',
+    content_style: 'body{font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.7;padding:8px}',
+    convert_urls: false
+});
+</script>
 @endsection
