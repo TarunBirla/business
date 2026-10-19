@@ -1,6 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'Community Events UK')
+@section('title', 'Community Events & Business Networking UK')
+@section('meta_description', 'Attend professional networking meetups, business workshops, entrepreneur seminars, and industry conferences across the UK on Bizconn.')
+@section('meta_keywords', 'UK business events, networking meetups, business seminars London, professional workshops, Bizconn events')
+@section('geo_region', 'GB')
+@section('geo_placename', 'United Kingdom')
+
+@push('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "{{ url()->current() }}/#collectionpage",
+      "url": "{{ url()->current() }}",
+      "name": "Community Events & Business Networking UK",
+      "description": "Attend networking meetups, workshops, cultural gatherings and seminars across the UK.",
+      "isPartOf": {
+        "@id": "{{ url('/') }}/#website"
+      },
+      "inLanguage": "en-GB"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ url()->current() }}/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Events",
+          "item": "{{ url()->current() }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="py-12 border-b border-sky-100 text-white" style="background-color: var(--btn-primary-bg, #0A4744);">

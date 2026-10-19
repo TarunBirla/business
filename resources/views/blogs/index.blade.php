@@ -2,6 +2,48 @@
 
 @section('title', 'Business Insights & Articles - Bizconn Blog')
 @section('meta_description', 'Read the latest UK business networking tips, industry trends, community leadership insights, and entrepreneur strategies.')
+@section('meta_keywords', 'UK business blogs, business networking articles, leadership tips, Nexteck, corporate events, entrepreneur guides')
+@section('geo_region', 'GB')
+@section('geo_placename', 'United Kingdom')
+
+@push('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "{{ url()->current() }}/#collectionpage",
+      "url": "{{ url()->current() }}",
+      "name": "Business Insights & Articles - Bizconn Blog",
+      "description": "Read the latest UK business networking tips, industry trends, community leadership insights, and entrepreneur strategies.",
+      "isPartOf": {
+        "@id": "{{ url('/') }}/#website"
+      },
+      "inLanguage": "en-GB"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ url()->current() }}/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blogs",
+          "item": "{{ url()->current() }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 <!-- Hero Header -->

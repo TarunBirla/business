@@ -2,25 +2,91 @@
 
 @section('title', $blog->meta_title ?: $blog->title . ' - Bizconn')
 @section('meta_description', $blog->meta_description ?: $blog->excerpt)
+@section('meta_keywords', $blog->meta_keywords ?: 'business, networking, UK, Bizconn, ' . $blog->category)
+@section('meta_author', $blog->author_name)
+@section('og_title', $blog->meta_title ?: $blog->title)
+@section('og_description', $blog->meta_description ?: $blog->excerpt)
+@if($blog->image_url)
+    @section('og_image', $blog->image_url)
+@endif
+@section('og_type', 'article')
+@section('geo_region', $blog->geo_region ?: 'GB-UKM')
+@section('geo_placename', $blog->geo_placename ?: 'United Kingdom')
+
+@push('meta')
+    <meta property="article:published_time" content="{{ $blog->published_at ? $blog->published_at->toIso8601String() : $blog->created_at->toIso8601String() }}">
+    <meta property="article:modified_time" content="{{ $blog->updated_at->toIso8601String() }}">
+    <meta property="article:section" content="{{ $blog->category }}">
+    <meta property="article:author" content="{{ $blog->author_name }}">
+@endpush
+
+@push('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "{{ url()->current() }}/#blogposting",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ url()->current() }}"
+      },
+      "headline": {{ json_encode($blog->title) }},
+      "description": {{ json_encode($blog->meta_description ?: $blog->excerpt) }},
+      @if($blog->image_url)
+      "image": [
+        {{ json_encode($blog->image_url) }}
+      ],
+      @endif
+      "datePublished": "{{ $blog->published_at ? $blog->published_at->toIso8601String() : $blog->created_at->toIso8601String() }}",
+      "dateModified": "{{ $blog->updated_at->toIso8601String() }}",
+      "author": {
+        "@type": "Person",
+        "name": {{ json_encode($blog->author_name) }}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Bizconn",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ asset('nlogo.png') }}"
+        }
+      },
+      "keywords": {{ json_encode($blog->meta_keywords ?: 'business, networking, UK, Bizconn') }},
+      "articleSection": {{ json_encode($blog->category ?: 'Business Insight') }},
+      "inLanguage": "en-GB"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ url()->current() }}/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blogs",
+          "item": "{{ route('blogs.index') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ json_encode($blog->title) }},
+          "item": "{{ url()->current() }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
-<!-- Dynamic Meta Tags & SEO / ARO / GEO Injection -->
-@push('meta')
-    <meta name="keywords" content="{{ $blog->meta_keywords ?: 'business, networking, UK, Bizconn' }}">
-    <meta name="author" content="{{ $blog->author_name }}">
-    <!-- Open Graph (SEO / ARO) -->
-    <meta property="og:title" content="{{ $blog->meta_title ?: $blog->title }}">
-    <meta property="og:description" content="{{ $blog->meta_description ?: $blog->excerpt }}">
-    @if($blog->image_url)
-        <meta property="og:image" content="{{ $blog->image_url }}">
-    @endif
-    <meta property="og:type" content="article">
-    <meta property="article:published_time" content="{{ $blog->published_at ? $blog->published_at->toIso8601String() : $blog->created_at->toIso8601String() }}">
-    <meta property="article:section" content="{{ $blog->category }}">
-    <!-- GEO Targeting Tags -->
-    <meta name="geo.region" content="{{ $blog->geo_region ?: 'GB-UKM' }}">
-    <meta name="geo.placename" content="{{ $blog->geo_placename ?: 'United Kingdom' }}">
-@endpush
 
 <div class="py-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
     <!-- Breadcrumb -->

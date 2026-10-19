@@ -8,22 +8,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>@yield('title', 'Business Networking Platform') - Bizconn</title>
     <meta name="description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'business networking platform, UK business directory, professional communities, Nexteck, corporate events, business connections, entrepreneur network, UK business events')">
+    <meta name="author" content="@yield('meta_author', 'Bizconn by Nexteck')">
+    <meta name="publisher" content="Nexteck Company">
+    <meta name="copyright" content="Nexteck Company">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
     <link rel="icon" type="image/png" href="{{ asset('nlogo.png') }}">
+
+    <!-- GEO Targeting Tags (UK & Local Search Optimization) -->
+    <meta name="geo.region" content="@yield('geo_region', 'GB')">
+    <meta name="geo.placename" content="@yield('geo_placename', 'United Kingdom')">
+    <meta name="geo.position" content="@yield('geo_position', '51.5074;-0.1278')">
+    <meta name="ICBM" content="@yield('geo_icbm', '51.5074, -0.1278')">
+
+    <!-- ARO (AI Retrieval Optimization) & Dublin Core Metadata -->
+    <meta name="DC.title" content="@yield('title', 'Business Networking Platform') - Bizconn">
+    <meta name="DC.creator" content="@yield('meta_author', 'Bizconn by Nexteck')">
+    <meta name="DC.description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
+    <meta name="DC.publisher" content="Nexteck Company">
+    <meta name="DC.language" content="en">
+    <meta name="DC.coverage" content="United Kingdom">
+    <meta name="DC.subject" content="Business Networking, Enterprise Directory, Professional Collaboration">
+
     <!-- OpenGraph Tags -->
+    <meta property="og:site_name" content="Bizconn">
     <meta property="og:title" content="@yield('og_title', 'Empowering Communities. Connecting Members. Unlocking Opportunities.')">
     <meta property="og:description" content="@yield('og_description', 'Build meaningful relationships with people, professionals and businesses on Bizconn.')">
     <meta property="og:image" content="@yield('og_image', asset('nlogo.png'))">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:locale" content="en_GB">
 
     <!-- Twitter / X Card Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Connect. Empowering Communities. Connecting Members. Unlocking Opportunities.">
-<meta name="twitter:description" content="Connect. Collaborate. Grow Your Business Network.">
-<meta name="twitter:image" content="{{ asset('nlogo.png') }}">
-<meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@bizconn">
+    <meta name="twitter:creator" content="@bizconn">
+    <meta name="twitter:title" content="@yield('og_title', 'Empowering Communities. Connecting Members. Unlocking Opportunities.')">
+    <meta name="twitter:description" content="@yield('og_description', 'Connect. Collaborate. Grow Your Business Network.')">
+    <meta name="twitter:image" content="@yield('og_image', asset('nlogo.png'))">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+
+    <!-- Page / View Specific Meta Injections -->
+    @stack('meta')
+
+    <!-- JSON-LD Structured Data (Schema.org) for 100% Rich Results & ARO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "{{ url('/') }}/#organization",
+          "name": "Bizconn",
+          "legalName": "Nexteck Company",
+          "url": "{{ url('/') }}",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "{{ url('/') }}/#logo",
+            "url": "{{ asset('nlogo.png') }}",
+            "caption": "Bizconn Logo"
+          },
+          "image": "{{ asset('nlogo.png') }}",
+          "description": "Bizconn is an enterprise community networking and professional directory platform engineered by Nexteck Company.",
+          "telephone": "+44 7879175585",
+          "email": "nasar@thenexteck.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "GB"
+          },
+          "areaServed": "GB",
+          "parentOrganization": {
+            "@type": "Organization",
+            "name": "Nexteck Company",
+            "url": "{{ url('/') }}"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "{{ url('/') }}/#website",
+          "url": "{{ url('/') }}",
+          "name": "Bizconn",
+          "description": "Enterprise Business Networking & Professional Community Platform",
+          "publisher": {
+            "@id": "{{ url('/') }}/#organization"
+          },
+          "inLanguage": "en-GB",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "{{ route('groups.index') }}?search={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "{{ url()->current() }}/#webpage",
+          "url": "{{ url()->current() }}",
+          "name": "@yield('title', 'Business Networking Platform') - Bizconn",
+          "isPartOf": {
+            "@id": "{{ url('/') }}/#website"
+          },
+          "about": {
+            "@id": "{{ url('/') }}/#organization"
+          },
+          "description": "@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')",
+          "inLanguage": "en-GB"
+        }
+      ]
+    }
+    </script>
+
+    @stack('structured_data')
 
     <!-- Fonts: Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

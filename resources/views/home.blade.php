@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Connect With Your Community & Network')
+@section('title', 'Empowering Communities & Business Networking')
+@section('meta_description', 'Bizconn is an enterprise business networking and community management platform engineered by Nexteck Company. Connect with verified professionals, discover trusted services, attend events, and scale your network across the UK.')
+@section('meta_keywords', 'business networking, UK business communities, professional networking, business directory, entrepreneurs, corporate networking, Nexteck, Bizconn, London business events')
+@section('geo_region', 'GB')
+@section('geo_placename', 'United Kingdom')
 
 @section('content')
 

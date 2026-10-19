@@ -1,6 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'Explore Communities UK')
+@section('title', 'Explore Business Communities & Networks UK')
+@section('meta_description', 'Discover and join business networking communities across London, Birmingham, and the UK. Connect with entrepreneurs and verified professionals on Bizconn.')
+@section('meta_keywords', 'UK business communities, networking groups, professional associations, London business network, Bizconn directory')
+@section('geo_region', 'GB')
+@section('geo_placename', 'United Kingdom')
+
+@push('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "{{ url()->current() }}/#collectionpage",
+      "url": "{{ url()->current() }}",
+      "name": "Explore Business Communities & Networks UK",
+      "description": "Discover and join business networking communities across London, Birmingham, and the UK.",
+      "isPartOf": {
+        "@id": "{{ url('/') }}/#website"
+      },
+      "inLanguage": "en-GB"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ url()->current() }}/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Communities",
+          "item": "{{ url()->current() }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="py-12 border-b border-slate-200" style="background-color: var(--bg-page);">
