@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Request a New Community - Bizconn')
+@section('title', 'Request a New Community')
 
 @section('content')
 <div class="py-12 border-b border-slate-200 bg-white">

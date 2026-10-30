@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Business Insights & Articles - Bizconn Blog')
+@section('title', 'Business Insights & Articles')
 @section('meta_description', 'Read the latest UK business networking tips, industry trends, community leadership insights, and entrepreneur strategies.')
 @section('meta_keywords', 'UK business blogs, business networking articles, leadership tips, Nexteck, corporate events, entrepreneur guides')
 @section('geo_region', 'GB')

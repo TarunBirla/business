@@ -6,7 +6,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'Business Networking Platform') - Bizconn</title>
+
+    @php
+        $gaId = config('services.google_analytics_id', env('GOOGLE_ANALYTICS_ID', 'G-309DTHMEG5'));
+    @endphp
+    @if($gaId)
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ $gaId }}');
+    </script>
+    @endif
+
+    <title>@hasSection('title'){{ preg_replace('/\s*[-|]\s*Bizconn(\s*Blog)?$/i', '', trim($__env->yieldContent('title'))) }} | Bizconn@else Empowering Communities & Business Networking | Bizconn@endif</title>
     <meta name="description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
     <meta name="keywords" content="@yield('meta_keywords', 'business networking platform, UK business directory, professional communities, Nexteck, corporate events, business connections, entrepreneur network, UK business events')">
     <meta name="author" content="@yield('meta_author', 'Bizconn by Nexteck')">
@@ -25,7 +41,7 @@
     <meta name="ICBM" content="@yield('geo_icbm', '51.5074, -0.1278')">
 
     <!-- ARO (AI Retrieval Optimization) & Dublin Core Metadata -->
-    <meta name="DC.title" content="@yield('title', 'Business Networking Platform') - Bizconn">
+    <meta name="DC.title" content="@hasSection('title'){{ preg_replace('/\s*[-|]\s*Bizconn(\s*Blog)?$/i', '', trim($__env->yieldContent('title'))) }} | Bizconn@else Empowering Communities & Business Networking | Bizconn@endif">
     <meta name="DC.creator" content="@yield('meta_author', 'Bizconn by Nexteck')">
     <meta name="DC.description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
     <meta name="DC.publisher" content="Nexteck Company">

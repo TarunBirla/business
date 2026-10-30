@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $blog->meta_title ?: $blog->title . ' - Bizconn')
+@section('title', $blog->meta_title ?: $blog->title)
 @section('meta_description', $blog->meta_description ?: $blog->excerpt)
 @section('meta_keywords', $blog->meta_keywords ?: 'business, networking, UK, Bizconn, ' . $blog->category)
 @section('meta_author', $blog->author_name)

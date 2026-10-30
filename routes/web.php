@@ -63,6 +63,9 @@ Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.show');
 Route::get('/blogs', [PublicBlogController::class, 'index'])->name('blogs.index');
 Route::get('/blogs/{slug}', [PublicBlogController::class, 'show'])->name('blogs.show');
 
+// Dynamic XML Sitemap for Search Engines (SEO)
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
 // Public Community Request Routes
 Route::get('/request-community', [\App\Http\Controllers\PublicCommunityRequestController::class, 'create'])->name('public.community_request.create');
 Route::post('/request-community', [\App\Http\Controllers\PublicCommunityRequestController::class, 'store'])->name('public.community_request.store');

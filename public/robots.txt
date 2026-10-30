@@ -1,2 +1,15 @@
 User-agent: *
 Disallow:
+
+# AI Search Bots (Explicitly Allowed)
+User-agent: GPTBot
+Disallow:
+
+User-agent: ClaudeBot
+Disallow:
+
+User-agent: PerplexityBot
+Disallow:
+
+# XML Sitemap
+Sitemap: https://bizconn.co.uk/sitemap.xml
