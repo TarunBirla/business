@@ -22,7 +22,7 @@
     </script>
     @endif
 
-    <title>@hasSection('title'){{ preg_replace('/\s*[-|]\s*Bizconn(\s*Blog)?$/i', '', trim($__env->yieldContent('title'))) }} | Bizconn@else Empowering Communities & Business Networking | Bizconn@endif</title>
+    <title>@yield('title', 'Empowering Communities & Business Networking') | Bizconn</title>
     <meta name="description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
     <meta name="keywords" content="@yield('meta_keywords', 'business networking platform, UK business directory, professional communities, Nexteck, corporate events, business connections, entrepreneur network, UK business events')">
     <meta name="author" content="@yield('meta_author', 'Bizconn by Nexteck')">
@@ -41,7 +41,7 @@
     <meta name="ICBM" content="@yield('geo_icbm', '51.5074, -0.1278')">
 
     <!-- ARO (AI Retrieval Optimization) & Dublin Core Metadata -->
-    <meta name="DC.title" content="@hasSection('title'){{ preg_replace('/\s*[-|]\s*Bizconn(\s*Blog)?$/i', '', trim($__env->yieldContent('title'))) }} | Bizconn@else Empowering Communities & Business Networking | Bizconn@endif">
+    <meta name="DC.title" content="@yield('title', 'Empowering Communities & Business Networking') | Bizconn">
     <meta name="DC.creator" content="@yield('meta_author', 'Bizconn by Nexteck')">
     <meta name="DC.description" content="@yield('meta_description', 'Connect with your business network, discover professionals and services, attend events and build meaningful relationships across Bizconn.')">
     <meta name="DC.publisher" content="Nexteck Company">
