@@ -77,11 +77,9 @@
         </div>
     </div>
 
-    <!-- Main Content Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
 
-            <!-- Left 2 Columns: Main Details -->
             <div class="lg:col-span-2 space-y-6">
 
                 <!-- Featured Event Card Image (If provided) -->
