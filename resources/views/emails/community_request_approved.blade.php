@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="footer">
-            Developed and Powered by Nexteck &copy; {{ date('Y') }} | Support: nasar@thenexteck.com
+            Developed and Powered by Nexteck &copy; {{ date('Y') }} | Support: info@thenexteck.com
         </div>
     </div>
 </body>
