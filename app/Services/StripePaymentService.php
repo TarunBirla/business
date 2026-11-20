@@ -64,6 +64,11 @@ class StripePaymentService
             $user->groups()->updateExistingPivot($group->id, ['status' => 'active']);
         }
 
+        // Send Email Alert to Super Admin (nasar@thenexteck.com)
+        AdminAlertService::sendPaymentAlert($payment, $user, [
+            'item_name' => "Community Membership: {$group->name}",
+        ]);
+
         return $payment;
     }
 
@@ -102,6 +107,11 @@ class StripePaymentService
                 'registered_at' => now(),
             ]
         );
+
+        // Send Email Alert to Super Admin (nasar@thenexteck.com)
+        AdminAlertService::sendPaymentAlert($payment, $user, [
+            'item_name' => "Event Ticket: {$event->title}",
+        ]);
 
         return $registration;
     }

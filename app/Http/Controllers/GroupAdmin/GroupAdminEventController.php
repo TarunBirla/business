@@ -60,7 +60,7 @@ class GroupAdminEventController extends Controller
             $eventImgPath = $request->file('event_img')->store('events/images', 'public');
         }
 
-        $group->events()->create([
+        $event = $group->events()->create([
             'created_by' => auth()->id(),
             'title' => $request->title,
             'slug' => $slug,
@@ -82,6 +82,9 @@ class GroupAdminEventController extends Controller
             'currency' => 'GBP',
             'status' => 'published',
         ]);
+
+        // Send Email Alert to Super Admin (nasar@thenexteck.com)
+        \App\Services\AdminAlertService::sendNewEventAlert($event, $group, auth()->user());
 
         return redirect()->route('group_admin.events.index', $group->id)->with('success', 'Event created successfully.');
     }

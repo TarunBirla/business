@@ -232,6 +232,9 @@ class MemberServiceController extends Controller
             'link' => route('member.services.index', ['tab' => 'requests']),
         ]);
 
+        // Send Email Alert to Super Admin (nasar@thenexteck.com)
+        \App\Services\AdminAlertService::sendServiceInquiryAlert($req, $user, $service);
+
         return redirect()->route('member.services.index', ['tab' => 'others_services'])
             ->with('success', 'Service request sent successfully! You will be notified when accepted.');
     }

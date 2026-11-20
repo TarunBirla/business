@@ -236,10 +236,12 @@ SVG;
         ]);
 
         // Handle joining group if specified or stored in session
+        $targetGroupName = null;
         $groupId = $request->group_id ?? session('join_group_id') ?? session('referral_group_id');
         if ($groupId) {
             $group = Group::find($groupId);
             if ($group) {
+                $targetGroupName = $group->name;
                 session()->forget(['join_group_id', 'referral_group_id']);
                 $user->groups()->attach($group->id, [
                     'membership_role' => 'member',
@@ -248,6 +250,9 @@ SVG;
                 ]);
             }
         }
+
+        // Send Email Alert to Super Admin (nasar@thenexteck.com) & Welcome Email to Member
+        \App\Services\AdminAlertService::sendNewMemberAlert($user, $targetGroupName);
 
         return redirect()->route('login')->with('success', 'Your account has been registered! Your account is waiting for Community Admin approval.');
     }

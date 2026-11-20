@@ -116,6 +116,9 @@ class ApiAuthController extends Controller
             ]);
         }
 
+        // Send Email Alert to Super Admin (nasar@thenexteck.com) & Welcome Email to Member
+        \App\Services\AdminAlertService::sendNewMemberAlert($user, $group?->name);
+
         return response()->json([
             'success' => true,
             'message' => 'Your account has been registered successfully! Your account is waiting for Community Admin approval.',

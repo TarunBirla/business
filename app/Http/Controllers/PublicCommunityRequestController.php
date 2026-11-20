@@ -36,7 +36,10 @@ class PublicCommunityRequestController extends Controller
         $validated['status'] = 'pending';
         $validated['country'] = $validated['country'] ?? 'United Kingdom';
 
-        CommunityRequest::create($validated);
+        $communityRequest = CommunityRequest::create($validated);
+
+        // Send Email Alert to Super Admin (nasar@thenexteck.com) & Acknowledgement to Applicant
+        \App\Services\AdminAlertService::sendCommunityRequestAlert($communityRequest);
 
         return redirect()->route('public.community_request.create')
             ->with('success', 'Your request to create a new community has been submitted successfully! Super Admin will review your application.');

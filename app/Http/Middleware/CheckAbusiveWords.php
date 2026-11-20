@@ -26,6 +26,9 @@ class CheckAbusiveWords
             $detectedWord = ProfanityFilter::findAbusiveWord($inputs);
 
             if ($detectedWord) {
+                // Send Security Alert to Super Admin (nasar@thenexteck.com)
+                \App\Services\AdminAlertService::sendSecurityAlert($detectedWord, $request);
+
                 $errorMessage = "Your submission contains inappropriate language (\"{$detectedWord}\"). Please remove abusive words to proceed.";
 
                 if ($request->expectsJson() || $request->wantsJson() || $request->ajax()) {
