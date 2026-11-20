@@ -29,11 +29,13 @@ class GroupAdminSurveyController extends Controller
         $this->authorizeAdmin($group);
 
         $survey = new Survey(['status' => 'active']);
+        $questions = collect();
         $initialQuestions = [];
 
         return view('group_admin.surveys.form', [
             'group' => $group,
             'survey' => $survey,
+            'questions' => $questions,
             'initialQuestions' => $initialQuestions,
             'isEdit' => false,
         ]);
@@ -73,9 +75,21 @@ class GroupAdminSurveyController extends Controller
         foreach ($request->questions as $qData) {
             $options = null;
             if (in_array($qData['type'], ['single_choice', 'multiple_choice']) && !empty($qData['options'])) {
-                // Split options by newline or comma
-                $rawOptions = preg_split('/[\r\n,]+/', $qData['options']);
-                $options = array_values(array_filter(array_map('trim', $rawOptions)));
+                if (is_array($qData['options'])) {
+                    $options = array_values(array_filter(array_map('trim', $qData['options'])));
+                } else {
+                    $rawText = trim((string)$qData['options']);
+                    if (strpos($rawText, "\n") !== false) {
+                        $rawOptions = preg_split('/[\r\n]+/', $rawText);
+                    } elseif (strpos($rawText, ',') !== false && !preg_match('/\(.*,.*\)/', $rawText)) {
+                        $rawOptions = explode(',', $rawText);
+                    } else {
+                        $rawOptions = [$rawText];
+                    }
+                    $options = array_values(array_filter(array_map('trim', $rawOptions), function ($val) {
+                        return $val !== '';
+                    }));
+                }
             }
 
             $survey->questions()->create([
@@ -99,7 +113,9 @@ class GroupAdminSurveyController extends Controller
             abort(404);
         }
 
-        $initialQuestions = $survey->questions->map(function ($q) {
+        $questions = $survey->questions()->orderBy('sort_order', 'asc')->get();
+
+        $initialQuestions = $questions->map(function ($q) {
             return [
                 'id' => $q->id,
                 'text' => $q->question_text,
@@ -112,6 +128,7 @@ class GroupAdminSurveyController extends Controller
         return view('group_admin.surveys.form', [
             'group' => $group,
             'survey' => $survey,
+            'questions' => $questions,
             'initialQuestions' => $initialQuestions,
             'isEdit' => true,
         ]);
@@ -153,8 +170,21 @@ class GroupAdminSurveyController extends Controller
         foreach ($request->questions as $qData) {
             $options = null;
             if (in_array($qData['type'], ['single_choice', 'multiple_choice']) && !empty($qData['options'])) {
-                $rawOptions = preg_split('/[\r\n,]+/', $qData['options']);
-                $options = array_values(array_filter(array_map('trim', $rawOptions)));
+                if (is_array($qData['options'])) {
+                    $options = array_values(array_filter(array_map('trim', $qData['options'])));
+                } else {
+                    $rawText = trim((string)$qData['options']);
+                    if (strpos($rawText, "\n") !== false) {
+                        $rawOptions = preg_split('/[\r\n]+/', $rawText);
+                    } elseif (strpos($rawText, ',') !== false && !preg_match('/\(.*,.*\)/', $rawText)) {
+                        $rawOptions = explode(',', $rawText);
+                    } else {
+                        $rawOptions = [$rawText];
+                    }
+                    $options = array_values(array_filter(array_map('trim', $rawOptions), function ($val) {
+                        return $val !== '';
+                    }));
+                }
             }
 
             $questionId = $qData['id'] ?? null;
