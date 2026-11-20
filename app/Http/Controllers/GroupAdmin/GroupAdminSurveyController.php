@@ -29,12 +29,12 @@ class GroupAdminSurveyController extends Controller
         $this->authorizeAdmin($group);
 
         $survey = new Survey(['status' => 'active']);
-        $questions = collect();
+        $initialQuestions = [];
 
         return view('group_admin.surveys.form', [
             'group' => $group,
             'survey' => $survey,
-            'questions' => $questions,
+            'initialQuestions' => $initialQuestions,
             'isEdit' => false,
         ]);
     }
@@ -99,12 +99,20 @@ class GroupAdminSurveyController extends Controller
             abort(404);
         }
 
-        $questions = $survey->questions;
+        $initialQuestions = $survey->questions->map(function ($q) {
+            return [
+                'id' => $q->id,
+                'text' => $q->question_text,
+                'type' => $q->question_type,
+                'options' => is_array($q->options) ? implode("\n", $q->options) : ($q->options ?: ''),
+                'is_required' => (bool)$q->is_required,
+            ];
+        })->values()->toArray();
 
         return view('group_admin.surveys.form', [
             'group' => $group,
             'survey' => $survey,
-            'questions' => $questions,
+            'initialQuestions' => $initialQuestions,
             'isEdit' => true,
         ]);
     }

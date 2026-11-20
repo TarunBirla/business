@@ -220,15 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let questionIndex = 0;
 
     // Existing questions data passed from controller
-    const initialQuestions = @json($questions->map(function($q) {
-        return [
-            'id' => $q->id,
-            'text' => $q->question_text,
-            'type' => $q->question_type,
-            'options' => is_array($q->options) ? implode("\n", $q->options) : '',
-            'is_required' => $q->is_required ? true : false,
-        ];
-    }));
+    const initialQuestions = {!! json_encode($initialQuestions ?? []) !!};
 
     function updateNumbers() {
         const cards = container.querySelectorAll('.question-card');
