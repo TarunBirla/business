@@ -204,12 +204,7 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <div class="font-extrabold text-slate-900 text-sm flex items-center space-x-1.5">
-                                            <span>{{ $m->name }}</span>
-                                            @if($m->membership_role === 'group_admin')
-                                                <span class="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[9px] font-extrabold rounded uppercase">Admin</span>
-                                            @endif
-                                        </div>
+                                        
                                         <div class="text-[11px] text-slate-500">{{ $m->email }}</div>
                                         <div class="text-[10px] text-slate-400 mt-0.5">
                                             {{ $m->profession ?: ($m->job_title ?: 'Member') }}

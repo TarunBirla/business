@@ -33,14 +33,20 @@ class GroupAdminDashboardController extends Controller
             $activeGroup = $assignedGroups->first();
         }
 
-        $memberCount = $activeGroup->members()->count();
-        $newMembersCount = $activeGroup->members()->where('group_user.created_at', '>=', now()->subDays(30))->count();
+                $memberCount = $activeGroup->members()
+            ->where('users.id', '!=', $user->id)
+            ->count();
+        $newMembersCount = $activeGroup->members()
+            ->where('users.id', '!=', $user->id)
+            ->where('group_user.created_at', '>=', now()->subDays(30))
+            ->count();
         $eventsCount = $activeGroup->events()->count();
         $noticesCount = $activeGroup->notices()->count();
 
         // 1. Online Members Count in Active Community
         $fiveMinutesAgo = now()->subMinutes(5);
         $onlineMembersCount = $activeGroup->members()
+            ->where('users.id', '!=', $user->id)
             ->where('users.last_seen_at', '>=', $fiveMinutesAgo)
             ->where(function ($q) {
                 $q->whereNull('users.last_logout_at')
@@ -54,8 +60,10 @@ class GroupAdminDashboardController extends Controller
             ->count();
 
         // 3. Query Community Members with full Activity & Connection data
+               // 3. Query Community Members with full Activity & Connection data
         $membersQuery = $activeGroup->members()
-            ->select('users.*', 'group_user.membership_role', 'group_user.joined_at', 'group_user.status as member_status');
+            ->select('users.*', 'group_user.membership_role', 'group_user.joined_at', 'group_user.status as member_status')
+            ->where('users.id', '!=', $user->id);
 
         if ($request->filled('search')) {
             $s = trim($request->search);
