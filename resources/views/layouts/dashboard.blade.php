@@ -547,6 +547,8 @@
                                             $selUrl = route('group_admin.events.index', $mag->id);
                                         } elseif (request()->routeIs('group_admin.payments*')) {
                                             $selUrl = route('group_admin.payments.index', $mag->id);
+                                        } elseif (request()->routeIs('group_admin.surveys*')) {
+                                            $selUrl = route('group_admin.surveys.index', $mag->id);
                                         } elseif (request()->routeIs('group_admin.promotion*')) {
                                             $selUrl = route('group_admin.promotion.index', $mag->id);
                                         } elseif (request()->routeIs('group_admin.dashboard')) {
@@ -636,6 +638,16 @@
                             <i class="fa-solid fa-bullhorn w-5"
                                 style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
                             <span style="{{ $active ? 'color: #ffffff;' : '' }}">Announcements</span>
+                        </a>
+
+                        @php $active = request()->routeIs('group_admin.surveys*'); @endphp
+                        <a href="{{ route('group_admin.surveys.index', $currentAdminGroup->id) }}"
+                            onclick="closeMobileSidebar()"
+                            class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}"
+                            style="{{ $active ? $navActiveStyle : '' }}">
+                            <i class="fa-solid fa-square-poll-vertical w-5"
+                                style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                            <span style="{{ $active ? 'color: #ffffff;' : '' }}">Surveys</span>
                         </a>
                         @php $active = request()->routeIs('group_admin.promotion*'); @endphp
                         <a href="{{ route('group_admin.promotion.index', $currentAdminGroup->id) }}"
@@ -827,6 +839,15 @@
                                 {{ auth()->user()->unreadNotificationsCount() }}
                             </span>
                         @endif
+                    </a>
+
+                    @php $active = request()->routeIs('member.surveys*'); @endphp
+                    <a href="{{ route('member.surveys.index') }}" onclick="closeMobileSidebar()"
+                        class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-bold text-sm transition {{ $active ? 'shadow-sm text-white' : 'text-slate-700 hover:bg-slate-50' }}"
+                        style="{{ $active ? $navActiveStyle : '' }}">
+                        <i class="fa-solid fa-square-poll-vertical w-5"
+                            style="{{ $active ? 'color: #ffffff;' : 'color: var(--text-link, #0A4744);' }}"></i>
+                        <span style="{{ $active ? 'color: #ffffff;' : '' }}">Surveys & Feedback</span>
                     </a>
 
                     @php $active = request()->routeIs('member.profile*'); @endphp

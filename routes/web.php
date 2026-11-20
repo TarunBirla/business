@@ -98,6 +98,61 @@ Route::get('/fix-expert-categories-migration', function () {
     }
 });
 
+// 1-Click Safe Migration Helper Route for Community Surveys
+Route::get('/migrate-surveys-table', function () {
+    try {
+        if (!\Illuminate\Support\Facades\Schema::hasTable('surveys')) {
+            \Illuminate\Support\Facades\Schema::create('surveys', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
+                $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+                $table->string('title');
+                $table->text('description')->nullable();
+                $table->enum('status', ['active', 'inactive'])->default('active');
+                $table->date('start_date')->nullable();
+                $table->date('end_date')->nullable();
+                $table->timestamps();
+            });
+        }
+
+        if (!\Illuminate\Support\Facades\Schema::hasTable('survey_questions')) {
+            \Illuminate\Support\Facades\Schema::create('survey_questions', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->foreignId('survey_id')->constrained('surveys')->onDelete('cascade');
+                $table->text('question_text');
+                $table->enum('question_type', ['text', 'single_choice', 'multiple_choice', 'rating'])->default('text');
+                $table->json('options')->nullable();
+                $table->boolean('is_required')->default(true);
+                $table->integer('sort_order')->default(0);
+                $table->timestamps();
+            });
+        }
+
+        if (!\Illuminate\Support\Facades\Schema::hasTable('survey_responses')) {
+            \Illuminate\Support\Facades\Schema::create('survey_responses', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->foreignId('survey_id')->constrained('surveys')->onDelete('cascade');
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+                $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
+                $table->foreignId('question_id')->constrained('survey_questions')->onDelete('cascade');
+                $table->text('answer')->nullable();
+                $table->timestamps();
+                $table->index(['survey_id', 'user_id']);
+            });
+        }
+
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+        return '<div style="font-family:sans-serif;text-align:center;margin-top:60px;">' .
+            '<h1 style="color:#0A4744;font-size:32px;">SUCCESS!</h1>' .
+            '<p style="color:#334155;font-size:18px;">Surveys tables created safely without touching any existing data.</p>' .
+            '<a href="/dashboard" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#0A4744;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold;">Go to Dashboard</a>' .
+            '</div>';
+    } catch (\Throwable $e) {
+        return '<h1 style="color:red;font-family:sans-serif;text-align:center;margin-top:50px;">STATUS: ' . $e->getMessage() . '</h1>';
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Authentication Routes
@@ -186,6 +241,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/member/services/{service}/request', [MemberServiceController::class, 'sendRequest'])->name('member.services.request');
     Route::post('/member/services/requests/{serviceRequest}/approve', [MemberServiceController::class, 'approveRequest'])->name('member.services.requests.approve');
     Route::post('/member/services/requests/{serviceRequest}/reject', [MemberServiceController::class, 'rejectRequest'])->name('member.services.requests.reject');
+
+    // Community Surveys for Members
+    Route::get('/member/surveys', [\App\Http\Controllers\Member\MemberSurveyController::class, 'index'])->name('member.surveys.index');
+    Route::get('/member/surveys/{survey}', [\App\Http\Controllers\Member\MemberSurveyController::class, 'show'])->name('member.surveys.show');
+    Route::post('/member/surveys/{survey}/submit', [\App\Http\Controllers\Member\MemberSurveyController::class, 'submit'])->name('member.surveys.submit');
 });
 
 /*
@@ -266,6 +326,17 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::get('/policies/{policy}/edit', [GroupAdminPolicyController::class, 'edit'])->name('policies.edit');
     Route::put('/policies/{policy}', [GroupAdminPolicyController::class, 'update'])->name('policies.update');
     Route::delete('/policies/{policy}', [GroupAdminPolicyController::class, 'destroy'])->name('policies.destroy');
+
+    // Community Surveys Management
+    Route::get('/group/{group}/surveys', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'index'])->name('surveys.index');
+    Route::get('/group/{group}/surveys/create', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'create'])->name('surveys.create');
+    Route::post('/group/{group}/surveys', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'store'])->name('surveys.store');
+    Route::get('/group/{group}/surveys/{survey}/edit', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'edit'])->name('surveys.edit');
+    Route::put('/group/{group}/surveys/{survey}', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'update'])->name('surveys.update');
+    Route::post('/group/{group}/surveys/{survey}/toggle-status', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'toggleStatus'])->name('surveys.toggle_status');
+    Route::delete('/group/{group}/surveys/{survey}', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'destroy'])->name('surveys.destroy');
+    Route::get('/group/{group}/surveys/{survey}/responses', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'responses'])->name('surveys.responses');
+    Route::get('/group/{group}/surveys/{survey}/export-csv', [\App\Http\Controllers\GroupAdmin\GroupAdminSurveyController::class, 'exportCsv'])->name('surveys.export_csv');
 });
 
 /*

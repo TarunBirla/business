@@ -183,6 +183,11 @@ class Group extends Model
         return $this->hasMany(Referral::class);
     }
 
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class)->orderBy('created_at', 'desc');
+    }
+
     public function auditLogs()
     {
         return $this->hasMany(CommunityAuditLog::class)->orderBy('created_at', 'desc');
