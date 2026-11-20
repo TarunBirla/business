@@ -33,6 +33,9 @@ class User extends Authenticatable
         'global_role',
         'status',
         'theme_id',
+        'last_login_at',
+        'last_logout_at',
+        'last_seen_at',
     ];
 
     protected $hidden = [
@@ -44,6 +47,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'privacy_settings' => 'array',
         'password' => 'hashed',
+        'last_login_at' => 'datetime',
+        'last_logout_at' => 'datetime',
+        'last_seen_at' => 'datetime',
     ];
 
     public function getNameAttribute(): string
@@ -242,5 +248,39 @@ class User extends Authenticatable
         }
         $percentage = (int) round(($filled / count($fields)) * 100);
         return min($percentage, 100);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class)->orderBy('created_at', 'desc');
+    }
+
+    public function isOnline(): bool
+    {
+        if (!$this->last_seen_at) {
+            return false;
+        }
+
+        // If user logged out after their last seen timestamp, they are offline
+        if ($this->last_logout_at && $this->last_logout_at->gt($this->last_seen_at)) {
+            return false;
+        }
+
+        return $this->last_seen_at->gt(now()->subMinutes(5));
+    }
+
+    public function acceptedConnectionsCountInGroup(?int $groupId = null): int
+    {
+        $query = Connection::where('status', 'accepted')
+            ->where(function ($q) {
+                $q->where('sender_id', $this->id)
+                    ->orWhere('receiver_id', $this->id);
+            });
+
+        if ($groupId) {
+            $query->where('group_id', $groupId);
+        }
+
+        return $query->count();
     }
 }

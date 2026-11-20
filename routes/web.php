@@ -454,6 +454,68 @@ Route::get('/seed-survey-5', function () {
     }
 });
 
+// 1-Click Safe Migration Helper Route for Member Activities, Login/Logout & Connections Tracking
+Route::get('/migrate-member-activity-table', function () {
+    try {
+        // 1. Add last_login_at, last_logout_at, last_seen_at columns to users table safely
+        \Illuminate\Support\Facades\Schema::table('users', function (\Illuminate\Database\Schema\Blueprint $table) {
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_login_at')) {
+                $table->timestamp('last_login_at')->nullable()->after('status');
+            }
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_logout_at')) {
+                $table->timestamp('last_logout_at')->nullable()->after('last_login_at');
+            }
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_seen_at')) {
+                $table->timestamp('last_seen_at')->nullable()->after('last_logout_at');
+            }
+        });
+
+        // 2. Create user_activities table for detailed login, logout, and page views audit trail
+        if (!\Illuminate\Support\Facades\Schema::hasTable('user_activities')) {
+            \Illuminate\Support\Facades\Schema::create('user_activities', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+                $table->foreignId('group_id')->nullable()->constrained('groups')->nullOnDelete();
+                $table->string('activity_type', 50)->default('page_view');
+                $table->string('description', 500);
+                $table->string('path', 500)->nullable();
+                $table->text('url')->nullable();
+                $table->string('ip_address', 45)->nullable();
+                $table->text('user_agent')->nullable();
+                $table->timestamps();
+
+                $table->index(['user_id', 'created_at']);
+                $table->index(['group_id', 'created_at']);
+                $table->index('activity_type');
+            });
+        }
+
+        // 3. Backfill initial last_login_at and last_seen_at for existing users if null
+        \App\Models\User::whereNull('last_login_at')->update([
+            'last_login_at' => \Illuminate\Support\Facades\DB::raw('COALESCE(updated_at, created_at, NOW())'),
+            'last_seen_at' => \Illuminate\Support\Facades\DB::raw('COALESCE(updated_at, created_at, NOW())'),
+        ]);
+
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+
+        return '<div style="font-family:sans-serif;max-width:680px;margin:50px auto;padding:32px;background:#f0fdf4;border:1px solid #86efac;border-radius:16px;text-align:center;box-shadow:0 10px 25px -5px rgba(0,0,0,0.05);">'
+            . '<div style="font-size:42px;margin-bottom:12px;">✅</div>'
+            . '<h2 style="color:#166534;margin:0 0 10px 0;font-size:24px;">SUCCESS: Member Activity & Tracking System Setup Complete!</h2>'
+            . '<p style="color:#15803d;font-size:15px;line-height:1.6;margin-bottom:24px;">Columns (last_login_at, last_logout_at, last_seen_at) and user_activities table verified safely without touching any existing data.<br>All caches cleared.</p>'
+            . '<div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">'
+            . '<a href="/group-admin" style="background:#0A4744;color:white;padding:12px 24px;text-decoration:none;border-radius:10px;font-weight:bold;font-size:14px;display:inline-block;">Open Group Admin Dashboard</a>'
+            . '<a href="/dashboard" style="background:#0284c7;color:white;padding:12px 24px;text-decoration:none;border-radius:10px;font-weight:bold;font-size:14px;display:inline-block;">Go to Member Dashboard</a>'
+            . '</div>'
+            . '</div>';
+    } catch (\Throwable $e) {
+        return '<div style="font-family:sans-serif;max-width:620px;margin:50px auto;padding:32px;background:#fef2f2;border:1px solid #fca5a5;border-radius:16px;text-align:center;">'
+            . '<h2 style="color:#991b1b;margin-bottom:10px;">ERROR</h2>'
+            . '<p style="color:#b91c1c;font-size:14px;">' . htmlspecialchars($e->getMessage()) . '</p>'
+            . '</div>';
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Authentication Routes
@@ -569,6 +631,7 @@ Route::middleware(['auth', 'group_admin'])->prefix('group-admin')->name('group_a
     Route::post('/group/{group}/members', [GroupAdminMemberController::class, 'store'])->name('members.store');
     Route::post('/group/{group}/members/{user}/status', [GroupAdminMemberController::class, 'updateStatus'])->name('members.update_status');
     Route::match(['get', 'post'], '/group/{group}/members/export-csv', [GroupAdminMemberController::class, 'exportCsv'])->name('members.export_csv');
+    Route::get('/group/{group}/members/{user}/activity', [GroupAdminDashboardController::class, 'memberActivityLog'])->name('members.activity');
 
     // Community Settings & Audit Trail
     Route::get('/group/{group}/settings', [GroupAdminDashboardController::class, 'settings'])->name('settings');

@@ -70,6 +70,26 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
+            // Track Member Login
+            try {
+                $user->update([
+                    'last_login_at' => now(),
+                    'last_seen_at' => now(),
+                ]);
+
+                \App\Models\UserActivity::create([
+                    'user_id' => $user->id,
+                    'activity_type' => 'login',
+                    'description' => 'Member Logged In',
+                    'path' => '/' . ltrim($request->path(), '/'),
+                    'url' => $request->fullUrl(),
+                    'ip_address' => $request->ip(),
+                    'user_agent' => substr((string)$request->userAgent(), 0, 500),
+                ]);
+            } catch (\Throwable $e) {
+                // Silently ignore to avoid blocking authentication
+            }
+
             if ($request->wantsJson() || $request->ajax()) {
                 $targetUrl = $request->input('redirect_to');
                 if (!$targetUrl) {
@@ -331,6 +351,27 @@ SVG;
 
     public function logout(Request $request)
     {
+        try {
+            $user = Auth::user();
+            if ($user) {
+                $user->update([
+                    'last_logout_at' => now(),
+                ]);
+
+                \App\Models\UserActivity::create([
+                    'user_id' => $user->id,
+                    'activity_type' => 'logout',
+                    'description' => 'Member Logged Out',
+                    'path' => '/' . ltrim($request->path(), '/'),
+                    'url' => $request->fullUrl(),
+                    'ip_address' => $request->ip(),
+                    'user_agent' => substr((string)$request->userAgent(), 0, 500),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // Silently ignore to ensure clean logout
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

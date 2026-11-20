@@ -99,6 +99,54 @@ class TrackVisitorAnalytics
             'region' => $geoData['region'] ?? 'England',
             'is_unique_daily' => $isUniqueDaily,
         ]);
+
+        // 6. Record Member Activity for Logged-in Users
+        if (auth()->check()) {
+            $userId = auth()->id();
+            $cacheSeenKey = "member_last_seen_{$userId}";
+            if (!Cache::has($cacheSeenKey)) {
+                \App\Models\User::where('id', $userId)->update(['last_seen_at' => now()]);
+                Cache::put($cacheSeenKey, true, now()->addMinutes(1));
+            }
+
+            $cleanPath = '/' . ltrim($request->path(), '/');
+            $cachePvKey = "member_pv_{$userId}_" . md5($cleanPath);
+            if (!Cache::has($cachePvKey)) {
+                $description = $this->getFriendlyPathDescription($cleanPath);
+
+                \App\Models\UserActivity::create([
+                    'user_id' => $userId,
+                    'activity_type' => 'page_view',
+                    'description' => $description,
+                    'path' => $cleanPath,
+                    'url' => $request->fullUrl(),
+                    'ip_address' => $ip,
+                    'user_agent' => substr($userAgent, 0, 500),
+                ]);
+
+                Cache::put($cachePvKey, true, now()->addSeconds(30));
+            }
+        }
+    }
+
+    protected function getFriendlyPathDescription(string $path): string
+    {
+        $lower = strtolower($path);
+
+        if ($lower === '/' || $lower === '') return 'Visited Homepage';
+        if (str_starts_with($lower, '/directory')) return 'Browsing Member Directory';
+        if (str_contains($lower, '/events')) return 'Viewing Community Events';
+        if (str_contains($lower, '/notices')) return 'Reading Notice Board';
+        if (str_contains($lower, '/services')) return 'Browsing Marketplace Services';
+        if (str_contains($lower, 'survey')) return 'Interacting with Surveys';
+        if (str_contains($lower, '/connections')) return 'Managing Member Connections';
+        if (str_contains($lower, '/messages')) return 'Checking Messages';
+        if (str_contains($lower, '/profile')) return 'Viewing / Editing Profile';
+        if (str_starts_with($lower, '/dashboard') || str_starts_with($lower, '/member')) return 'In Member Dashboard';
+        if (str_starts_with($lower, '/group-admin')) return 'In Community Admin Area';
+        if (str_starts_with($lower, '/blogs')) return 'Reading Community Blogs';
+
+        return 'Visited ' . ucwords(str_replace(['/', '-', '_'], ' ', trim($path, '/')));
     }
 
     protected function resolveGeoLocation(string $ip): array
