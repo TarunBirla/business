@@ -141,12 +141,147 @@ Route::get('/migrate-surveys-table', function () {
             });
         }
 
+        // Auto-seed Survey for Community ID 5
+        $group = \App\Models\Group::find(5) ?? \App\Models\Group::first();
+        $surveyCreated = false;
+
+        if ($group) {
+            $existingSurvey = \App\Models\Survey::where('group_id', $group->id)
+                ->where('title', 'like', '%Directory%')
+                ->first();
+
+            if (!$existingSurvey) {
+                $adminUser = $group->members()->wherePivot('membership_role', 'group_admin')->first()
+                    ?? \App\Models\User::where('global_role', 'super_admin')->first()
+                    ?? \App\Models\User::first();
+
+                $survey = \App\Models\Survey::create([
+                    'group_id' => $group->id,
+                    'created_by' => $adminUser ? $adminUser->id : 1,
+                    'title' => 'Community Directory & Networking Survey',
+                    'description' => 'Please answer these 8 quick questions to help us improve the directory, networking features, and community events.',
+                    'status' => 'active',
+                ]);
+
+                // 1
+                $survey->questions()->create([
+                    'question_text' => 'Have you completed your profile, and was sign-up easy?',
+                    'question_type' => 'single_choice',
+                    'options' => [
+                        'Yes, easy',
+                        'Yes, but something was confusing (say what)',
+                        'Started but didn\'t finish',
+                        'Haven\'t signed up yet',
+                    ],
+                    'is_required' => true,
+                    'sort_order' => 1,
+                ]);
+
+                // 2
+                $survey->questions()->create([
+                    'question_text' => 'Which features have you used? (tick all)',
+                    'question_type' => 'multiple_choice',
+                    'options' => [
+                        'Searched the directory',
+                        'Sent or received a connection request',
+                        'Requested contact details',
+                        'Posted a service offered or needed',
+                        'Viewed notices or events',
+                        'None yet',
+                    ],
+                    'is_required' => true,
+                    'sort_order' => 2,
+                ]);
+
+                // 3
+                $survey->questions()->create([
+                    'question_text' => 'Have you made a useful connection or done any business through the directory?',
+                    'question_type' => 'single_choice',
+                    'options' => [
+                        'Yes, business done',
+                        'Yes, useful conversations',
+                        'Connected, nothing yet',
+                        'Not yet',
+                    ],
+                    'is_required' => true,
+                    'sort_order' => 3,
+                ]);
+
+                // 4
+                $survey->questions()->create([
+                    'question_text' => 'How useful is the directory to you right now? (1 = not useful, 5 = very useful)',
+                    'question_type' => 'rating',
+                    'options' => null,
+                    'is_required' => true,
+                    'sort_order' => 4,
+                ]);
+
+                // 5
+                $survey->questions()->create([
+                    'question_text' => 'How likely are you to recommend it to another Indian Muslim professional or business? (0 to 10)',
+                    'question_type' => 'single_choice',
+                    'options' => ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10 (Extremely likely)'],
+                    'is_required' => true,
+                    'sort_order' => 5,
+                ]);
+
+                // 6
+                $survey->questions()->create([
+                    'question_text' => 'What is the one thing we should improve or add?',
+                    'question_type' => 'text',
+                    'options' => null,
+                    'is_required' => false,
+                    'sort_order' => 6,
+                ]);
+
+                // 7
+                $survey->questions()->create([
+                    'question_text' => 'What would make you use it more often? (tick all)',
+                    'question_type' => 'multiple_choice',
+                    'options' => [
+                        'More members in my industry or area',
+                        'Better search',
+                        'Regular events or meetups',
+                        'Email or WhatsApp reminders and updates',
+                        'Easier profile editing',
+                        'Other',
+                    ],
+                    'is_required' => true,
+                    'sort_order' => 7,
+                ]);
+
+                // 8
+                $survey->questions()->create([
+                    'question_text' => 'Would you attend IMAN events (dinners, business breakfasts, webinars)? What format do you prefer?',
+                    'question_type' => 'single_choice',
+                    'options' => [
+                        'In person',
+                        'Online',
+                        'Both',
+                        'Not interested',
+                    ],
+                    'is_required' => true,
+                    'sort_order' => 8,
+                ]);
+
+                $surveyCreated = true;
+            }
+        }
+
         \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+        $surveyMsg = $surveyCreated
+            ? '<p style="color:#0A4744;font-weight:bold;font-size:16px;">✓ Community ID 5 Survey with 8 Questions has been created successfully!</p>'
+            : '<p style="color:#64748b;font-size:14px;">(Survey for Community 5 already exists or created previously).</p>';
 
         return '<div style="font-family:sans-serif;text-align:center;margin-top:60px;">' .
             '<h1 style="color:#0A4744;font-size:32px;">SUCCESS!</h1>' .
-            '<p style="color:#334155;font-size:18px;">Surveys tables created safely without touching any existing data.</p>' .
-            '<a href="/dashboard" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#0A4744;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold;">Go to Dashboard</a>' .
+            '<p style="color:#334155;font-size:18px;">Surveys tables verified safely without touching any existing data.</p>' .
+            $surveyMsg .
+            '<div style="margin-top:25px;">' .
+            '<a href="/group-admin/group/5/surveys" style="display:inline-block;padding:12px 24px;background:#0A4744;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold;margin-right:10px;">Go to Group 5 Surveys</a>' .
+            '<a href="/dashboard" style="display:inline-block;padding:12px 24px;background:#334155;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold;">Go to Dashboard</a>' .
+            '</div>' .
             '</div>';
     } catch (\Throwable $e) {
         return '<h1 style="color:red;font-family:sans-serif;text-align:center;margin-top:50px;">STATUS: ' . $e->getMessage() . '</h1>';

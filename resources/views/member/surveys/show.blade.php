@@ -119,21 +119,38 @@
 
                         @elseif($q->question_type === 'single_choice')
                             <!-- Single Choice (Radio) -->
-                            <div class="space-y-2">
-                                @if(!empty($q->options) && is_array($q->options))
-                                    @foreach($q->options as $optIdx => $option)
-                                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                            @php
+                                $isNumericScale = !empty($q->options) && count($q->options) > 6 && is_numeric(trim(explode(' ', $q->options[0])[0]));
+                            @endphp
+                            @if($isNumericScale)
+                                <div class="flex flex-wrap gap-2 pt-1">
+                                    @foreach($q->options as $option)
+                                        <label class="flex-1 min-w-[50px] text-center p-3 rounded-xl border border-slate-200 hover:border-sky-500 hover:bg-sky-50 cursor-pointer transition has-[:checked]:bg-sky-600 has-[:checked]:text-white has-[:checked]:border-sky-600 bg-white">
                                             <input type="radio" name="answers[{{ $q->id }}]" value="{{ $option }}"
                                                 {{ $q->is_required ? 'required' : '' }}
                                                 {{ old('answers.' . $q->id) === $option ? 'checked' : '' }}
-                                                class="w-4 h-4 text-sky-600 focus:ring-0">
-                                            <span class="text-sm font-semibold text-slate-800">{{ $option }}</span>
+                                                class="sr-only">
+                                            <span class="text-xs font-bold block">{{ $option }}</span>
                                         </label>
                                     @endforeach
-                                @else
-                                    <p class="text-xs text-slate-400 italic">No options defined by admin.</p>
-                                @endif
-                            </div>
+                                </div>
+                            @else
+                                <div class="space-y-2">
+                                    @if(!empty($q->options) && is_array($q->options))
+                                        @foreach($q->options as $optIdx => $option)
+                                            <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition bg-white">
+                                                <input type="radio" name="answers[{{ $q->id }}]" value="{{ $option }}"
+                                                    {{ $q->is_required ? 'required' : '' }}
+                                                    {{ old('answers.' . $q->id) === $option ? 'checked' : '' }}
+                                                    class="w-4 h-4 text-sky-600 focus:ring-0">
+                                                <span class="text-sm font-semibold text-slate-800">{{ $option }}</span>
+                                            </label>
+                                        @endforeach
+                                    @else
+                                        <p class="text-xs text-slate-400 italic">No options defined by admin.</p>
+                                    @endif
+                                </div>
+                            @endif
 
                         @elseif($q->question_type === 'multiple_choice')
                             <!-- Multiple Choice (Checkboxes) -->
