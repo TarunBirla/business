@@ -3,15 +3,15 @@
 @section('title', 'Community Chat - ' . $activeGroup->name)
 
 @section('content')
-<div class="h-[calc(100vh-6.5rem)] flex flex-col space-y-3 overflow-hidden">
+<div class="h-[calc(100vh-10rem)] md:h-[calc(100vh-6.5rem)] flex flex-col space-y-2 sm:space-y-3 overflow-hidden">
     <!-- Top Selector Bar (Compact Header) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200 shadow-xs shrink-0">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 bg-white px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl border border-slate-200 shadow-xs shrink-0">
         <div>
-            <h1 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+            <h1 class="text-base sm:text-xl font-bold text-slate-900 flex items-center space-x-2">
                 <i class="fa-solid fa-comments text-sky-600"></i>
                 <span>Community Direct Messaging</span>
             </h1>
-            <p class="text-xs text-slate-500">Live real-time messaging with verified community contacts.</p>
+            <p class="text-[11px] sm:text-xs text-slate-500">Live real-time messaging with verified community contacts.</p>
         </div>
 
         <!-- Community Selector Dropdown -->
@@ -27,11 +27,11 @@
         </div>
     </div>
 
-    <!-- Main Chat Grid (Fills remaining height without page scrolling) -->
+    <!-- Main Chat Grid (Responsive Native App Split: On Mobile shows either Contacts or Chat; on Desktop shows both) -->
     <div class="flex-grow flex flex-col md:flex-row bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden min-h-0">
         
         <!-- Left Panel: Group Contacts List -->
-        <div class="w-full md:w-1/3 flex flex-col border-r border-slate-200 bg-slate-50/50 shrink-0 min-h-0 max-h-48 md:max-h-full">
+        <div class="{{ $activeContact ? 'hidden md:flex' : 'flex' }} w-full md:w-1/3 flex-col border-r border-slate-200 bg-slate-50/50 shrink-0 min-h-0 md:max-h-full h-full">
             <div class="p-3 border-b border-slate-200 bg-white shrink-0 flex items-center justify-between">
                 <div>
                     <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider">Group Contacts ({{ $contacts->count() }})</h3>
@@ -51,14 +51,14 @@
                             ->count();
                     @endphp
                     <a href="{{ route('member.chat', ['groupId' => $activeGroup->id, 'receiverId' => $contact->id]) }}" 
-                       class="flex items-center justify-between p-3.5 transition hover:bg-sky-50/80 {{ $isSelected ? 'bg-sky-100/70 border-l-4 border-sky-600' : '' }}"
+                       class="flex items-center justify-between p-3.5 transition hover:bg-sky-50/80 active:bg-sky-100 {{ $isSelected ? 'bg-sky-100/70 border-l-4 border-sky-600' : '' }}"
                        data-contact-id="{{ $contact->id }}">
                         <div class="flex items-center space-x-3 truncate pr-2">
-                            <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
+                            <div class="w-10 h-10 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                                 {{ strtoupper(substr($contact->first_name, 0, 1) . substr($contact->last_name, 0, 1)) }}
                             </div>
                             <div class="truncate">
-                                <div class="font-bold text-slate-900 text-xs truncate">{{ $contact->name }}</div>
+                                <div class="font-bold text-slate-900 text-xs sm:text-sm truncate">{{ $contact->name }}</div>
                                 <div class="text-[11px] text-sky-600 font-medium truncate">{{ $contact->profession ?? 'Community Member' }}</div>
                             </div>
                         </div>
@@ -81,22 +81,25 @@
         </div>
 
         <!-- Right Panel: Chat Thread Window -->
-        <div class="w-full md:w-2/3 flex flex-col bg-slate-50 min-h-0 flex-grow">
+        <div class="{{ $activeContact ? 'flex' : 'hidden md:flex' }} w-full md:w-2/3 flex-col bg-slate-50 min-h-0 flex-grow h-full">
             @if($activeContact)
-                <!-- Active Chat Header -->
-                <div class="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between shrink-0 shadow-2xs">
-                    <div class="flex items-center space-x-3">
+                <!-- Active Chat Header (with mobile back-to-contacts arrow) -->
+                <div class="p-3 sm:p-3.5 bg-white border-b border-slate-200 flex items-center justify-between shrink-0 shadow-2xs">
+                    <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
+                        <a href="{{ route('member.chat', ['groupId' => $activeGroup->id]) }}" class="md:hidden p-2 -ml-1 text-slate-600 hover:text-slate-900 active:scale-95 transition shrink-0" title="Back to Contacts">
+                            <i class="fa-solid fa-arrow-left text-base"></i>
+                        </a>
                         <div class="w-9 h-9 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
                             {{ strtoupper(substr($activeContact->first_name, 0, 1) . substr($activeContact->last_name, 0, 1)) }}
                         </div>
-                        <div>
-                            <h3 class="font-bold text-slate-900 text-sm leading-tight">{{ $activeContact->name }}</h3>
-                            <p class="text-[11px] text-sky-600 font-medium">{{ $activeContact->profession ?? 'Member' }} &bull; {{ $activeContact->city ?? 'UK' }}</p>
+                        <div class="min-w-0">
+                            <h3 class="font-bold text-slate-900 text-sm leading-tight truncate">{{ $activeContact->name }}</h3>
+                            <p class="text-[11px] text-sky-600 font-medium truncate">{{ $activeContact->profession ?? 'Member' }} &bull; {{ $activeContact->city ?? 'UK' }}</p>
                         </div>
                     </div>
 
-                    <a href="{{ route('member.directory.show', $activeContact->id) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition">
-                        View Profile
+                    <a href="{{ route('member.directory.show', $activeContact->id) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition shrink-0">
+                        Profile
                     </a>
                 </div>
 
@@ -151,12 +154,12 @@
                 </div>
 
                 <!-- Message Input Form (ALWAYS VISIBLE AT BOTTOM) -->
-                <form id="chatForm" action="{{ route('member.chat.send') }}" method="POST" class="p-3 sm:p-4 bg-white border-t border-slate-200 flex items-center space-x-2 shrink-0 z-10">
+                <form id="chatForm" action="{{ route('member.chat.send') }}" method="POST" class="p-2.5 sm:p-4 bg-white border-t border-slate-200 flex items-center space-x-2 shrink-0 z-10">
                     @csrf
                     <input type="hidden" name="group_id" value="{{ $activeGroup->id }}">
                     <input type="hidden" name="receiver_id" value="{{ $activeContact->id }}">
-                    <input type="text" id="chatMessageInput" name="message" required autocomplete="off" placeholder="Type your message to {{ $activeContact->first_name }}..." class="flex-grow px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-sky-500 font-medium">
-                    <button type="submit" id="chatSendBtn" class="px-4 sm:px-5 py-2.5 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center space-x-1.5 shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
+                    <input type="text" id="chatMessageInput" name="message" required autocomplete="off" placeholder="Type your message to {{ $activeContact->first_name }}..." class="flex-grow px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                    <button type="submit" id="chatSendBtn" class="px-4 sm:px-5 py-2.5 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center space-x-1.5 shrink-0 active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
                         <span>Send</span>
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>

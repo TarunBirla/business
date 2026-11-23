@@ -3,18 +3,18 @@
 @section('title', 'My Portfolio & Projects')
 
 @section('content')
-<div class="max-w-6xl mx-auto space-y-8">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6 border-slate-200">
+<div class="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 sm:pb-6 border-slate-200">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">My Portfolio & Projects</h1>
-            <p class="text-sm text-slate-600 mt-1">Showcase your professional work, client case studies, and key accomplishments on your profile & Digital Business Card.</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">My Portfolio & Projects</h1>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">Showcase your professional work, client case studies, and key accomplishments on your profile & Digital Business Card.</p>
         </div>
-        <div class="flex items-center space-x-3">
-            <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-sm rounded-xl transition flex items-center space-x-2 border border-slate-300">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-3">
+            <a href="{{ route('bizcard.show', auth()->id()) }}" target="_blank" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs sm:text-sm rounded-xl transition flex items-center justify-center space-x-2 border border-slate-300 active:scale-95">
                 <i class="fa-solid fa-id-card text-sky-600"></i>
                 <span>View My Business Card</span>
             </a>
-            <a href="{{ route('member.projects.create') }}" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow transition flex items-center space-x-2">
+            <a href="{{ route('member.projects.create') }}" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center space-x-2 active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
                 <i class="fa-solid fa-plus"></i>
                 <span>Add New Project</span>
             </a>

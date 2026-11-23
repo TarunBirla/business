@@ -52,8 +52,8 @@
         </div>
     </form>
 
-    <!-- Professional Responsive Table (Fits 14-inch Laptop Viewports) -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <!-- Professional Responsive Table for Desktop (Hidden on Mobile) -->
+    <div class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse min-w-[768px]">
                 <thead>
@@ -160,10 +160,96 @@
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <div class="p-4 border-t border-slate-100">
-            {{ $members->appends(request()->query())->links() }}
-        </div>
+    <!-- Mobile App Member Card Feed (Visible ONLY on Mobile: md:hidden) -->
+    <div class="md:hidden space-y-3">
+        @forelse($members as $member)
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center space-x-3 min-w-0">
+                        <div class="w-12 h-12 rounded-2xl text-white font-extrabold flex items-center justify-center text-sm shadow-2xs shrink-0" style="background-color: var(--btn-primary-bg, #0A4744);">
+                            {{ strtoupper(substr($member->first_name, 0, 1) . substr($member->last_name, 0, 1)) }}
+                        </div>
+                        <div class="min-w-0">
+                            <a href="{{ route('member.directory.show', $member->id) }}" class="font-bold text-slate-900 text-sm block truncate hover:underline">
+                                {{ $member->name }}
+                            </a>
+                            <div class="text-xs font-semibold truncate" style="color: var(--text-link, #0A4744);">
+                                {{ $member->profession ?? 'Community Member' }}
+                            </div>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 shrink-0">
+                        <i class="fa-solid fa-shield-halved text-slate-400 text-[9px]"></i>
+                        <span>Protected</span>
+                    </span>
+                </div>
+
+                <!-- Company & Location -->
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600 pt-0.5">
+                    @if($member->company)
+                        <div class="flex items-center space-x-1.5 font-medium">
+                            <i class="fa-solid fa-building text-slate-400 text-[11px]"></i>
+                            <span class="truncate">{{ $member->company }}</span>
+                        </div>
+                    @endif
+                    <div class="flex items-center space-x-1.5 text-slate-500">
+                        <i class="fa-solid fa-location-dot text-rose-500 text-[11px]"></i>
+                        <span>{{ $member->city ?? 'United Kingdom' }}</span>
+                    </div>
+                </div>
+
+                <!-- Community & Services Tags -->
+                @if($member->groups->count() > 0 || $member->servicesOffered->count() > 0)
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        @foreach($member->groups->take(2) as $g)
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-bold rounded-md">
+                                {{ $g->name }}
+                            </span>
+                        @endforeach
+                        @foreach($member->servicesOffered->take(2) as $srv)
+                            <span class="px-2 py-0.5 bg-sky-50 text-sky-800 text-[10px] font-semibold rounded-md border border-sky-100">
+                                {{ $srv->name }}
+                            </span>
+                        @endforeach
+                    </div>
+                @endif
+
+                <!-- Mobile Action Buttons -->
+                <div class="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2">
+                    <a href="{{ route('member.directory.show', $member->id) }}" class="py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl text-center shadow-2xs transition active:scale-95 flex items-center justify-center space-x-1.5">
+                        <span>View Profile</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+
+                    @php
+                        $userCommonGroup = auth()->user()->groups->intersect($member->groups)->first();
+                    @endphp
+                    @if($userCommonGroup)
+                        <a href="{{ route('member.chat', ['groupId' => $userCommonGroup->id, 'receiverId' => $member->id]) }}" class="py-2.5 px-3 text-white font-bold text-xs rounded-xl text-center shadow-2xs transition active:scale-95 flex items-center justify-center space-x-1.5" style="background-color: var(--btn-primary-bg, #0A4744);">
+                            <i class="fa-solid fa-comments text-[11px]"></i>
+                            <span>Message</span>
+                        </a>
+                    @else
+                        <a href="{{ route('member.directory.show', $member->id) }}" class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl text-center transition active:scale-95 flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-user-plus text-[11px]"></i>
+                            <span>Connect</span>
+                        </a>
+                    @endif
+                </div>
+            </div>
+        @empty
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-slate-500 font-medium">
+                <i class="fa-solid fa-users-slash text-3xl text-slate-300 mb-2 block"></i>
+                <p class="text-xs sm:text-sm">No members found matching your search criteria.</p>
+            </div>
+        @endforelse
+    </div>
+
+    <!-- Pagination Container -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4">
+        {{ $members->appends(request()->query())->links() }}
     </div>
 </div>
 @endsection

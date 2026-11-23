@@ -3,51 +3,49 @@
 @section('title', $user->name . ' - Member Profile')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-8">
+<div class="max-w-4xl mx-auto space-y-6 sm:space-y-8">
     <!-- Header Profile Card -->
-    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-        <div class="w-24 h-24 rounded-full text-white font-bold text-3xl flex items-center justify-center border-4 border-white shadow-lg shrink-0" style="background-color: var(--btn-primary-bg);">
+    <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center md:items-start space-y-4 sm:space-y-6 md:space-y-0 md:space-x-8">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full text-white font-bold text-2xl sm:text-3xl flex items-center justify-center border-4 border-white shadow-lg shrink-0" style="background-color: var(--btn-primary-bg);">
             {{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}
         </div>
-        <div class="flex-grow text-center md:text-left space-y-2">
-            <h1 class="text-3xl font-bold text-black">{{ $user->name }}</h1>
-            <p class="text-base text-sky-600 font-semibold">{{ $user->profession ?? 'Community Professional' }} {{ $user->company ? 'at ' . $user->company : '' }}</p>
-            <p class="text-sm text-black"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $user->city ?? 'UK' }}, {{ $user->country }}</p>
+        <div class="flex-grow text-center md:text-left space-y-2 w-full">
+            <h1 class="text-2xl sm:text-3xl font-bold text-black">{{ $user->name }}</h1>
+            <p class="text-sm sm:text-base text-sky-600 font-semibold" style="color: var(--text-link, #0A4744);">{{ $user->profession ?? 'Community Professional' }} {{ $user->company ? 'at ' . $user->company : '' }}</p>
+            <p class="text-xs sm:text-sm text-slate-600"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>{{ $user->city ?? 'UK' }}, {{ $user->country }}</p>
 
-            <div class="pt-4 flex flex-wrap justify-center md:justify-start gap-3">
+            <div class="pt-3 sm:pt-4 flex flex-wrap justify-center md:justify-start gap-2.5 sm:gap-3">
                 @if(!$connection)
                     <form action="{{ route('member.connections.send') }}" method="POST">
                         @csrf
                         <input type="hidden" name="receiver_id" value="{{ $user->id }}">
                         <input type="hidden" name="group_id" value="{{ $activeGroupId }}">
-                        <button type="submit" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-sm shadow transition flex items-center">
+                        <button type="submit" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow transition flex items-center active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
                             <i class="fa-solid fa-user-plus mr-1.5"></i> Connect
                         </button>
                     </form>
                 @elseif($connection->status === 'pending')
-                    <span class="px-5 py-2.5 bg-amber-50 text-amber-800 font-bold rounded-xl text-sm border border-amber-200 flex items-center">
-                        <i class="fa-regular fa-clock text-amber-600 mr-1.5"></i> Connection Request Pending
+                    <span class="px-4 py-2.5 bg-amber-50 text-amber-800 font-bold rounded-xl text-xs sm:text-sm border border-amber-200 flex items-center">
+                        <i class="fa-regular fa-clock text-amber-600 mr-1.5"></i> Request Pending
                     </span>
                 @elseif($connection->status === 'accepted')
-                    <span class="px-5 py-2.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl text-sm border border-emerald-200 flex items-center">
+                    <span class="px-4 py-2.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl text-xs sm:text-sm border border-emerald-200 flex items-center">
                         <i class="fa-solid fa-check text-emerald-600 mr-1.5"></i> Connected
                     </span>
                 @endif
 
-                <a href="{{ route('member.chat', ['groupId' => $activeGroupId, 'receiverId' => $user->id]) }}" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm shadow transition flex items-center">
+                <a href="{{ route('member.chat', ['groupId' => $activeGroupId, 'receiverId' => $user->id]) }}" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs sm:text-sm shadow transition flex items-center active:scale-95">
                     <i class="fa-solid fa-comments text-sky-400 mr-1.5"></i> Direct Message
                 </a>
-
-               
             </div>
         </div>
     </div>
 
     <!-- Contact Details Card & Privacy Controls -->
-    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 class="text-xl font-bold text-slate-900 border-b pb-4">Contact Information</h3>
+    <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <h3 class="text-lg sm:text-xl font-bold text-slate-900 border-b pb-3">Contact Information</h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
                 <span class="text-xs font-bold text-slate-700 uppercase block mb-1">Email Address</span>
                 @if($canSeeEmail)
@@ -66,15 +64,13 @@
                 @endif
             </div>
         </div>
-
-       
     </div>
 
     <!-- Biography -->
     @if($user->description)
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 class="text-xl font-bold text-black mb-4">About {{ $user->first_name }}</h3>
-            <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">{{ $user->description }}</p>
+        <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 class="text-lg sm:text-xl font-bold text-black mb-3">About {{ $user->first_name }}</h3>
+            <p class="text-slate-700 text-xs sm:text-sm leading-relaxed whitespace-pre-line">{{ $user->description }}</p>
         </div>
     @endif
 

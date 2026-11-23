@@ -5,33 +5,36 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header Banner -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">Services & Marketplace</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Services & Marketplace</h1>
             <p class="text-xs text-slate-500 mt-1">Offer your skills, explore professional services from community members, and connect directly.</p>
         </div>
-        <button onclick="openCreateServiceModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-2 shrink-0">
+        <button onclick="openCreateServiceModal()" class="w-full sm:w-auto px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center space-x-2 shrink-0 active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
             <i class="fa-solid fa-plus"></i>
             <span>Offer a Service</span>
         </button>
     </div>
 
-    <!-- Main Navigation Tabs -->
-    <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+    <!-- Main Navigation Tabs (Scrollable pill tabs on mobile, desktop untouched) -->
+    <div class="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto no-scrollbar">
         <a href="{{ route('member.services.index', ['tab' => 'my_services']) }}" 
-           class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 {{ $tab === 'my_services' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}">
+           class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 shrink-0 active:scale-95 {{ $tab === 'my_services' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}"
+           style="{{ $tab === 'my_services' ? 'background-color: var(--btn-primary-bg, #0A4744);' : '' }}">
             <i class="fa-solid fa-user-gear"></i>
             <span>My Services ({{ $myServices->count() }})</span>
         </a>
         <a href="{{ route('member.services.index', ['tab' => 'others_services']) }}" 
-           class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 {{ $tab === 'others_services' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}">
+           class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 shrink-0 active:scale-95 {{ $tab === 'others_services' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}"
+           style="{{ $tab === 'others_services' ? 'background-color: var(--btn-primary-bg, #0A4744);' : '' }}">
             <i class="fa-solid fa-handshake"></i>
             <span>Other Services ({{ $othersServices->count() }})</span>
         </a>
         <a href="{{ route('member.services.index', ['tab' => 'requests']) }}" 
-           class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 {{ $tab === 'requests' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}">
+           class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center space-x-2 shrink-0 active:scale-95 {{ $tab === 'requests' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200' }}"
+           style="{{ $tab === 'requests' ? 'background-color: var(--btn-primary-bg, #0A4744);' : '' }}">
             <i class="fa-solid fa-envelope-open-text"></i>
-            <span>Service Requests ({{ $receivedRequests->where('status', 'pending')->count() }} New)</span>
+            <span>Requests ({{ $receivedRequests->where('status', 'pending')->count() }} New)</span>
         </a>
     </div>
 

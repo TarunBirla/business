@@ -301,6 +301,44 @@
         [data-theme*="dark"] .border-slate-200, [data-theme*="dark"] .border-slate-100, [data-theme*="dark"] .border-slate-300, [data-theme*="dark"] .border-sky-100 {
             border-color: var(--border-color, #334155) !important;
         }
+
+        /* Mobile App Responsiveness (Strictly scoped to screens < 768px, Desktop 100% untouched) */
+        @media (max-width: 767.98px) {
+            /* Prevent iOS automatic zoom on inputs when user taps by setting 16px font size */
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="url"],
+            input[type="number"],
+            input[type="tel"],
+            input[type="search"],
+            textarea,
+            select {
+                font-size: 16px !important;
+            }
+
+            /* Prevent horizontal overflow across all mobile screens */
+            html, body {
+                overflow-x: hidden !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            /* Touch action manipulation for snappy 0ms tap response */
+            button, a, input, select, textarea {
+                touch-action: manipulation;
+            }
+
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-slate-50 antialiased">

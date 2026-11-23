@@ -3,18 +3,18 @@
 @section('title', 'My Profile & Privacy')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-8">
+<div class="max-w-4xl mx-auto space-y-6 sm:space-y-8">
     <div>
-        <h1 class="text-3xl font-bold text-black">Manage Profile & Privacy Controls</h1>
-        <p class="text-sm text-black mt-1">Keep your professional networking profile up to date and configure your privacy controls.</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-black">Manage Profile & Privacy Controls</h1>
+        <p class="text-xs sm:text-sm text-black mt-1">Keep your professional networking profile up to date and configure your privacy controls.</p>
     </div>
 
-    <form method="POST" action="{{ route('member.profile.update') }}" enctype="multipart/form-data" class="space-y-8">
+    <form method="POST" action="{{ route('member.profile.update') }}" enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
         @csrf
 
         <!-- Basic Personal Info -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <h3 class="text-xl font-bold text-black border-b pb-4">Personal Details</h3>
+        <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <h3 class="text-lg sm:text-xl font-bold text-black border-b pb-4">Personal Details</h3>
 
             <!-- Profile Photo Upload & Initial Fallback Avatar -->
             <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50">
@@ -120,9 +120,9 @@
         </div>
 
         <!-- Services I Offer & Services I Need (Dynamic per Joined Community) -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div class="border-b pb-4">
-                <h3 class="text-xl font-bold text-black">Professional Services Exchange</h3>
+                <h3 class="text-lg sm:text-xl font-bold text-black">Professional Services Exchange</h3>
                 <p class="text-xs text-slate-500 mt-1">Select the expert services you offer or need based on your joined communities.</p>
             </div>
 
@@ -208,10 +208,10 @@
         </div>
 
         <!-- Theme Preference Settings -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div class="flex items-center justify-between border-b pb-4">
                 <div>
-                    <h3 class="text-xl font-bold text-black">Theme & Visual Appearance</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-black">Theme & Visual Appearance</h3>
                     <p class="text-xs text-black mt-1">Select your preferred color scheme across the platform. Theme preferences are saved to your profile.</p>
                 </div>
                 <span class="text-xs px-2.5 py-1 bg-sky-50 text-sky-700 font-semibold rounded-full border border-sky-200">
@@ -266,7 +266,7 @@
             </div>
         </div>
 
-        <button type="submit" class="px-8 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition flex items-center space-x-2">
+        <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2 active:scale-95" style="background-color: var(--btn-primary-bg, #0A4744);">
             <i class="fa-solid fa-check"></i>
             <span>Save Profile & Settings</span>
         </button>

@@ -20,7 +20,7 @@
 
     <!-- Community Filter (If member belongs to multiple groups) -->
     @if($joinedGroups->count() > 1)
-        <div class="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto">
+        <div class="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto no-scrollbar">
             <span class="text-xs font-extrabold uppercase text-slate-400 mr-2 shrink-0">Filter by Community:</span>
             <a href="{{ route('member.surveys.index') }}"
                 class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition shrink-0 {{ !$selectedGroupId ? 'text-white shadow-2xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}"
@@ -39,13 +39,13 @@
 
     <!-- Surveys Grid -->
     @if($surveys->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             @foreach($surveys as $survey)
                 @php
                     $isCompleted = in_array($survey->id, $completedSurveyIds);
                 @endphp
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex flex-col justify-between overflow-hidden">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <!-- Top Community Badge & Status -->
                         <div class="flex items-center justify-between gap-2 mb-3">
                             <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold text-slate-700 truncate max-w-[200px]">
@@ -65,7 +65,7 @@
                         </div>
 
                         <!-- Title & Description -->
-                        <h3 class="font-bold text-slate-900 text-lg line-clamp-2 leading-snug">{{ $survey->title }}</h3>
+                        <h3 class="font-bold text-slate-900 text-base sm:text-lg line-clamp-2 leading-snug">{{ $survey->title }}</h3>
                         <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
                             {{ $survey->description ?: 'Answer the survey questions to share your feedback with the community.' }}
                         </p>
@@ -80,7 +80,7 @@
                     </div>
 
                     <!-- Bottom Action Bar -->
-                    <div class="p-6 pt-0">
+                    <div class="p-4 sm:p-6 pt-0">
                         @if($isCompleted)
                             <a href="{{ route('member.surveys.show', $survey->id) }}"
                                 class="w-full inline-flex items-center justify-center space-x-2 py-2.5 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition">

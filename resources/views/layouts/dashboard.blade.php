@@ -228,6 +228,50 @@
         [data-theme*="dark"] .border-sky-100 {
             border-color: var(--border-color, #334155) !important;
         }
+
+        /* Mobile App Responsiveness (Strictly scoped to screens < 768px, Desktop 100% untouched) */
+        @media (max-width: 767.98px) {
+            /* Prevent iOS automatic zoom on inputs when user taps by setting 16px font size */
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="url"],
+            input[type="number"],
+            input[type="tel"],
+            input[type="search"],
+            textarea,
+            select {
+                font-size: 16px !important;
+            }
+
+            /* Prevent horizontal overflow across all mobile screens */
+            html, body {
+                overflow-x: hidden !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            /* Touch action manipulation for snappy 0ms tap response */
+            button, a, input, select, textarea {
+                touch-action: manipulation;
+            }
+
+            /* Smooth scroll for mobile tabs */
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            /* Safe area bottom padding for notch / home indicator */
+            .mobile-safe-bottom {
+                padding-bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+            }
+        }
     </style>
 
     <!-- Fonts: Space Grotesk -->
@@ -263,31 +307,50 @@
         }
     @endphp
 
-    <!-- Mobile Top Header Bar -->
+    <!-- Mobile Top Header Bar (Native App Style Header) -->
     <header
-        class="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
-        <a href="{{ url('/') }}" class="flex items-center space-x-2.5">
+        class="md:hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-3.5 py-2.5 flex items-center justify-between sticky top-0 z-40 shadow-xs">
+        <a href="{{ url('/') }}" class="flex items-center space-x-2">
             <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo"
-                class="h-9 w-auto rounded-lg object-contain shadow-2xs">
+                class="h-8 w-auto rounded-lg object-contain shadow-2xs">
             <span class="font-extrabold text-sm text-slate-900 tracking-tight">Bizconn</span>
         </a>
 
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-1.5">
             @if(auth()->check())
-                <a href="{{ route('member.chat') }}" class="p-2 text-slate-600 hover:text-slate-900 relative"
+                @php
+                    $headerUnreadNotifs = auth()->user()->unreadNotificationsCount();
+                @endphp
+                <!-- Mobile Top Chat Icon -->
+                <a href="{{ route('member.chat') }}" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 relative transition"
                     title="Community Chat">
-                    <i class="fa-solid fa-comments text-lg"></i>
+                    <i class="fa-solid fa-comments text-base"></i>
                     @if($sidebarUnreadCount > 0)
                         <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white"></span>
                     @endif
                 </a>
-            @endif
 
-            <!-- Mobile Hamburger Toggle Button -->
-            <button onclick="toggleMobileSidebar()" id="mobileMenuBtn" aria-label="Toggle Menu"
-                class="p-2 rounded-xl text-slate-800 hover:bg-slate-100 border border-slate-200 transition flex items-center justify-center">
-                <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
-            </button>
+                <!-- Mobile Top Notifications Bell -->
+                <a href="{{ route('notifications.index') }}" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 relative transition"
+                    title="Notifications">
+                    <i class="fa-solid fa-bell text-base"></i>
+                    @if($headerUnreadNotifs > 0)
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-sky-600 rounded-full ring-2 ring-white" style="background-color: var(--btn-primary-bg, #0A4744);"></span>
+                    @endif
+                </a>
+
+                <!-- Mobile Top User Avatar / Menu Toggle -->
+                <button onclick="toggleMobileSidebar()" id="mobileMenuBtn" aria-label="Toggle Menu"
+                    class="w-9 h-9 rounded-xl text-white font-extrabold text-xs uppercase flex items-center justify-center shadow-2xs transition active:scale-95 ml-1"
+                    style="background-color: var(--btn-primary-bg, #0A4744);">
+                    {{ strtoupper(substr($authUser->first_name ?? 'M', 0, 1) . substr($authUser->last_name ?? 'U', 0, 1)) }}
+                </button>
+            @else
+                <button onclick="toggleMobileSidebar()" id="mobileMenuBtn" aria-label="Toggle Menu"
+                    class="p-2 rounded-xl text-slate-800 hover:bg-slate-100 border border-slate-200 transition flex items-center justify-center">
+                    <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
+                </button>
+            @endif
         </div>
     </header>
 
@@ -299,16 +362,39 @@
     <aside id="sidebarNav"
         class="hidden md:flex w-full md:w-64 bg-white border-r border-slate-200 p-5 md:p-6 flex-col justify-between shrink-0 transition-all duration-300 z-50">
         <div class="space-y-1">
-            <!-- Header for Mobile Drawer (Close Button) -->
-            <div class="flex items-center justify-between md:hidden pb-3 border-b border-slate-100">
-                <div class="flex items-center space-x-2">
-                    <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-8 w-auto rounded-lg">
-                    <span class="font-bold text-sm text-slate-900">Navigation Menu</span>
+            <!-- Header for Mobile Drawer (Close Button & User Card) -->
+            <div class="md:hidden pb-3 mb-2 border-b border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                        <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo" class="h-7 w-auto rounded-lg">
+                        <span class="font-bold text-sm text-slate-900">Bizconn Navigation</span>
+                    </div>
+                    <button onclick="closeMobileSidebar()"
+                        class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition active:scale-95">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
                 </div>
-                <button onclick="closeMobileSidebar()"
-                    class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
+
+                @if(auth()->check())
+                    <!-- Mobile User Profile Card in Drawer -->
+                    <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center space-x-3">
+                        <div class="w-11 h-11 rounded-full text-white font-extrabold flex items-center justify-center text-sm uppercase shrink-0 shadow-2xs"
+                            style="background-color: var(--btn-primary-bg, #0A4744);">
+                            {{ strtoupper(substr($authUser->first_name ?? 'M', 0, 1) . substr($authUser->last_name ?? 'U', 0, 1)) }}
+                        </div>
+                        <div class="min-w-0 flex-grow">
+                            <div class="font-bold text-sm text-slate-900 truncate">{{ $authUser->name }}</div>
+                            <div class="text-[11px] text-slate-500 truncate">{{ $authUser->profession ?? 'Community Member' }}</div>
+                            <div class="mt-1 flex items-center space-x-2">
+                                <a href="{{ route('member.profile.edit') }}" onclick="closeMobileSidebar()"
+                                    class="text-[11px] font-bold text-sky-600 hover:underline"
+                                    style="color: var(--text-link, #0A4744);">
+                                    Edit Profile &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             @php
@@ -915,7 +1001,7 @@
     </aside>
 
     <!-- Main View Content Area -->
-    <main class="flex-grow p-3 sm:p-4 md:p-5 max-w-7xl w-full overflow-y-auto">
+    <main class="flex-grow p-3 sm:p-4 md:p-5 max-w-7xl w-full overflow-y-auto pb-24 md:pb-6">
         @if(session('success'))
             <div
                 class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl flex items-center space-x-2 shadow-2xs">
@@ -951,18 +1037,85 @@
 
     </main>
 
+    @if(auth()->check())
+    <!-- App-Like Mobile Bottom Navigation Bar (Hidden on Desktop: md:hidden) -->
+    <nav id="mobileBottomNav" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 pt-1 pb-[calc(0.4rem+env(safe-area-inset-bottom))] transition-all">
+        <div class="grid grid-cols-5 items-center gap-1 max-w-md mx-auto text-center">
+            <!-- 1. Home / Dashboard -->
+            @php $isDash = request()->routeIs('member.dashboard') || request()->is('dashboard') || request()->routeIs('group_admin.dashboard') || request()->routeIs('super_admin.dashboard'); @endphp
+            <a href="{{ $authUser->isSuperAdmin() ? route('super_admin.dashboard') : ($authUser->isGroupAdmin() ? route('group_admin.dashboard') : route('member.dashboard')) }}" 
+               class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition active:scale-95 {{ $isDash ? 'font-bold' : 'text-slate-500 font-medium hover:text-slate-900' }}"
+               style="{{ $isDash ? 'color: var(--text-link, #0A4744);' : '' }}">
+                <i class="fa-solid fa-gauge-high text-lg mb-0.5 {{ $isDash ? 'scale-110' : '' }} transition-transform"></i>
+                <span class="text-[10px] tracking-tight">Home</span>
+            </a>
+
+            <!-- 2. Members / Directory -->
+            @php $isDir = request()->routeIs('member.directory*'); @endphp
+            <a href="{{ route('member.directory') }}" 
+               class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition active:scale-95 {{ $isDir ? 'font-bold' : 'text-slate-500 font-medium hover:text-slate-900' }}"
+               style="{{ $isDir ? 'color: var(--text-link, #0A4744);' : '' }}">
+                <i class="fa-solid fa-users text-lg mb-0.5 {{ $isDir ? 'scale-110' : '' }} transition-transform"></i>
+                <span class="text-[10px] tracking-tight">Members</span>
+            </a>
+
+            <!-- 3. Community Chat -->
+            @php $isChat = request()->routeIs('member.chat*'); @endphp
+            <a href="{{ route('member.chat') }}" 
+               class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition active:scale-95 relative {{ $isChat ? 'font-bold' : 'text-slate-500 font-medium hover:text-slate-900' }}"
+               style="{{ $isChat ? 'color: var(--text-link, #0A4744);' : '' }}">
+                <div class="relative inline-block">
+                    <i class="fa-solid fa-comments text-lg mb-0.5 {{ $isChat ? 'scale-110' : '' }} transition-transform"></i>
+                    @if($sidebarUnreadCount > 0)
+                        <span class="absolute -top-1 -right-2 px-1.5 py-0.2 bg-rose-500 text-white text-[9px] font-black rounded-full ring-2 ring-white">
+                            {{ $sidebarUnreadCount > 9 ? '9+' : $sidebarUnreadCount }}
+                        </span>
+                    @endif
+                </div>
+                <span class="text-[10px] tracking-tight">Chat</span>
+            </a>
+
+            <!-- 4. Alerts / Notifications -->
+            @php 
+                $isNotif = request()->routeIs('notifications*');
+                $unreadNotifCount = auth()->user()->unreadNotificationsCount();
+            @endphp
+            <a href="{{ route('notifications.index') }}" 
+               class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition active:scale-95 relative {{ $isNotif ? 'font-bold' : 'text-slate-500 font-medium hover:text-slate-900' }}"
+               style="{{ $isNotif ? 'color: var(--text-link, #0A4744);' : '' }}">
+                <div class="relative inline-block">
+                    <i class="fa-solid fa-bell text-lg mb-0.5 {{ $isNotif ? 'scale-110' : '' }} transition-transform"></i>
+                    @if($unreadNotifCount > 0)
+                        <span class="absolute -top-1 -right-2 px-1.5 py-0.2 text-white text-[9px] font-black rounded-full ring-2 ring-white"
+                              style="background-color: var(--btn-primary-bg, #0A4744);">
+                            {{ $unreadNotifCount > 9 ? '9+' : $unreadNotifCount }}
+                        </span>
+                    @endif
+                </div>
+                <span class="text-[10px] tracking-tight">Alerts</span>
+            </a>
+
+            <!-- 5. App Menu Drawer -->
+            <button onclick="toggleMobileSidebar()" 
+                    type="button"
+                    aria-label="Toggle App Menu" 
+                    class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-slate-500 font-medium hover:text-slate-900 transition active:scale-95">
+                <i class="fa-solid fa-bars text-lg mb-0.5"></i>
+                <span class="text-[10px] tracking-tight">Menu</span>
+            </button>
+        </div>
+    </nav>
+    @endif
+
     <script>
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebarNav');
             const backdrop = document.getElementById('mobileBackdrop');
-            const icon = document.getElementById('menuIcon');
 
             if (sidebar.classList.contains('hidden')) {
                 sidebar.classList.remove('hidden');
-                sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'w-72', 'flex', 'shadow-2xl', 'overflow-y-auto');
-                backdrop.classList.remove('hidden');
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmark');
+                sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'w-80', 'max-w-[85vw]', 'flex', 'shadow-2xl', 'overflow-y-auto', 'z-50');
+                if (backdrop) backdrop.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             } else {
                 closeMobileSidebar();
@@ -972,18 +1125,13 @@
         function closeMobileSidebar() {
             const sidebar = document.getElementById('sidebarNav');
             const backdrop = document.getElementById('mobileBackdrop');
-            const icon = document.getElementById('menuIcon');
 
             if (sidebar) {
                 sidebar.classList.add('hidden');
-                sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'w-72', 'flex', 'shadow-2xl', 'overflow-y-auto');
+                sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'w-80', 'max-w-[85vw]', 'flex', 'shadow-2xl', 'overflow-y-auto', 'z-50');
             }
             if (backdrop) {
                 backdrop.classList.add('hidden');
-            }
-            if (icon) {
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
             }
             document.body.style.overflow = '';
         }

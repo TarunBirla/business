@@ -3,23 +3,23 @@
 @section('title', 'Login to Your Account')
 
 @section('content')
-    <div class="min-h-[70vh] flex items-center justify-center py-8 px-4">
-        <div class="max-w-md w-full bg-white p-8 rounded-2xl border border-slate-200 shadow-xl">
+    <div class="min-h-[70vh] flex items-center justify-center py-6 sm:py-8 px-3 sm:px-4">
+        <div class="max-w-md w-full bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl">
             <div class="text-center mb-4">
                 <a href="{{ url('/') }}" class="inline-flex justify-center mb-2">
                     <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo"
-                        class="h-20 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
+                        class="h-16 sm:h-20 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
                 </a>
-                <h2 class="text-3xl font-bold text-slate-900">Welcome</h2>
-                <p class="text-sm text-slate-600 mt-1">Log in to access your community network.</p>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Welcome</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1">Log in to access your community network.</p>
             </div>
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-2">
+            <form method="POST" action="{{ route('login') }}" class="space-y-3">
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
                     <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                        class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500">
+                        class="w-full px-4 py-3 border border-slate-200 rounded-xl text-base sm:text-sm focus:outline-none focus:border-sky-500 font-medium">
                     @error('email') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
                 </div>
 
@@ -27,9 +27,9 @@
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
                     <div class="relative">
                         <input type="password" id="login_password" name="password" required
-                            class="w-full px-4 py-3 pr-11 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 font-medium">
+                            class="w-full px-4 py-3 pr-11 border border-slate-200 rounded-xl text-base sm:text-sm focus:outline-none focus:border-sky-500 font-medium">
                         <button type="button" onclick="togglePasswordVisibility('login_password', this)"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 transition"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-2 transition active:scale-95"
                             title="Toggle Password Visibility">
                             <i class="fa-solid fa-eye text-base"></i>
                         </button>
@@ -37,36 +37,36 @@
                     @error('password') <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center justify-between text-xs sm:text-sm pt-1">
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" name="remember"
                             class="rounded border-slate-300 text-sky-600 focus:ring-sky-500">
-                        <span class="text-slate-600">Remember me</span>
+                        <span class="text-slate-600 text-xs sm:text-sm">Remember me</span>
                     </label>
                     <a href="{{ route('password.request') }}" class="text-xs font-bold text-sky-600 hover:underline">Forgot
                         password?</a>
                 </div>
 
                 <button type="submit"
-                    class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition text-base">
+                    class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-lg transition text-base active:scale-98">
                     Log In
                 </button>
             </form>
 
             <div class="mt-6 pt-5 border-t border-slate-100 space-y-3">
-                <div class="flex items-center justify-between gap-3 text-xs">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 text-xs">
                     <span class="text-slate-600 font-medium">Don't have an account yet?</span>
                     <button type="button" onclick="openJoinModal()"
-                        class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition shadow-2xs flex items-center space-x-1.5 shrink-0">
+                        class="w-full sm:w-auto px-3.5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition shadow-2xs flex items-center justify-center space-x-1.5 shrink-0 active:scale-95">
                         <i class="fa-solid fa-user-plus text-xs"></i>
                         <span>Join as member</span>
                     </button>
                 </div>
 
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-3 text-xs">
+                <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 text-xs">
                     <span class="text-slate-600 font-medium">Want to lead a community?</span>
                     <a href="{{ route('public.community_request.create') }}"
-                        class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition border border-slate-200 shadow-2xs flex items-center space-x-1.5 shrink-0">
+                        class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition border border-slate-200 shadow-2xs flex items-center justify-center space-x-1.5 shrink-0 active:scale-95">
                         <i class="fa-solid fa-plus-circle text-sky-600 text-xs"></i>
                         <span>Request New Community</span>
                     </a>
