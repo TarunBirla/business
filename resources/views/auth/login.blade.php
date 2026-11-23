@@ -3,10 +3,10 @@
 @section('title', 'Login to Your Account')
 
 @section('content')
-    <div class="min-h-[70vh] flex items-center justify-center py-16 px-4">
+    <div class="min-h-[70vh] flex items-center justify-center py-8 px-4">
         <div class="max-w-md w-full bg-white p-8 rounded-2xl border border-slate-200 shadow-xl">
-            <div class="text-center mb-8">
-                <a href="{{ url('/') }}" class="inline-flex justify-center mb-5">
+            <div class="text-center mb-4">
+                <a href="{{ url('/') }}" class="inline-flex justify-center mb-2">
                     <img src="{{ asset('nlogo.png') }}" alt="Bizconn Logo"
                         class="h-20 w-auto rounded-xl object-contain bg-white p-1 shadow-2xs">
                 </a>
@@ -14,7 +14,7 @@
                 <p class="text-sm text-slate-600 mt-1">Log in to access your community network.</p>
             </div>
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+            <form method="POST" action="{{ route('login') }}" class="space-y-2">
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
